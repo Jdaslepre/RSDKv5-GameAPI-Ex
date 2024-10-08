@@ -312,12 +312,12 @@ public class Input
     {
         return RSDKTable.InputSlotUnknown2(inputSlot, unknown1, unknown2);
     }
-    public static void AssignInputSlotToDevice(uint8 inputSlot, uint32 inputID) { RSDKTable.AssignInputSlotToDevice(inputSlot, inputID); }
+    public static void AssignInputSlotToDevice(uint8 inputSlot, uint32 inputID) => RSDKTable.AssignInputSlotToDevice(inputSlot, inputID);
     public static bool32 IsInputSlotAssigned(uint8 inputSlot) { return RSDKTable.IsInputSlotAssigned(inputSlot); }
     public static void ResetInputSlotAssignments() { RSDKTable.ResetInputSlotAssignments(); }
 #endif
 
 #if !RETRO_REV02
-    public static void GetUnknownInputValue(int32 inputSlot, int32 type, int32* value) => RSDKTable->GetUnknownInputValue(inputSlot, type, value);
+    public static void GetUnknownInputValue(int32 inputSlot, int32 type, int32* value) => RSDKTable.GetUnknownInputValue(inputSlot, type, value);
 #endif
 }
