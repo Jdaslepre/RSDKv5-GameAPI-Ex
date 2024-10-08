@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
+<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
+    <AssemblyName>Game</AssemblyName>
+    <LangVersion>preview</LangVersion>
+	<PublishAot>true</PublishAot>
+	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RSDKv5\RSDKv5.csproj" />
+  </ItemGroup>
+
+</Project>

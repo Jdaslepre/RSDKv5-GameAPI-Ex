@@ -1,0 +1,8 @@
+FileVersion = 1
+Projects = {RSDKv5 = {Path = "RSDKv5"}, RSDK-Game = {Path = "RSDK-Game"}}
+
+[Configs.Test.Win32]
+ConfigSelections = {RSDKv5 = {Config = "Debug"}}
+
+[Configs.Test.Win64]
+ConfigSelections = {RSDKv5 = {Config = "Debug"}}

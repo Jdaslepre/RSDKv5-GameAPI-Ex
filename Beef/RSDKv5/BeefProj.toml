@@ -1,0 +1,7 @@
+FileVersion = 1
+
+[Project]
+Name = "RSDKv5"
+TargetType = "BeefLib"
+StartupObject = "RSDKv5.Program"
+ProcessorMacros = ["RETRO_REV02", "RETRO_REV0U", "RETRO_USE_MOD_LOADER", "RETRO_MOD_LOADER_VER_2", "GAME_INCLUDE_EDITOR"]

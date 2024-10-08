@@ -1,0 +1,13 @@
+FileVersion = 1
+Dependencies = {corlib = "*", RSDKv5 = "*"}
+
+[Project]
+Name = "RSDK-Game"
+TargetType = "BeefLib"
+StartupObject = "GameLogic.Program"
+DefaultNamespace = "GameLogic"
+ProcessorMacros = ["RETRO_REV02", "RETRO_REV0U", "GAME_INCLUDE_EDITOR", "RETRO_USE_MOD_LOADER", "RETRO_MOD_LOADER_VER_2"]
+
+[Configs.Debug.Win64]
+BuildKind = "DynamicLib"
+TargetName = "Game"
