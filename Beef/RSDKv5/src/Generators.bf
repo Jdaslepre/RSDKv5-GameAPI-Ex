@@ -51,9 +51,6 @@ public class EntityGenerator1 : Compiler.Generator
 
 				    public new void Update()
 				    {{
-				        // example
-				        // var self = GameObject.This<Self>();
-				        // self.position.x += Math.TO_FIXED(1);
 					}}
 
 				    public new void LateUpdate()
@@ -62,8 +59,7 @@ public class EntityGenerator1 : Compiler.Generator
 
 				    public new static void StaticUpdate()
 				    {{
-
-					}}
+				    }}
 
 				    public new void Draw()
 				    {{
