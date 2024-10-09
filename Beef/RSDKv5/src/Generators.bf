@@ -49,9 +49,9 @@ public class EntityGenerator1 : Compiler.Generator
 				    // Entity Events
 				    // -------------
 
-				    public new void Update()
+					public new void Update()
 				    {{
-					}}
+				    }}
 
 				    public new void LateUpdate()
 				    {{
