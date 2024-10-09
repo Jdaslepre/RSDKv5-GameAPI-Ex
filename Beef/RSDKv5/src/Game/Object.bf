@@ -83,7 +83,7 @@ public enum TileCollisionModes : uint8
         public uint8 active;
 
         public void EditableVar(VariableTypes type, char8* name, uint32 offset) => RSDKTable.SetEditableVar((.)type, name, (.)classID, (.)offset);
-        public int32 Count(bool32 isActive = false) { return RSDKTable.GetEntityCount(classID, isActive); }
+        public int32 Count(bool32 isActive = false)                             => RSDKTable.GetEntityCount(classID, isActive);
 
 #if RETRO_USE_MOD_LOADER
         public void Super(int32 callback, void *data = null) => modTable.Super(classID, callback, data);
@@ -137,7 +137,7 @@ public enum TileCollisionModes : uint8
         // used for languages such as beeflang that always have vfTables in classes
         // note from jd, if our object type was class instead of struct, we could've had this commented out - but unfortunately, inheriting a class
         // will add another vTable i think..? so there'd be this vfTable field, and then *another* vfTable that'd completely ruin entity alignment :pensive:
-        // having entities be structs is good anyways - because *if* the class idea worked, the objects would absolutely have to be v5U exclusive :D
+        // having entities as structs is good anyways - because *if* the class idea worked, the objects would absolutely have to be v5U exclusive :D
         private void* vfTable;
 #endif
 
@@ -183,7 +183,7 @@ public enum TileCollisionModes : uint8
             updateRange.y = RSDK.Math.TO_FIXED(128);
         }
 
-        public uint16 Slot() mut { return (.)RSDKTable.GetEntitySlot(&this); }
+        public uint16 Slot() mut  => (.)RSDKTable.GetEntitySlot(&this);
         public void Destroy() mut => RSDKTable.ResetEntity(&this, (.)DefaultObjects.TYPE_DEFAULTOBJECT, null);
 
         public void Reset(uint32 type, void* data) mut => RSDKTable.ResetEntity(&this, (.)type, data);
@@ -191,7 +191,7 @@ public enum TileCollisionModes : uint8
 
         public void Copy(GameObject.Entity* dst, bool32 clearThis) mut => RSDKTable.CopyEntity(dst, &this, clearThis);
 
-        public bool32 CheckOnScreen(RSDK.Vector2* range) mut { return RSDKTable.CheckOnScreen(&this, range); }
+        public bool32 CheckOnScreen(RSDK.Vector2* range) mut => RSDKTable.CheckOnScreen(&this, range);
 
         public void AddDrawListRef(uint8 drawGroup) mut => RSDKTable.AddDrawListRef(drawGroup, Slot());
 
@@ -232,41 +232,36 @@ public enum TileCollisionModes : uint8
 #endif
     }
 
-    public static T* This<T>() { return (.)sceneInfo.entity; }
+    public static T* This<T>() => (.)sceneInfo.entity;
 
-    // untested
-    public static GameObject.Entity* Create(void* data, int32 x, int32 y) { return (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y); }
-    public static GameObject.Entity* Create(int32 data, int32 x, int32 y) { return (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, RSDK.Math.INT_TO_VOID(data), x, y); }
+    public static GameObject.Entity* Create(void* data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y);
+    public static GameObject.Entity* Create(int32 data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, RSDK.Math.INT_TO_VOID(data), x, y);
 
-    // untested
     public static T* Create<T>(void* data, int32 x, int32 y) where T : struct
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
         return (.)RSDKTable.CreateEntity(fStatic.classID, data, x, y);
     }
 
-    // untested
     public static T* Create<T>(int32 data, int32 x, int32 y) where T : GameObject.Entity
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
         return (.)RSDKTable.CreateEntity(fStatic.classID, RSDK.Math.INT_TO_VOID(data), x, y);
     }
 
-    public static GameObject.Entity* Get(int32 slot) { return (.)RSDKTable.GetEntity((.)slot); }
-    public static GameObject.Entity* Get(uint16 slot) { return (.)RSDKTable.GetEntity(slot); }
-    public static T* Get<T>(int32 slot) where T : struct { return (.)RSDKTable.GetEntity((.)slot); }
-    public static T* Get<T>(uint16 slot) where T : struct { return (.)RSDKTable.GetEntity(slot); }
+    public static GameObject.Entity* Get(int32 slot)      => (.)RSDKTable.GetEntity((.)slot);
+    public static GameObject.Entity* Get(uint16 slot)     => (.)RSDKTable.GetEntity(slot);
+    public static T* Get<T>(int32 slot) where T : struct  => (.)RSDKTable.GetEntity((.)slot);
+    public static T* Get<T>(uint16 slot) where T : struct => (.)RSDKTable.GetEntity(slot);
 
-    // untested
     public static int32 Count<T>(bool32 isActive = false) where T : struct
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
         return RSDKTable.GetEntityCount(fStatic.classID, isActive);
     }
 
-    // untested
     public static void Copy(GameObject.Entity* dst, GameObject.Entity* src, bool32 clearSrc) => RSDKTable.CopyEntity(dst, src, clearSrc);
-    public static void Copy(void* dst, void* src, bool32 clearSrc) => RSDKTable.CopyEntity(dst, src, clearSrc);
+    public static void Copy(void* dst, void* src, bool32 clearSrc)                           => RSDKTable.CopyEntity(dst, src, clearSrc);
 
     public static void Reset(uint16 slot, uint16 type, void* data) => RSDKTable.ResetEntitySlot(slot, type, data);
     public static void Reset(uint16 slot, uint16 type, int32 data) => RSDKTable.ResetEntitySlot(slot, type, RSDK.Math.INT_TO_VOID(data));
@@ -282,68 +277,121 @@ public enum TileCollisionModes : uint8
         RSDKTable.ResetEntitySlot(slot, fStatic.classID, RSDK.Math.INT_TO_VOID(data));
     }
 
-    // TODO: THIS
+    // Example usage:
+    // for (var entity in GameObject.GetEntities<Type>(.ALL_ENTITIES, scope .()))
 
-    public static List<Entity*> GetEntities(ForeachTypes type)
-    {
-        List<Entity*> list = null;
-
-        Entity* entity = null;
-
-        if (type == .ALL_ENTITIES)
-        {
-            while (RSDKTable.GetAllEntities((.)ForeachGroups.GROUP_ALL, (void**)&entity)) list.Add(entity);
-        }
-        else if (type == .ACTIVE_ENTITIES)
-        {
-            while (RSDKTable.GetActiveEntities((.)ForeachGroups.GROUP_ALL, (void**)&entity)) list.Add(entity);
-        }
-#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
-        else if (type == .GROUP_ENTITIES) {
-            while (modTable.GetGroupEntities((.)ForeachGroups.GROUP_ALL, (void **)&entity)) list.Add(entity);
-        }
-#endif
-
-        return list;
-    }
-
-    public static List<T*> GetEntities<T>(ForeachTypes type) where T : struct
+    public static LinkedList<T*> GetEntities<T>(ForeachTypes type, LinkedList<T*> list) where T : struct
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
 
-        List<T*> list = scope .(); // null;
-
         uint16 group = fStatic != null ? fStatic.classID : (.)ForeachGroups.GROUP_ALL;
 
-        T* entity = null;
-        if (type == .ALL_ENTITIES)
+        T* entity = null; defer delete entity;
+        switch (type)
         {
-            while (RSDKTable.GetAllEntities(group, (.)&entity)) list.Add(entity);
-        }
-        else if (type == .ACTIVE_ENTITIES)
-        {
-            while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.Add(entity);
-        }
+            case .ALL_ENTITIES:
+                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
+            case .ACTIVE_ENTITIES:
+                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
-        else if (type == .GROUP_ENTITIES) {
-            while (modTable.GetGroupEntities(group, (void **)&entity)) list.Add(entity);
-        }
+            case .GROUP_ENTITIES:
+                while (modTable.GetGroupEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
 #endif
+            default: break;
+        }
 
         return list;
     }
 
-    // untested
-    public static int32 Find(char8* name) { return RSDKTable.FindObject(name); }
+    // Example usage:
+    // for (var entity in GameObject.GetEntities<Type>(.ALL_ENTITIES, OtherType.sVars.classID, scope .()))
+
+    public static LinkedList<T*> GetEntities<T>(ForeachTypes type, uint16 group, LinkedList<T*> list) where T : struct
+    {
+        T* entity = null; defer delete entity;
+        switch (type)
+        {
+            case .ALL_ENTITIES:
+                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
+            case .ACTIVE_ENTITIES:
+                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
+            case .GROUP_ENTITIES:
+                while (modTable.GetGroupEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
+#endif
+            default: break;
+        }
+
+        return list;
+    }
+
+    // Example usage:
+    // for (var entity in GameObject.GetEntities(.ALL_ENTITIES, scope .()))
+
+    public static LinkedList<GameObject.Entity*> GetEntities(ForeachTypes type, LinkedList<GameObject.Entity*> list)
+    {
+        GameObject.Entity* entity = null; defer delete entity;
+
+        switch (type)
+        {
+            case .ALL_ENTITIES:
+                while (RSDKTable.GetAllEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
+                break;
+            case .ACTIVE_ENTITIES:
+                while (RSDKTable.GetActiveEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
+                break;
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
+            case .GROUP_ENTITIES:
+                while (modTable.GetGroupEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
+                break;
+#endif
+            default: break;
+        }
+
+        return list;
+    }
+
+    // Example usage:
+    // for (var entity in GameObject.GetEntities(.ALL_ENTITIES, OtherType.sVars.classID, scope .()))
+
+    public static LinkedList<GameObject.Entity*> GetEntities(ForeachTypes type, uint16 group, LinkedList<Entity*> list)
+    {
+        GameObject.Entity* entity = null; defer delete entity;
+
+        switch (type)
+        {
+            case .ALL_ENTITIES:
+                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
+            case .ACTIVE_ENTITIES:
+                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
+#if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
+            case .GROUP_ENTITIES:
+                while (modTable.GetGroupEntities(group, (void**)&entity)) list.AddLast(entity);
+                break;
+#endif
+            default: break;
+        }
+
+        return list;
+    }
+
+    public static int32 Find(char8* name) => RSDKTable.FindObject(name);
 
 #if RETRO_USE_MOD_LOADER
-    // untested
-    public static void *FindClass(char8 *name) { return modTable.FindObject(name); }
+    public static void *FindClass(char8 *name) => modTable.FindObject(name);
 #endif
 
 #if GAME_INCLUDE_EDITOR
     public static void SetActiveVariable(int32 classID, char8 *name) => RSDKTable.SetActiveVariable(classID, name);
-    public static void AddVarEnumValue(char8 *name) => RSDKTable.AddVarEnumValue(name);
+    public static void AddVarEnumValue(char8 *name)                  => RSDKTable.AddVarEnumValue(name);
 #endif
 
     [CRepr] public struct EntityBase : GameObject.Entity
@@ -361,7 +409,7 @@ public enum TileCollisionModes : uint8
     public struct Registration
     {
         public char8* name;
-        void* padding;
+        private void* padding;
         public function void() update;
         public function void() lateUpdate;
         public function void() staticUpdate;
@@ -411,17 +459,13 @@ public enum TileCollisionModes : uint8
             object.create = create;
             object.stageLoad = stageLoad;
 #if GAME_INCLUDE_EDITOR
-            // these are null if GAME_INCLUDE_EDITOR is false, but
-            // let's check anyways?
             object.editorLoad = editorLoad;
             object.editorDraw = editorDraw;
 #endif
             object.serialize = serialize;
 #if RETRO_REV0U
-            // same here
             object.staticLoad = staticLoad;
 #endif
-
             object.staticVars      = (.)(void**)&sVars;
             object.entityClassSize = (.)sizeof(entity);
             object.staticClassSize = (.)sizeof(staticVars);

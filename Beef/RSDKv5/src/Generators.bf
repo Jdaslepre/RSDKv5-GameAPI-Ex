@@ -25,7 +25,7 @@ $"""
 
 				namespace GameLogic;
 				
-				[RegisterClass, System.CRepr]
+				[RegisterClass]
 				public struct {name} : GameObject.Entity
 				{{
 				    // -----------------

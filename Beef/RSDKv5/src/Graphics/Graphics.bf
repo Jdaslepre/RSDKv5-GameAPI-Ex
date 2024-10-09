@@ -77,7 +77,7 @@ public struct Palette
 #endif
 
 #if RETRO_REV01
-    public static uint16 *GetTintLookupTable() { return RSDKTable.GetTintLookupTable(); }
+    public static uint16 *GetTintLookupTable() => RSDKTable.GetTintLookupTable();
 #endif
 
 #if RETRO_REV02
@@ -87,23 +87,19 @@ public struct Palette
     public static void SetPaletteMask(uint32 maskColor) => RSDKTable.SetPaletteMask(maskColor);
 
     public void SetEntry(uint8 index, uint32 color) => RSDKTable.SetPaletteEntry(id, index, color);
-
-    public color GetEntry(uint8 index) { return RSDKTable.GetPaletteEntry(id, index); }
+    public color GetEntry(uint8 index)              => RSDKTable.GetPaletteEntry(id, index);
 
     public void SetActivePalette(int32 startLine, int32 endLine) => RSDKTable.SetActivePalette(id, startLine, endLine);
 
     public void Rotate(uint8 startIndex, uint8 endIndex, bool32 right) => RSDKTable.RotatePalette(id, startIndex, endIndex, right ? true : false);
-
     public void Copy(uint8 sourceBank, uint8 srcBankStart, uint8 destBankStart, uint8 count)
     {
         RSDKTable.CopyPalette(sourceBank, srcBankStart, id, destBankStart, count);
     }
-
     public void SetLimitedFade(uint8 srcBankA, uint8 srcBankB, uint16 blendAmount, int32 startIndex, int32 endIndex)
     {
         RSDKTable.SetLimitedFade(id, srcBankA, srcBankB, (.)blendAmount, startIndex, endIndex);
     }
-
 #if RETRO_REV02
     public void BlendColors(uint32 *srcColorsA, uint32 *srcColorsB, int32 blendAmount, int32 startIndex, int32 count)
     {
@@ -121,14 +117,17 @@ static
 
 public static class Graphics
 {
+    // -------
     // Cameras
-    public static void AddCamera(RSDK.Vector2* targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative)
-    {
-        RSDKTable.AddCamera(targetPos, offsetX, offsetY, worldRelative);
-    }
+    // -------
+
+    public static void AddCamera(RSDK.Vector2* targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative) => RSDKTable.AddCamera(targetPos, offsetX, offsetY, worldRelative);
     public static void ClearCameras() => RSDKTable.ClearCameras();
 
+    // -------
     // Drawing
+    // -------
+
     public static void DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, uint32 color, int32 alpha, InkEffects inkEffect, bool32 screenRelative)
     {
         RSDKTable.DrawLine(x1, y1, x2, y2, color, alpha, (.)inkEffect, screenRelative);
@@ -179,13 +178,17 @@ public static class Graphics
 
     public static void FillScreen(color color, int32 alphaR, int32 alphaG, int32 alphaB) => RSDKTable.FillScreen(color, alphaR, alphaG, alphaB);
 
+    // ------------------
     // Screens & Displays
+    // ------------------
+
     public static void GetDisplayInfo(int32* displayID, int32* width, int32* height, int32* refreshRate, char8* text)
     {
         RSDKTable.GetDisplayInfo(displayID, width, height, refreshRate, text);
     }
-    public static void GetWindowSize(int32* width, int32* height) => RSDKTable.GetWindowSize(width, height);
-    public static int32 SetScreenSize(uint8 screenID, uint16 width, uint16 height) { return RSDKTable.SetScreenSize(screenID, width, height); }
+    public static void GetWindowSize(int32* width, int32* height)                  => RSDKTable.GetWindowSize(width, height);
+    public static int32 SetScreenSize(uint8 screenID, uint16 width, uint16 height) => RSDKTable.SetScreenSize(screenID, width, height);
+
     public static void SetClipBounds(uint8 screenID, int32 x1, int32 y1, int32 x2, int32 y2) => RSDKTable.SetClipBounds(screenID, x1, y1, x2, y2);
 #if RETRO_REV02
     public static void SetScreenVertices(uint8 startVert2P_S1, uint8 startVert2P_S2, uint8 startVert3P_S1, uint8 startVert3P_S2, uint8 startVert3P_S3)
@@ -194,20 +197,24 @@ public static class Graphics
     }
 #endif
 
+    // ---------------------
     // Window/Video Settings
-    public static int32 GetVideoSetting(VideoSettingsValues id) { return RSDKTable.GetVideoSetting((.)id); }
-    public static void SetVideoSetting(VideoSettingsValues id, int32 value) => RSDKTable.SetVideoSetting((.)id, value);
+    // ---------------------
 
-    public static void UpdateWindow() => RSDKTable.UpdateWindow();
+    public static int32 GetVideoSetting(RSDK.VideoSettingsValues id)             => RSDKTable.GetVideoSetting((.)id);
+    public static void SetVideoSetting(RSDK.VideoSettingsValues id, int32 value) => RSDKTable.SetVideoSetting((.)id, value);
+    public static void UpdateWindow()                                            => RSDKTable.UpdateWindow();
 
+    // ------------------
     // Entities & Objects
-    public static int32 GetDrawListRefSlot(uint8 drawGroup, uint16 listPos) { return RSDKTable.GetDrawListRefSlot(drawGroup, listPos); }
-    public static void* GetDrawListRef(uint8 drawGroup, uint16 listPos) { return RSDKTable.GetDrawListRef(drawGroup, listPos); }
-    public static T* GetDrawListRef<T>(uint8 drawGroup, uint16 entitySlot) { return (T*)RSDKTable.GetDrawListRef(drawGroup, entitySlot); }
+    // ------------------
+
+    public static int32 GetDrawListRefSlot(uint8 drawGroup, uint16 listPos) => RSDKTable.GetDrawListRefSlot(drawGroup, listPos);
+    public static void* GetDrawListRef(uint8 drawGroup, uint16 listPos)     => RSDKTable.GetDrawListRef(drawGroup, listPos);
+    public static T* GetDrawListRef<T>(uint8 drawGroup, uint16 entitySlot)  => (T*)RSDKTable.GetDrawListRef(drawGroup, entitySlot);
+
     public static void AddDrawListRef(uint8 drawGroup, uint16 entitySlot) => RSDKTable.AddDrawListRef(drawGroup, entitySlot);
-    public static void SwapDrawListEntries(uint8 drawGroup, uint16 slot1, uint16 slot2, uint16 count)
-    {
-        RSDKTable.SwapDrawListEntries(drawGroup, slot1, slot2, count);
-    }
+
+    public static void SwapDrawListEntries(uint8 drawGroup, uint16 slot1, uint16 slot2, uint16 count) => RSDKTable.SwapDrawListEntries(drawGroup, slot1, slot2, count);
     public static void SetDrawGroupProperties(uint8 drawGroup, bool32 sorted, function void() hookCB) => RSDKTable.SetDrawGroupProperties(drawGroup, sorted, hookCB);
 }
