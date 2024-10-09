@@ -4,25 +4,17 @@ namespace RSDK;
 
 public static class Math
 {
-    public static T MIN<T>(T a, T b) where T : var, IInteger
-    {
-        return (a < b) ? a : b;
-    }
+    // --------------
+    // Helpers/Macros
+    // --------------
 
-    public static T MAX<T>(T a, T b) where T : var, IInteger
-    {
-        return (a) > (b) ? a : b;
-    }
+    public static T MIN<T>(T a, T b) where T : var, IInteger => (a < b) ? a : b;
+    public static T MAX<T>(T a, T b) where T : var, IInteger => (a) > (b) ? a : b;
 
-    public static T CLAMP<T>(T value, T minimum, T maximum) where T : var, IInteger
-    {
-        return (((value) < (minimum)) ? (minimum) : (((value) > (maximum)) ? (maximum) : (value)));
-    }
+    public static T CLAMP<T>(T value, T minimum, T maximum) where T : var, IInteger => (((value) < (minimum)) ? (minimum) : (((value) > (maximum)) ? (maximum) : (value)));
 
-    public static T FABS<T>(T a) where T : var, IInteger
-    {
-        return (a) > default ? a : -a;
-    }
+    public static T FABS<T>(T a) where T : var, IInteger => (a) > default ? a : -a;
+
 
     public static int SET_BIT(ref int value, int set, int pos)     => value ^= (-set ^ (value)) & (1 << (pos));
     public static int GET_BIT(int b, int pos)                      => (b) >> (pos) & 1;
@@ -53,7 +45,10 @@ public static class Math
     public static T TO_FIXED<T>(T x) where T : var, IInteger   => (x) << 16;
     public static T FROM_FIXED<T>(T x) where T : var, IInteger => (x) >> 16;
 
-    // Functions
+    // --------------
+    // RSDK Functions
+    // --------------
+
     public static int32 Sin1024(int32 angle)  => RSDKTable.Sin1024(angle);
     public static int32 Cos1024(int32 angle)  => RSDKTable.Cos1024(angle);
     public static int32 Tan1024(int32 angle)  => RSDKTable.Tan1024(angle);
