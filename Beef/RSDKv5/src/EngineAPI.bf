@@ -1,30 +1,28 @@
-using System;
-
 namespace RSDK;
 
 static
 {
-    public static RSDK.RSDKFunctionTable* RSDKTable;
-    public static RSDK.APIFunctionTable* APITable;
+    public static RSDKFunctionTable* RSDKTable;
+    public static APIFunctionTable* APITable;
 #if RETRO_USE_MOD_LOADER
-    public static RSDK.ModFunctionTable* modTable;
+    public static ModFunctionTable* modTable;
 #endif
 
-    public static RSDK.SceneInfo* sceneInfo;
+    public static SceneInfo* sceneInfo;
 
-    public static RSDK.GameInfo* gameInfo;
-    public static RSDK.SKUInfo* SKU;
+    public static GameInfo* gameInfo;
+    public static SKUInfo* SKU;
 
-    public static RSDK.ControllerState* controllerInfo;
-    public static RSDK.AnalogState* analogStickInfoL;
-    public static RSDK.AnalogState* analogStickInfoR;
-    public static RSDK.TriggerState* triggerInfoL;
-    public static RSDK.TriggerState* triggerInfoR;
-    public static RSDK.TouchInfo* touchInfo;
+    public static ControllerState* controllerInfo;
+    public static AnalogState* analogStickInfoL;
+    public static AnalogState* analogStickInfoR;
+    public static TriggerState* triggerInfoL;
+    public static TriggerState* triggerInfoR;
+    public static TouchInfo* touchInfo;
 
-    public static RSDK.UnknownInfo* unknownInfo;
+    public static UnknownInfo* unknownInfo;
 
-    public static RSDK.ScreenInfo* screenInfo;
+    public static ScreenInfo* screenInfo;
 }
 
 public enum Scopes : uint8
@@ -54,7 +52,7 @@ public enum GameLanguages
     TC,
 }
 
-[CRepr] public struct ModFunctionTable
+[System.CRepr] public struct ModFunctionTable
 {
     // Registration & Core
 #if RETRO_REV0U
@@ -78,11 +76,11 @@ public enum GameLanguages
     public function void(int32 classID, int32 callback, void* data) Super;
 
     // Mod Info
-    public function bool32(char8* id, RSDK.String* name, RSDK.String* description, RSDK.String* version, bool32* active) LoadModInfo;
-    public function void(char8* id, RSDK.String* result) GetModPath;
+    public function bool32(char8* id, String* name, String* description, String* version, bool32* active) LoadModInfo;
+    public function void(char8* id, String* result) GetModPath;
     public function int32(bool32 active) GetModCount;
     public function char8*(uint32 index) GetModIDByIndex;
-    public function bool32(RSDK.String* id) ForeachModID;
+    public function bool32(String* id) ForeachModID;
 
     // Mod Callbacks & Public Functions
     public function void(int32 callbackID, function void(void*) callback) AddModCallback;
@@ -94,24 +92,24 @@ public enum GameLanguages
     public function bool32(char8* id, char8* key, bool32 fallback) GetSettingsBool;
     public function int32(char8* id, char8* key, int32 fallback) GetSettingsInteger;
     public function float(char8* id, char8* key, float fallback) GetSettingsFloat;
-    public function void(char8* id, char8* key, RSDK.String* result, char8* fallback) GetSettingsString;
+    public function void(char8* id, char8* key, String* result, char8* fallback) GetSettingsString;
     public function void(char8* key, bool32 val) SetSettingsBool;
     public function void(char8* key, int32 val) SetSettingsInteger;
     public function void(char8* key, float val) SetSettingsFloat;
-    public function void(char8* key, RSDK.String* val) SetSettingsString;
+    public function void(char8* key, String* val) SetSettingsString;
     public function void() SaveSettings;
 
     // Config
     public function bool32(char8* key, bool32 fallback) GetConfigBool;
     public function int32(char8* key, int32 fallback) GetConfigInteger;
     public function float(char8* key, float fallback) GetConfigFloat;
-    public function void(char8* key, RSDK.String* result, char8* fallback) GetConfigString;
-    public function bool32(RSDK.String* config) ForeachConfig;
-    public function bool32(RSDK.String* category) ForeachConfigCategory;
+    public function void(char8* key, String* result, char8* fallback) GetConfigString;
+    public function bool32(String* config) ForeachConfig;
+    public function bool32(String* category) ForeachConfigCategory;
 
     // Achievements
     public function void(char8* identifier, char8* name, char8* desc) RegisterAchievement;
-    public function void(uint32 id, RSDK.String* name, RSDK.String* description, RSDK.String* identifier, bool32* achieved) GetAchievementInfo;
+    public function void(uint32 id, String* name, String* description, String* identifier, bool32* achieved) GetAchievementInfo;
     public function int32(char8* identifier) GetAchievementIndexByID;
     public function int32() GetAchievementCount;
 
@@ -128,8 +126,8 @@ public enum GameLanguages
 
 #if RETRO_MOD_LOADER_VER_2
     // Mod Settings (Part 2)
-    public function bool32(char8 *id, RSDK.String *setting) ForeachSetting;
-    public function bool32(char8 *id, RSDK.String *category) ForeachSettingCategory;
+    public function bool32(char8 *id, String *setting) ForeachSetting;
+    public function bool32(char8 *id, String *category) ForeachSettingCategory;
 
     // Files
     public function bool32(char8 *id, char8 *path) ExcludeFile;
@@ -152,7 +150,7 @@ public enum GameLanguages
     public function void *(uint8 id) GetShader;
     public function void*(uint16 id) GetModel;
     public function void*(uint16 id) GetScene3D;
-    public function void(RSDK.Animator *animator, uint16 tileIndex) DrawDynamicAniTiles;
+    public function void(Animator *animator, uint16 tileIndex) DrawDynamicAniTiles;
 
     // Audio
     public function void*(uint16 id) GetSfx;
@@ -162,21 +160,21 @@ public enum GameLanguages
     public function bool32(uint16 group, void **entity) GetGroupEntities;
 
     // Collision
-    public function void (RSDK.CollisionSensor *sensors) SetPathGripSensors; // expects 5 sensors
-    public function void (RSDK.CollisionSensor *sensor) FindFloorPosition;
-    public function void (RSDK.CollisionSensor *sensor) FindLWallPosition;
-    public function void (RSDK.CollisionSensor *sensor) FindRoofPosition;
-    public function void (RSDK.CollisionSensor *sensor) FindRWallPosition;
-    public function void (RSDK.CollisionSensor *sensor) FloorCollision;
-    public function void (RSDK.CollisionSensor *sensor) LWallCollision;
-    public function void (RSDK.CollisionSensor *sensor) RoofCollision;
-    public function void (RSDK.CollisionSensor *sensor) RWallCollision;
+    public function void (CollisionSensor *sensors) SetPathGripSensors; // expects 5 sensors
+    public function void (CollisionSensor *sensor) FindFloorPosition;
+    public function void (CollisionSensor *sensor) FindLWallPosition;
+    public function void (CollisionSensor *sensor) FindRoofPosition;
+    public function void (CollisionSensor *sensor) FindRWallPosition;
+    public function void (CollisionSensor *sensor) FloorCollision;
+    public function void (CollisionSensor *sensor) LWallCollision;
+    public function void (CollisionSensor *sensor) RoofCollision;
+    public function void (CollisionSensor *sensor) RWallCollision;
     public function void (uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) CopyCollisionMask;
-    public function void (RSDK.CollisionMask **masks, RSDK.TileInfo **tileInfo) GetCollisionInfo;
+    public function void (CollisionMask **masks, TileInfo **tileInfo) GetCollisionInfo;
 #endif
 }
 
-[CRepr] public struct APIFunctionTable
+[System.CRepr] public struct APIFunctionTable
 {
     // API Core
     public function int32() GetUserLanguage;
@@ -202,32 +200,32 @@ public enum GameLanguages
 #endif
 
     // Achievements
-    public function void(RSDK.AchievementID* id) TryUnlockAchievement;
+    public function void(AchievementID* id) TryUnlockAchievement;
     public function bool32() GetAchievementsEnabled;
     public function void(bool32 enabled) SetAchievementsEnabled;
 #if RETRO_USE_EGS
     public function bool32() CheckAchievementsEnabled;
-    public function void (RSDK.String **names, int32 count) SetAchievementNames;
+    public function void (String **names, int32 count) SetAchievementNames;
 #endif
     // Leaderboards
 #if RETRO_USE_EGS
     public function bool32() CheckLeaderboardsEnabled;
 #endif
     public function void() InitLeaderboards;
-    public function void(RSDK.LeaderboardID* leaderboard, bool32 isUser) FetchLeaderboard;
-    public function void(RSDK.LeaderboardID* leaderboard, int32 score, function void(bool32 success, int32 rank) callback) TrackScore;
+    public function void(LeaderboardID* leaderboard, bool32 isUser) FetchLeaderboard;
+    public function void(LeaderboardID* leaderboard, int32 score, function void(bool32 success, int32 rank) callback) TrackScore;
     public function int32() GetLeaderboardsStatus;
-    public function RSDK.LeaderboardAvail() LeaderboardEntryViewSize;
-    public function RSDK.LeaderboardAvail() LeaderboardEntryLoadSize;
+    public function LeaderboardAvail() LeaderboardEntryViewSize;
+    public function LeaderboardAvail() LeaderboardEntryLoadSize;
     public function void(int32 start, uint32 end, int32 type) LoadLeaderboardEntries;
     public function void() ResetLeaderboardInfo;
-    public function RSDK.LeaderboardEntry*(uint32 entryID) ReadLeaderboardEntry;
+    public function LeaderboardEntry*(uint32 entryID) ReadLeaderboardEntry;
 
     // Rich Presence
-    public function void(int32 id, RSDK.String* text) SetRichPresence;
+    public function void(int32 id, String* text) SetRichPresence;
 
     // Stats
-    public function void(RSDK.StatInfo* stat) TryTrackStat;
+    public function void(StatInfo* stat) TryTrackStat;
     public function bool32() GetStatsEnabled;
     public function void(bool32 enabled) SetStatsEnabled;
 
@@ -235,7 +233,7 @@ public enum GameLanguages
     public function void() ClearPrerollErrors;
     public function void() TryAuth;
     public function int32() GetUserAuthStatus;
-    public function bool32(RSDK.String* userName) GetUsername;
+    public function bool32(String* userName) GetUsername;
 
     // Storage
     public function void() TryInitStorage;
@@ -277,7 +275,7 @@ public enum GameLanguages
     public function bool32(uint16 tableID) RemoveAllDBRows;
 }
 
-[CRepr] public struct RSDKFunctionTable
+[System.CRepr] public struct RSDKFunctionTable
 {
     // Registration
 #if RETRO_REV0U
@@ -312,8 +310,8 @@ public enum GameLanguages
     public function void(uint16 slot, uint16 classID, void* data) ResetEntitySlot;
     public function void*(uint16 classID, void* data, int32 x, int32 y) CreateEntity;
     public function void(void* destEntity, void* srcEntity, bool32 clearSrcEntity) CopyEntity;
-    public function bool32(void* entity, RSDK.Vector2* range) CheckOnScreen;
-    public function bool32(RSDK.Vector2* position, RSDK.Vector2* range) CheckPosOnScreen;
+    public function bool32(void* entity, Vector2* range) CheckOnScreen;
+    public function bool32(Vector2* position, Vector2* range) CheckPosOnScreen;
     public function void(uint8 drawGroup, uint16 entitySlot) AddDrawListRef;
     public function void(uint8 drawGroup, uint16 slot1, uint16 slot2, uint16 count) SwapDrawListEntries;
     public function void(uint8 drawGroup, bool32 sorted, function void() hookCB) SetDrawGroupProperties;
@@ -331,7 +329,7 @@ public enum GameLanguages
 
     // Cameras
     public function void() ClearCameras;
-    public function void(RSDK.Vector2* targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative) AddCamera;
+    public function void(Vector2* targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative) AddCamera;
 
     // API (Rev01 only)
 #if !RETRO_REV02
@@ -365,27 +363,27 @@ public enum GameLanguages
     public function uint8(int32 x, int32 y) ATan2;
 
     // Matrices
-    public function void(RSDK.Matrix* matrix) SetIdentityMatrix;
-    public function void(RSDK.Matrix* dest, RSDK.Matrix* matrixA, RSDK.Matrix* matrixB) MatrixMultiply;
-    public function void(RSDK.Matrix* matrix, int32 x, int32 y, int32 z, bool32 setIdentity) MatrixTranslateXYZ;
-    public function void(RSDK.Matrix* matrix, int32 x, int32 y, int32 z) MatrixScaleXYZ;
-    public function void(RSDK.Matrix* matrix, int16 angle) MatrixRotateX;
-    public function void(RSDK.Matrix* matrix, int16 angle) MatrixRotateY;
-    public function void(RSDK.Matrix* matrix, int16 angle) MatrixRotateZ;
-    public function void(RSDK.Matrix* matrix, int16 x, int16 y, int16 z) MatrixRotateXYZ;
-    public function void(RSDK.Matrix* dest, RSDK.Matrix* matrix) MatrixInverse;
-    public function void(RSDK.Matrix* matDest, RSDK.Matrix* matSrc) MatrixCopy;
+    public function void(Matrix* matrix) SetIdentityMatrix;
+    public function void(Matrix* dest, Matrix* matrixA, Matrix* matrixB) MatrixMultiply;
+    public function void(Matrix* matrix, int32 x, int32 y, int32 z, bool32 setIdentity) MatrixTranslateXYZ;
+    public function void(Matrix* matrix, int32 x, int32 y, int32 z) MatrixScaleXYZ;
+    public function void(Matrix* matrix, int16 angle) MatrixRotateX;
+    public function void(Matrix* matrix, int16 angle) MatrixRotateY;
+    public function void(Matrix* matrix, int16 angle) MatrixRotateZ;
+    public function void(Matrix* matrix, int16 x, int16 y, int16 z) MatrixRotateXYZ;
+    public function void(Matrix* dest, Matrix* matrix) MatrixInverse;
+    public function void(Matrix* matDest, Matrix* matSrc) MatrixCopy;
 
     // Strings
-    public function void(RSDK.String* string, char8* text, uint32 textLength) InitString;
-    public function void(RSDK.String* dst, RSDK.String* src) CopyString;
-    public function void(RSDK.String* string, char8* text) SetString;
-    public function void(RSDK.String* string, RSDK.String* appendString) AppendString;
-    public function void(RSDK.String* string, char8* appendText) AppendText;
-    public function void(RSDK.String* stringList, char8* filePath, uint32 charSize) LoadStringList;
-    public function bool32(RSDK.String* splitStrings, RSDK.String* stringList, int32 startStringID, int32 stringCount) SplitStringList;
-    public function void(char8* destChars, RSDK.String* string) GetCString;
-    public function bool32(RSDK.String* string1, RSDK.String* string2, bool32 exactMatch) CompareStrings;
+    public function void(String* string, char8* text, uint32 textLength) InitString;
+    public function void(String* dst, String* src) CopyString;
+    public function void(String* string, char8* text) SetString;
+    public function void(String* string, String* appendString) AppendString;
+    public function void(String* string, char8* appendText) AppendText;
+    public function void(String* stringList, char8* filePath, uint32 charSize) LoadStringList;
+    public function bool32(String* splitStrings, String* stringList, int32 startStringID, int32 stringCount) SplitStringList;
+    public function void(char8* destChars, String* string) GetCString;
+    public function bool32(String* string1, String* string2, bool32 exactMatch) CompareStrings;
 
     // Screens & Displays
     public function void(int32* displayID, int32* width, int32* height, int32* refreshRate, char8* text) GetDisplayInfo;
@@ -426,17 +424,17 @@ public enum GameLanguages
     public function void(int32 x, int32 y, int32 radius, uint32 color, int32 alpha, int32 inkEffect, bool32 screenRelative) DrawCircle;
     public function void(int32 x, int32 y, int32 innerRadius, int32 outerRadius, uint32 color, int32 alpha, int32 inkEffect,
         bool32 screenRelative) DrawCircleOutline;
-    public function void(RSDK.Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect) DrawFace;
-    public function void(RSDK.Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, int32 inkEffect) DrawBlendedFace;
-    public function void(RSDK.Animator* animator, RSDK.Vector2* position, bool32 screenRelative) DrawSprite;
+    public function void(Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect) DrawFace;
+    public function void(Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, int32 inkEffect) DrawBlendedFace;
+    public function void(Animator* animator, Vector2* position, bool32 screenRelative) DrawSprite;
     public function void(uint16 sheetID, int32 inkEffect, bool32 screenRelative) DrawDeformedSprite;
-    public function void(RSDK.Animator* animator, RSDK.Vector2* position, RSDK.String* string, int32 endFrame, int32 textLength, int32 align, int32 spacing,
-        void* unused, RSDK.Vector2* charOffsets, bool32 screenRelative) DrawText;
-    public function void(uint16* tiles, int32 countX, int32 countY, RSDK.Vector2* position, RSDK.Vector2* offset, bool32 screenRelative) DrawTile;
+    public function void(Animator* animator, Vector2* position, String* string, int32 endFrame, int32 textLength, int32 align, int32 spacing,
+        void* unused, Vector2* charOffsets, bool32 screenRelative) DrawText;
+    public function void(uint16* tiles, int32 countX, int32 countY, Vector2* position, Vector2* offset, bool32 screenRelative) DrawTile;
     public function void(uint16 dest, uint16 src, uint16 count) CopyTile;
     public function void(uint16 sheetID, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height) DrawAniTiles;
 #if RETRO_REV0U
-    public function void(RSDK.Animator* animator, uint16 tileIndex) DrawDynamicAniTiles;
+    public function void(Animator* animator, uint16 tileIndex) DrawDynamicAniTiles;
 #endif
     public function void(uint32 color, int32 alphaR, int32 alphaG, int32 alphaB) FillScreen;
 
@@ -447,9 +445,9 @@ public enum GameLanguages
     public function void(uint16 sceneIndex, uint8 x, uint8 y, uint8 z) SetDiffuseColor;
     public function void(uint16 sceneIndex, uint8 x, uint8 y, uint8 z) SetDiffuseIntensity;
     public function void(uint16 sceneIndex, uint8 x, uint8 y, uint8 z) SetSpecularIntensity;
-    public function void(uint16 modelFrames, uint16 sceneIndex, uint8 drawMode, RSDK.Matrix* matWorld, RSDK.Matrix* matView, color color) AddModelTo3DScene;
-    public function void(uint16 modelFrames, RSDK.Animator* animator, int16 speed, uint8 loopIndex, bool32 forceApply, int16 frameID) SetModelAnimation;
-    public function void(uint16 modelFrames, uint16 sceneIndex, RSDK.Animator* animator, uint8 drawMode, RSDK.Matrix* matWorld, RSDK.Matrix* matView,
+    public function void(uint16 modelFrames, uint16 sceneIndex, uint8 drawMode, Matrix* matWorld, Matrix* matView, color color) AddModelTo3DScene;
+    public function void(uint16 modelFrames, Animator* animator, int16 speed, uint8 loopIndex, bool32 forceApply, int16 frameID) SetModelAnimation;
+    public function void(uint16 modelFrames, uint16 sceneIndex, Animator* animator, uint8 drawMode, Matrix* matWorld, Matrix* matView,
         color color) AddMeshFrameTo3DScene;
     public function void(uint16 sceneIndex) Draw3DScene;
 
@@ -457,54 +455,54 @@ public enum GameLanguages
     public function uint16(char8* filePath, uint8 scopeType) LoadSpriteAnimation;
     public function uint16(char8* filePath, uint32 frameCount, uint32 listCount, uint8 scopeType) CreateSpriteAnimation;
 #if RETRO_MOD_LOADER_VER_2
-    public function void(uint16 aniFrames, uint16 listID, RSDK.Animator* animator, uint32 forceApply, int32 frameID) SetSpriteAnimation;
+    public function void(uint16 aniFrames, uint16 listID, Animator* animator, uint32 forceApply, int32 frameID) SetSpriteAnimation;
 #else
-    public function void(uint16 aniFrames, uint16 listID, RSDK.Animator* animator, uint32 forceApply, int16 frameID) SetSpriteAnimation;
+    public function void(uint16 aniFrames, uint16 listID, Animator* animator, uint32 forceApply, int16 frameID) SetSpriteAnimation;
 #endif
     public function void(uint16 aniFrames, uint16 listID, char8* name, int32 frameOffset, uint16 frameCount, int16 speed, uint8 loopIndex,
         uint8 rotationStyle) EditSpriteAnimation;
-    public function void(uint16 aniFrames, uint16 listID, RSDK.String* string) SetSpriteString;
+    public function void(uint16 aniFrames, uint16 listID, String* string) SetSpriteString;
     public function uint16(uint16 aniFrames, char8* name) FindSpriteAnimation;
-    public function RSDK.SpriteFrame*(uint16 aniFrames, uint16 listID, int32 frameID) GetFrame;
-    public function RSDK.Hitbox*(RSDK.Animator* animator, uint8 hitboxID) GetHitbox;
-    public function int16(RSDK.Animator* animator) GetFrameID;
-    public function int32(uint16 aniFrames, uint16 listID, RSDK.String* string, int32 startIndex, int32 length, int32 spacing) GetStringWidth;
-    public function void(RSDK.Animator* animator) ProcessAnimation;
+    public function SpriteFrame*(uint16 aniFrames, uint16 listID, int32 frameID) GetFrame;
+    public function Hitbox*(Animator* animator, uint8 hitboxID) GetHitbox;
+    public function int16(Animator* animator) GetFrameID;
+    public function int32(uint16 aniFrames, uint16 listID, String* string, int32 startIndex, int32 length, int32 spacing) GetStringWidth;
+    public function void(Animator* animator) ProcessAnimation;
 
     // Tile Layers
     public function uint16(char8* name) GetTileLayerID;
-    public function RSDK.TileLayer*(uint16 layerID) GetTileLayer;
-    public function void(uint16 layer, RSDK.Vector2* size, bool32 usePixelUnits) GetLayerSize;
+    public function TileLayer*(uint16 layerID) GetTileLayer;
+    public function void(uint16 layer, Vector2* size, bool32 usePixelUnits) GetLayerSize;
     public function uint16(uint16 layer, int32 x, int32 y) GetTile;
     public function void(uint16 layer, int32 x, int32 y, uint16 tile) SetTile;
     public function void(uint16 dstLayerID, int32 dstStartX, int32 dstStartY, uint16 srcLayerID, int32 srcStartX, int32 srcStartY, int32 countX,
         int32 countY) CopyTileLayer;
-    public function void(RSDK.TileLayer* tileLayer) ProcessParallax;
-    public function RSDK.ScanlineInfo*() GetScanlines;
+    public function void(TileLayer* tileLayer) ProcessParallax;
+    public function ScanlineInfo*() GetScanlines;
 
     // Object & Tile Collisions
-    public function bool32(void* thisEntity, RSDK.Hitbox* thisHitbox, void* otherEntity, RSDK.Hitbox* otherHitbox) CheckObjectCollisionTouchBox;
+    public function bool32(void* thisEntity, Hitbox* thisHitbox, void* otherEntity, Hitbox* otherHitbox) CheckObjectCollisionTouchBox;
     public function bool32(void* thisEntity, int32 thisRadius, void* otherEntity, int32 otherRadius) CheckObjectCollisionTouchCircle;
-    public function uint8(void* thisEntity, RSDK.Hitbox* thisHitbox, void* otherEntity, RSDK.Hitbox* otherHitbox, bool32 setPos) CheckObjectCollisionBox;
-    public function bool32(void* thisEntity, RSDK.Hitbox* thisHitbox, void* otherEntity, RSDK.Hitbox* otherHitbox, bool32 setPos) CheckObjectCollisionPlatform;
+    public function uint8(void* thisEntity, Hitbox* thisHitbox, void* otherEntity, Hitbox* otherHitbox, bool32 setPos) CheckObjectCollisionBox;
+    public function bool32(void* thisEntity, Hitbox* thisHitbox, void* otherEntity, Hitbox* otherHitbox, bool32 setPos) CheckObjectCollisionPlatform;
     public function bool32(void*, uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset,
         bool32 setPos) ObjectTileCollision;
     public function bool32(void*, uint16 collisionLayers, uint8 collisionMode, uint8 collisionPlane, int32 xOffset, int32 yOffset,
         int32 tolerance) ObjectTileGrip;
-    public function void(void* entity, RSDK.Hitbox* outer, RSDK.Hitbox* inner) ProcessObjectMovement;
+    public function void(void* entity, Hitbox* outer, Hitbox* inner) ProcessObjectMovement;
 
 #if RETRO_REV0U
     public function void(int32 minDistance, uint8 lowTolerance, uint8 highTolerance, uint8 floorAngleTolerance, uint8 wallAngleTolerance,
         uint8 roofAngleTolerance) SetupCollisionConfig;
-    public function void(RSDK.CollisionSensor* sensors) SetPathGripSensors; // expects 5 sensors
-    public function void(RSDK.CollisionSensor* sensor) FindFloorPosition;
-    public function void(RSDK.CollisionSensor* sensor) FindLWallPosition;
-    public function void(RSDK.CollisionSensor* sensor) FindRoofPosition;
-    public function void(RSDK.CollisionSensor* sensor) FindRWallPosition;
-    public function void(RSDK.CollisionSensor* sensor) FloorCollision;
-    public function void(RSDK.CollisionSensor* sensor) LWallCollision;
-    public function void(RSDK.CollisionSensor* sensor) RoofCollision;
-    public function void(RSDK.CollisionSensor* sensor) RWallCollision;
+    public function void(CollisionSensor* sensors) SetPathGripSensors; // expects 5 sensors
+    public function void(CollisionSensor* sensor) FindFloorPosition;
+    public function void(CollisionSensor* sensor) FindLWallPosition;
+    public function void(CollisionSensor* sensor) FindRoofPosition;
+    public function void(CollisionSensor* sensor) FindRWallPosition;
+    public function void(CollisionSensor* sensor) FloorCollision;
+    public function void(CollisionSensor* sensor) LWallCollision;
+    public function void(CollisionSensor* sensor) RoofCollision;
+    public function void(CollisionSensor* sensor) RWallCollision;
 #endif
     public function int32(uint16 tile, uint8 cPlane, uint8 cMode) GetTileAngle;
     public function void(uint16 tile, uint8 cPlane, uint8 cMode, uint8 angle) SetTileAngle;
@@ -512,7 +510,7 @@ public enum GameLanguages
     public function void(uint16 tile, uint8 cPlane, uint8 flag) SetTileFlags;
 #if RETRO_REV0U
     public function void(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) CopyCollisionMask;
-    public function void(RSDK.CollisionMask** masks, RSDK.TileInfo** tileInfo) GetCollisionInfo;
+    public function void(CollisionMask** masks, TileInfo** tileInfo) GetCollisionInfo;
 #endif
 
     // Audio
@@ -560,12 +558,12 @@ public enum GameLanguages
 #if RETRO_REV02
     public function void(int32 mode, char8* message, ...) PrintLog;
     public function void(int32 mode, char8* message) PrintText;
-    public function void(int32 mode, RSDK.String* message) PrintString;
+    public function void(int32 mode, String* message) PrintString;
     public function void(int32 mode, char8* message, uint32 i) PrintUInt32;
     public function void(int32 mode, char8* message, int32 i) PrintInt32;
     public function void(int32 mode, char8* message, float f) PrintFloat;
-    public function void(int32 mode, char8* message, RSDK.Vector2 vec) PrintVector2;
-    public function void(int32 mode, char8* message, RSDK.Hitbox hitbox) PrintHitbox;
+    public function void(int32 mode, char8* message, Vector2 vec) PrintVector2;
+    public function void(int32 mode, char8* message, Hitbox hitbox) PrintHitbox;
 #endif
 
     // Editor
@@ -601,7 +599,7 @@ public enum GamePlatforms
     PLATFORM_DEV = 0xFF,
 }
 
-[CRepr] public struct SKUInfo
+[System.CRepr] public struct SKUInfo
 {
     public int32 platform;
     public int32 language;
@@ -624,7 +622,7 @@ public enum StatusCodes
 
 // None of these besides the named 2 are even used
 // and even then they're not even set in plus
-[CRepr] public struct UnknownInfo
+[System.CRepr] public struct UnknownInfo
 {
     public int32 unknown1;
     public int32 unknown2;
@@ -640,54 +638,54 @@ public enum StatusCodes
     public int32 unknown10;
 }
 
-[CRepr] public struct GameInfo
+[System.CRepr] public struct GameInfo
 {
     public char8[0x40] gameTitle;
     public char8[0x100] gameSubtitle;
     public char8[0x10] version;
 }
 
-[CRepr] public struct InputState
+[System.CRepr] public struct InputState
 {
     public bool32 down;
     public bool32 press;
     public int32 keyMap;
 }
 
-[CRepr] public struct ControllerState
+[System.CRepr] public struct ControllerState
 {
-    public RSDK.InputState keyUp;
-    public RSDK.InputState keyDown;
-    public RSDK.InputState keyLeft;
-    public RSDK.InputState keyRight;
-    public RSDK.InputState keyA;
-    public RSDK.InputState keyB;
-    public RSDK.InputState keyC;
-    public RSDK.InputState keyX;
-    public RSDK.InputState keyY;
-    public RSDK.InputState keyZ;
-    public RSDK.InputState keyStart;
-    public RSDK.InputState keySelect;
+    public InputState keyUp;
+    public InputState keyDown;
+    public InputState keyLeft;
+    public InputState keyRight;
+    public InputState keyA;
+    public InputState keyB;
+    public InputState keyC;
+    public InputState keyX;
+    public InputState keyY;
+    public InputState keyZ;
+    public InputState keyStart;
+    public InputState keySelect;
 
     // Rev01 hasn't split these into different structs yet
 #if RETRO_REV01
-    public RSDK.InputState keyBumperL;
-    public RSDK.InputState keyBumperR;
-    public RSDK.InputState keyTriggerL;
-    public RSDK.InputState keyTriggerR;
-    public RSDK.InputState keyStickL;
-    public RSDK.InputState keyStickR;
+    public InputState keyBumperL;
+    public InputState keyBumperR;
+    public InputState keyTriggerL;
+    public InputState keyTriggerR;
+    public InputState keyStickL;
+    public InputState keyStickR;
 #endif
 }
 
-[CRepr] public struct AnalogState
+[System.CRepr] public struct AnalogState
 {
-    public RSDK.InputState keyUp;
-    public RSDK.InputState keyDown;
-    public RSDK.InputState keyLeft;
-    public RSDK.InputState keyRight;
+    public InputState keyUp;
+    public InputState keyDown;
+    public InputState keyLeft;
+    public InputState keyRight;
 #if RETRO_REV02
-    public RSDK.InputState keyStick;
+    public InputState keyStick;
     public float deadzone;
     public float hDelta;
     public float vDelta;
@@ -703,15 +701,15 @@ public enum StatusCodes
 }
 
 #if RETRO_REV02
-[CRepr] public struct TriggerState {
-    public RSDK.InputState keyBumper;
-    public RSDK.InputState keyTrigger;
+[System.CRepr] public struct TriggerState {
+    public InputState keyBumper;
+    public InputState keyTrigger;
     public float bumperDelta;
     public float triggerDelta;
 }
 #endif
 
-[CRepr] public struct TouchInfo
+[System.CRepr] public struct TouchInfo
 {
     public float[0x10] x;
     public float[0x10] y;
@@ -727,12 +725,12 @@ public enum StatusCodes
 #endif
 }
 
-[CRepr] public struct ScreenInfo
+[System.CRepr] public struct ScreenInfo
 {
     public uint16[Const.SCREEN_XMAX * Const.SCREEN_YSIZE] frameBuffer;
-    public RSDK.Vector2 position;
-    public RSDK.Vector2 size;
-    public RSDK.Vector2 center;
+    public Vector2 position;
+    public Vector2 size;
+    public Vector2 center;
     public int32 pitch;
     public int32 clipBound_X1;
     public int32 clipBound_Y1;
@@ -741,46 +739,46 @@ public enum StatusCodes
     public int32 waterDrawPos;
 }
 
-[CRepr] public struct EngineInfo
+[System.CRepr] public struct EngineInfo
 {
-    public RSDK.RSDKFunctionTable* RSDKTable = null;
+    public RSDKFunctionTable* RSDKTable = null;
 #if RETRO_REV02
-    public RSDK.APIFunctionTable* APITable = null;
+    public APIFunctionTable* APITable = null;
 #endif
 
-    public RSDK.GameInfo* gameInfo = null;
+    public GameInfo* gameInfo = null;
 #if RETRO_REV02
-    public RSDK.SKUInfo* currentSKU = null;
+    public SKUInfo* currentSKU = null;
 #endif
-    public RSDK.SceneInfo* sceneInfo = null;
+    public SceneInfo* sceneInfo = null;
 
-    public RSDK.ControllerState* controllerInfo = null;
-    public RSDK.AnalogState* stickInfoL = null;
+    public ControllerState* controllerInfo = null;
+    public AnalogState* stickInfoL = null;
 #if RETRO_REV02
-    public RSDK.AnalogState* stickInfoR = null;
-    public RSDK.TriggerState* triggerInfoL = null;
-    public RSDK.TriggerState* triggerInfoR = null;
+    public AnalogState* stickInfoR = null;
+    public TriggerState* triggerInfoL = null;
+    public TriggerState* triggerInfoR = null;
 #endif
-    public RSDK.TouchInfo* touchInfo = null;
+    public TouchInfo* touchInfo = null;
 
 #if RETRO_REV02
-    public RSDK.UnknownInfo* unknownInfo = null;
+    public UnknownInfo* unknownInfo = null;
 #endif
 
-    public RSDK.ScreenInfo* screenInfo = null;
+    public ScreenInfo* screenInfo = null;
 
 #if RETRO_REV02 && RETRO_REV0U
     public void* hedgehogLink = null;
 #endif
 
 #if RETRO_USE_MOD_LOADER
-    public RSDK.ModFunctionTable *modFunctionTable = null;
+    public ModFunctionTable *modFunctionTable = null;
 #endif
 }
 
 static
 {
-    public static void InitEngineInfo(RSDK.EngineInfo* info)
+    public static void InitEngineInfo(EngineInfo* info)
     {
         RSDKTable = info.RSDKTable;
 #if RETRO_REV02

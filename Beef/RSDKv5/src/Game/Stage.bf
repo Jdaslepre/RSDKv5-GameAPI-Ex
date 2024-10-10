@@ -1,5 +1,3 @@
-using System;
-
 namespace RSDK;
 
 public enum EngineStates : uint8
@@ -23,7 +21,7 @@ public enum EngineStates : uint8
 #endif
 }
 
-[CRepr] public struct SceneListInfo
+[System.CRepr] public struct SceneListInfo
 {
     public uint32[4] hash;
     public char8[0x20] name;
@@ -32,7 +30,7 @@ public enum EngineStates : uint8
     public uint8 sceneCount;
 }
 
-[CRepr] public struct SceneListEntry
+[System.CRepr] public struct SceneListEntry
 {
     public uint32[4] hash;
     public char8[0x20] name;
@@ -43,11 +41,11 @@ public enum EngineStates : uint8
 #endif
 }
 
-[CRepr] public struct SceneInfo
+[System.CRepr] public struct SceneInfo
 {
     public GameObject.Entity* entity;
-    public RSDK.SceneListEntry* listData;
-    public RSDK.SceneListInfo* listCategory;
+    public SceneListEntry* listData;
+    public SceneListInfo* listCategory;
     public int32 timeCounter;
     public int32 currentDrawGroup;
     public int32 currentScreenID;
@@ -73,14 +71,14 @@ public enum EngineStates : uint8
 
 public static class Stage
 {
-    public static bool32 CheckSceneFolder(char8* folderName) { return RSDKTable.CheckSceneFolder(folderName); }
-    public static bool32 CheckValidScene() { return RSDKTable.CheckValidScene(); }
+    public static bool32 CheckSceneFolder(char8* folderName) => RSDKTable.CheckSceneFolder(folderName);
+    public static bool32 CheckValidScene() => RSDKTable.CheckValidScene();
     public static void SetScene(char8* categoryName, char8* sceneName) => RSDKTable.SetScene(categoryName, sceneName);
     public static void LoadScene() => RSDKTable.LoadScene();
-    public static void SetEngineState(RSDK.EngineStates state) => RSDKTable.SetEngineState((.)state);
+    public static void SetEngineState(EngineStates state) => RSDKTable.SetEngineState((.)state);
 #if RETRO_REV02
     public static void ForceHardReset(bool32 shouldHardReset) => RSDKTable.ForceHardReset(shouldHardReset);
 #endif
 
-    public static RSDK.ScanlineInfo* GetScanlines() { return RSDKTable.GetScanlines(); }
+    public static ScanlineInfo* GetScanlines() => RSDKTable.GetScanlines();
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace RSDK;
 
 #if RETRO_REV02
@@ -38,22 +36,22 @@ public static class Dev
 #if RETRO_REV02
     public static void Print(PrintModes severity, char8 *message, ...)
     {
-        VarArgs vArgs = .();
+        System.VarArgs vArgs = .();
         vArgs.Start!();
         RSDKTable.PrintLog((.)severity, message, vArgs.ToVAList());
         vArgs.End!();
     }
 
     public static void PrintText(PrintModes severity, char8 *message) => RSDKTable.PrintText((.)severity, message); 
-    public static void PrintString(PrintModes severity, RSDK.String *string, ...) => RSDKTable.PrintString((.)severity, string); 
+    public static void PrintString(PrintModes severity, String *string, ...) => RSDKTable.PrintString((.)severity, string); 
     public static void PrintUInt32(PrintModes severity, char8 *message, uint32 integer) => RSDKTable.PrintUInt32((.)severity, message, integer); 
     public static void PrintInt32(PrintModes severity, char8 *message, int32 integer) => RSDKTable.PrintInt32((.)severity, message, integer);
     public static void PrintFloat(PrintModes severity, char8 *message, float f) => RSDKTable.PrintFloat((.)severity, message, f);
-    public static void PrintVector2(PrintModes severity, char8 *message, int32 x, int32 y) => RSDKTable.PrintVector2((.)severity, message, RSDK.Vector2(x, y));
-    public static void PrintVector2(PrintModes severity, char8 *message, RSDK.Vector2 *vec) => RSDKTable.PrintVector2((.)severity, message, *vec);
-    public static void PrintVector2(PrintModes severity, char8 *message, RSDK.Vector2 vec) => RSDKTable.PrintVector2((.)severity, message, vec); 
-    public static void PrintHitbox(PrintModes severity, char8 *message, RSDK.Hitbox *hitbox) => RSDKTable.PrintHitbox((.)severity, message, *hitbox);
-    public static void PrintHitbox(PrintModes severity, char8 *message, RSDK.Hitbox hitbox) => RSDKTable.PrintHitbox((.)severity, message, hitbox);
+    public static void PrintVector2(PrintModes severity, char8 *message, int32 x, int32 y) => RSDKTable.PrintVector2((.)severity, message, .(x, y));
+    public static void PrintVector2(PrintModes severity, char8 *message, Vector2 *vec) => RSDKTable.PrintVector2((.)severity, message, *vec);
+    public static void PrintVector2(PrintModes severity, char8 *message, Vector2 vec) => RSDKTable.PrintVector2((.)severity, message, vec); 
+    public static void PrintHitbox(PrintModes severity, char8 *message, Hitbox *hitbox) => RSDKTable.PrintHitbox((.)severity, message, *hitbox);
+    public static void PrintHitbox(PrintModes severity, char8 *message, Hitbox hitbox) => RSDKTable.PrintHitbox((.)severity, message, hitbox);
 
     public static void ClearViewableVariables() => RSDKTable.ClearViewableVariables();
     public static void AddViewableVariable(char8 *name, int *value, ViewableVarTypes type, int32 min, int32 max) => RSDKTable.AddViewableVariable(name, value, (.)type, min, max);

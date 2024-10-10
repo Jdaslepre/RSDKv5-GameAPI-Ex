@@ -112,7 +112,7 @@ public struct Palette
 
 static
 {
-    public static RSDK.Palette[Const.PALETTE_BANK_COUNT] paletteBank = .(.(0), .(1), .(2), .(3), .(4), .(5), .(6), .(7));;
+    public static Palette[Const.PALETTE_BANK_COUNT] paletteBank = .(.(0), .(1), .(2), .(3), .(4), .(5), .(6), .(7));;
 }
 
 public static class Graphics
@@ -121,7 +121,7 @@ public static class Graphics
     // Cameras
     // -------
 
-    public static void AddCamera(RSDK.Vector2* targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative) => RSDKTable.AddCamera(targetPos, offsetX, offsetY, worldRelative);
+    public static void AddCamera(Vector2* targetPos, int32 offsetX, int32 offsetY, bool32 worldRelative) => RSDKTable.AddCamera(targetPos, offsetX, offsetY, worldRelative);
     public static void ClearCameras() => RSDKTable.ClearCameras();
 
     // -------
@@ -149,29 +149,29 @@ public static class Graphics
         RSDKTable.DrawCircleOutline(x, y, innerRadius, outerRadius, color, alpha, inkEffect, screenRelative);
     }
 
-    public static void DrawFace(RSDK.Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect)
+    public static void DrawFace(Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect)
     {
         RSDKTable.DrawFace(vertices, vertCount, r, g, b, alpha, inkEffect);
     }
 
-    public static void DrawBlendedFace(RSDK.Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, int32 inkEffect)
+    public static void DrawBlendedFace(Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, int32 inkEffect)
     {
         RSDKTable.DrawBlendedFace(vertices, vertColors, vertCount, alpha, inkEffect);
     }
 
-    public static void DrawDeformedSprite(RSDK.SpriteSheet sheet, int32 inkEffect, bool32 screenRelative)
+    public static void DrawDeformedSprite(SpriteSheet sheet, int32 inkEffect, bool32 screenRelative)
     {
         RSDKTable.DrawDeformedSprite(sheet.id, inkEffect, screenRelative);
     }
 
-    public static void DrawTile(RSDK.Tile* tiles, int32 countX, int32 countY, RSDK.Vector2* position, RSDK.Vector2* offset, bool32 screenRelative)
+    public static void DrawTile(Tile* tiles, int32 countX, int32 countY, Vector2* position, Vector2* offset, bool32 screenRelative)
     {
         RSDKTable.DrawTile((uint16*)tiles, countX, countY, position, offset, screenRelative);
     }
 
     public static void CopyTile(uint16 dest, uint16 src, uint16 count) => RSDKTable.CopyTile(dest, src, count);
 
-    public static void DrawAniTiles(RSDK.SpriteSheet sheet, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height)
+    public static void DrawAniTiles(SpriteSheet sheet, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height)
     {
         RSDKTable.DrawAniTiles(sheet.id, tileIndex, srcX, srcY, width, height);
     }
@@ -201,8 +201,8 @@ public static class Graphics
     // Window/Video Settings
     // ---------------------
 
-    public static int32 GetVideoSetting(RSDK.VideoSettingsValues id)             => RSDKTable.GetVideoSetting((.)id);
-    public static void SetVideoSetting(RSDK.VideoSettingsValues id, int32 value) => RSDKTable.SetVideoSetting((.)id, value);
+    public static int32 GetVideoSetting(VideoSettingsValues id)             => RSDKTable.GetVideoSetting((.)id);
+    public static void SetVideoSetting(VideoSettingsValues id, int32 value) => RSDKTable.SetVideoSetting((.)id, value);
     public static void UpdateWindow()                                            => RSDKTable.UpdateWindow();
 
     // ------------------

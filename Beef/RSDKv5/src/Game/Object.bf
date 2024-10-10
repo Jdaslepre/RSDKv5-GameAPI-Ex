@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 
 namespace RSDK;
@@ -71,13 +70,13 @@ public enum TileCollisionModes : uint8
 #endif
 }
 
-[CRepr] public class GameObject
+[System.CRepr] public class GameObject
 {
     // --------------
     // Implementation
     // --------------
 
-    [CRepr] public struct Static
+    [System.CRepr] public struct Static
     {
         public uint16 classID;
         public uint8 active;
@@ -108,7 +107,7 @@ public enum TileCollisionModes : uint8
 #endif
     }
 
-    [CRepr] public struct Entity : IEntity
+    [System.CRepr] public struct Entity : IEntity
     {
         // ----------------------
         // Standard Entity Events
@@ -121,7 +120,7 @@ public enum TileCollisionModes : uint8
         public void Create(void* data) { }
         public static void StageLoad() { }
 #if RETRO_REV0U
-        public static void StaticLoad(void* sVars) => Internal.MemSet(sVars, 0, sizeof(Static));
+        public static void StaticLoad(void* sVars) => System.Internal.MemSet(sVars, 0, sizeof(Static));
 #endif
         public static void Serialize() { }
 #if GAME_INCLUDE_EDITOR
@@ -141,10 +140,10 @@ public enum TileCollisionModes : uint8
         private void* vfTable;
 #endif
 
-        public RSDK.Vector2 position;
-        public RSDK.Vector2 scale;
-        public RSDK.Vector2 velocity;
-        public RSDK.Vector2 updateRange;
+        public Vector2 position;
+        public Vector2 scale;
+        public Vector2 velocity;
+        public Vector2 updateRange;
         public int32 angle;
         public int32 alpha;
         public int32 rotation;
@@ -179,19 +178,19 @@ public enum TileCollisionModes : uint8
         {
             active        = .BOUNDS;
             visible       = false;
-            updateRange.x = RSDK.Math.TO_FIXED(128);
-            updateRange.y = RSDK.Math.TO_FIXED(128);
+            updateRange.x = Math.TO_FIXED(128);
+            updateRange.y = Math.TO_FIXED(128);
         }
 
         public uint16 Slot() mut  => (.)RSDKTable.GetEntitySlot(&this);
         public void Destroy() mut => RSDKTable.ResetEntity(&this, (.)DefaultObjects.TYPE_DEFAULTOBJECT, null);
 
         public void Reset(uint32 type, void* data) mut => RSDKTable.ResetEntity(&this, (.)type, data);
-        public void Reset(uint32 type, int32 data) mut => RSDKTable.ResetEntity(&this, (.)type, RSDK.Math.INT_TO_VOID(data));
+        public void Reset(uint32 type, int32 data) mut => RSDKTable.ResetEntity(&this, (.)type, Math.INT_TO_VOID(data));
 
         public void Copy(GameObject.Entity* dst, bool32 clearThis) mut => RSDKTable.CopyEntity(dst, &this, clearThis);
 
-        public bool32 CheckOnScreen(RSDK.Vector2* range) mut => RSDKTable.CheckOnScreen(&this, range);
+        public bool32 CheckOnScreen(Vector2* range) mut => RSDKTable.CheckOnScreen(&this, range);
 
         public void AddDrawListRef(uint8 drawGroup) mut => RSDKTable.AddDrawListRef(drawGroup, Slot());
 
@@ -205,9 +204,9 @@ public enum TileCollisionModes : uint8
             return RSDKTable.ObjectTileGrip(&this, collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, tolerance);
         }
 
-        public void ProcessMovement(RSDK.Hitbox* outerBox, RSDK.Hitbox* innerBox) mut => RSDKTable.ProcessObjectMovement(&this, outerBox, innerBox);
+        public void ProcessMovement(Hitbox* outerBox, Hitbox* innerBox) mut => RSDKTable.ProcessObjectMovement(&this, outerBox, innerBox);
 
-        public bool32 CheckCollisionTouchBox(RSDK.Hitbox* thisHitbox, GameObject.Entity* other, RSDK.Hitbox* otherHitbox) mut
+        public bool32 CheckCollisionTouchBox(Hitbox* thisHitbox, GameObject.Entity* other, Hitbox* otherHitbox) mut
         {
             return RSDKTable.CheckObjectCollisionTouchBox(&this, thisHitbox, other, otherHitbox);
         }
@@ -217,12 +216,12 @@ public enum TileCollisionModes : uint8
             return RSDKTable.CheckObjectCollisionTouchCircle(&this, thisRadius, other, otherRadius);
         }
 
-        public uint8 CheckCollisionBox(RSDK.Hitbox* thisHitbox, GameObject.Entity* other, RSDK.Hitbox* otherHitbox, bool32 setPos = true) mut
+        public uint8 CheckCollisionBox(Hitbox* thisHitbox, GameObject.Entity* other, Hitbox* otherHitbox, bool32 setPos = true) mut
         {
             return RSDKTable.CheckObjectCollisionBox(&this, thisHitbox, other, otherHitbox, setPos);
         }
 
-        public bool32 CheckCollisionPlatform(RSDK.Hitbox* thisHitbox, GameObject.Entity* other, RSDK.Hitbox* otherHitbox, bool32 setPos = true) mut
+        public bool32 CheckCollisionPlatform(Hitbox* thisHitbox, GameObject.Entity* other, Hitbox* otherHitbox, bool32 setPos = true) mut
         {
             return RSDKTable.CheckObjectCollisionPlatform(&this, thisHitbox, other, otherHitbox, setPos);
         }
@@ -235,7 +234,7 @@ public enum TileCollisionModes : uint8
     public static T* This<T>() => (.)sceneInfo.entity;
 
     public static GameObject.Entity* Create(void* data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y);
-    public static GameObject.Entity* Create(int32 data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, RSDK.Math.INT_TO_VOID(data), x, y);
+    public static GameObject.Entity* Create(int32 data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, Math.INT_TO_VOID(data), x, y);
 
     public static T* Create<T>(void* data, int32 x, int32 y) where T : struct
     {
@@ -246,7 +245,7 @@ public enum TileCollisionModes : uint8
     public static T* Create<T>(int32 data, int32 x, int32 y) where T : GameObject.Entity
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
-        return (.)RSDKTable.CreateEntity(fStatic.classID, RSDK.Math.INT_TO_VOID(data), x, y);
+        return (.)RSDKTable.CreateEntity(fStatic.classID, Math.INT_TO_VOID(data), x, y);
     }
 
     public static GameObject.Entity* Get(int32 slot)      => (.)RSDKTable.GetEntity((.)slot);
@@ -264,7 +263,7 @@ public enum TileCollisionModes : uint8
     public static void Copy(void* dst, void* src, bool32 clearSrc)                           => RSDKTable.CopyEntity(dst, src, clearSrc);
 
     public static void Reset(uint16 slot, uint16 type, void* data) => RSDKTable.ResetEntitySlot(slot, type, data);
-    public static void Reset(uint16 slot, uint16 type, int32 data) => RSDKTable.ResetEntitySlot(slot, type, RSDK.Math.INT_TO_VOID(data));
+    public static void Reset(uint16 slot, uint16 type, int32 data) => RSDKTable.ResetEntitySlot(slot, type, Math.INT_TO_VOID(data));
 
     public static void Reset<T>(uint16 slot, void* data)
     {
@@ -274,7 +273,7 @@ public enum TileCollisionModes : uint8
     public static void Reset<T>(uint16 slot, int32 data)
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
-        RSDKTable.ResetEntitySlot(slot, fStatic.classID, RSDK.Math.INT_TO_VOID(data));
+        RSDKTable.ResetEntitySlot(slot, fStatic.classID, Math.INT_TO_VOID(data));
     }
 
     // Example usage:
@@ -394,7 +393,7 @@ public enum TileCollisionModes : uint8
     public static void AddVarEnumValue(char8 *name)                  => RSDKTable.AddVarEnumValue(name);
 #endif
 
-    [CRepr] public struct EntityBase : GameObject.Entity
+    [System.CRepr] public struct EntityBase : GameObject.Entity
     {
         public void[0x100]* data;
 #if RETRO_REV0U
@@ -450,7 +449,7 @@ public enum TileCollisionModes : uint8
         if (registerObjectListCount < Const.OBJECT_COUNT)
         {
             var object = &registerObjectList[registerObjectListCount++];
-            Internal.MemSet(object, 0, sizeof(Registration));
+            System.Internal.MemSet(object, 0, sizeof(Registration));
             object.name = name;
             object.update = update;
             object.lateUpdate = lateUpdate;

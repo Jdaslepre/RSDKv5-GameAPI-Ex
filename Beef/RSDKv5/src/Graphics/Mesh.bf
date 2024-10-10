@@ -8,13 +8,10 @@ public struct Mesh
 
     public void Load(char8* path, Scopes scopeType) mut => id = RSDKTable.LoadMesh(path, (.)scopeType);
 
-    public bool32 Loaded() { return id != (.)(-1); }
+    public bool32 Loaded() => id != (.)(-1);
 
-    public bool32 Matches(RSDK.Mesh other) { return this.id == other.id; }
-    public bool32 Matches(RSDK.Mesh* other)
-    {
-        return other != null ? id == other.id : id == (.)(-1);
-    }
+    public bool32 Matches(Self other) => id == other.id;
+    public bool32 Matches(Self* other) => other != null ? id == other.id : id == (.)(-1);
 }
 
 public struct Scene3D
@@ -47,20 +44,17 @@ public struct Scene3D
     public void SetDiffuseIntensity(uint8 x, uint8 y, uint8 z) => RSDKTable.SetDiffuseIntensity(id, x, y, z);
     public void SetSpecularIntensity(uint8 x, uint8 y, uint8 z) => RSDKTable.SetSpecularIntensity(id, x, y, z);
 
-    public void AddModel(RSDK.Mesh modelFrames, DrawTypes drawMode, RSDK.Matrix* matWorld, RSDK.Matrix* matView, color color)
+    public void AddModel(Mesh modelFrames, DrawTypes drawMode, Matrix* matWorld, Matrix* matView, color color)
     {
         RSDKTable.AddModelTo3DScene(modelFrames.id, id, (.)drawMode, matWorld, matView, color);
     }
-    public void AddMesh(RSDK.Mesh modelFrames, RSDK.Animator* animator, DrawTypes drawMode, RSDK.Matrix* matWorld, RSDK.Matrix* matNormal, color color)
+    public void AddMesh(Mesh modelFrames, Animator* animator, DrawTypes drawMode, Matrix* matWorld, Matrix* matNormal, color color)
     {
         RSDKTable.AddMeshFrameTo3DScene(modelFrames.id, id, animator, (.)drawMode, matWorld, matNormal, color);
     }
 
-    public bool32 Loaded() { return id != (.)(-1); }
+    public bool32 Loaded() => id != (.)(-1);
 
-    public bool32 Matches(RSDK.Scene3D other) { return this.id == other.id; }
-    public bool32 Matches(RSDK.Scene3D* other)
-    {
-        return other != null ? id == other.id : id == (.)(-1);
-    }
+    public bool32 Matches(Self other) => id == other.id;
+    public bool32 Matches(Self* other) => other != null ? id == other.id : id == (.)(-1);
 }

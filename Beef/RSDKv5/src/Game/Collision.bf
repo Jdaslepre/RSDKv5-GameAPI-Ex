@@ -1,12 +1,10 @@
-using System;
-
 namespace RSDK;
 
 public enum CollisionModes : uint8 { CMODE_FLOOR, CMODE_LWALL, CMODE_ROOF, CMODE_RWALL }
 
 public enum CollisionSides : uint8 { C_NONE, C_TOP, C_LEFT, C_RIGHT, C_BOTTOM }
 
-public struct Hitbox
+[System.CRepr] public struct Hitbox
 {
     public int16 left;
     public int16 top;
@@ -16,13 +14,13 @@ public struct Hitbox
 
 #if RETRO_REV0U || RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
 public struct CollisionSensor {
-    public RSDK.Vector2 position;
+    public Vector2 position;
     public bool32 collided;
     public uint8 angle;
 
 #if RETRO_REV0U
     // expects an array of 5 sensors
-    public static void SetPathGripSensors(RSDK.CollisionSensor *sensors) => RSDKTable.SetPathGripSensors(sensors);
+    public static void SetPathGripSensors(Self *sensors) => RSDKTable.SetPathGripSensors(sensors);
 
     public void FindFloorPosition() mut => RSDKTable.FindFloorPosition(&this);
     public void FindLWallPosition() mut => RSDKTable.FindLWallPosition(&this); 
@@ -34,7 +32,7 @@ public struct CollisionSensor {
     public void RWallCollision() mut => RSDKTable.RWallCollision(&this);
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
     // expects an array of 5 sensors
-    public static void SetPathGripSensors(RSDK.CollisionSensor *sensors) => modTable.SetPathGripSensors(sensors);
+    public static void SetPathGripSensors(Self *sensors) => modTable.SetPathGripSensors(sensors);
 
     public void FindFloorPosition() mut => modTable.FindFloorPosition(&this);
     public void FindLWallPosition() mut => modTable.FindLWallPosition(&this); 
@@ -48,7 +46,7 @@ public struct CollisionSensor {
 }
 #endif
 
-[CRepr] public struct CollisionMask
+[System.CRepr] public struct CollisionMask
 {
     public uint8[Const.TILE_SIZE] floorMasks;
     public uint8[Const.TILE_SIZE] lWallMasks;
@@ -56,7 +54,7 @@ public struct CollisionSensor {
     public uint8[Const.TILE_SIZE] roofMasks;
 }
 
-[CRepr] public struct TileInfo
+[System.CRepr] public struct TileInfo
 {
     public uint8 floorAngle;
     public uint8 lWallAngle;
@@ -76,10 +74,10 @@ public static class Collision
 #endif
 
 #if RETRO_REV0U
-    public static void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) => RSDKTable.CopyCollisionMask(dst, src, cPlane, cMode);
-    public static void GetCollisionInfo(RSDK.CollisionMask **masks, RSDK.TileInfo **tileInfo) => RSDKTable.GetCollisionInfo(masks, tileInfo);
+    public static void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode)   => RSDKTable.CopyCollisionMask(dst, src, cPlane, cMode);
+    public static void GetCollisionInfo(CollisionMask **masks, TileInfo **tileInfo) => RSDKTable.GetCollisionInfo(masks, tileInfo);
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER >= 2
-    public static void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode) => modTable.CopyCollisionMask(dst, src, cPlane, cMode);
+    public static void CopyCollisionMask(uint16 dst, uint16 src, uint8 cPlane, uint8 cMode)   => modTable.CopyCollisionMask(dst, src, cPlane, cMode);
     public static void GetCollisionInfo(RSDK.CollisionMask **masks, RSDK.TileInfo **tileInfo) => modTable.GetCollisionInfo(masks, tileInfo);
 #endif
 }

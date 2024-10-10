@@ -1,5 +1,3 @@
-using System;
-
 namespace RSDK;
 
 public enum InputIDs
@@ -49,7 +47,7 @@ public enum InputDeviceAPIs
     DEVICE_API_STEAM,
 }
 
-[AllowDuplicates]
+[System.AllowDuplicates]
 public enum KeyMappings
 {
     KEYMAP_AUTO_MAPPING                    = -1,

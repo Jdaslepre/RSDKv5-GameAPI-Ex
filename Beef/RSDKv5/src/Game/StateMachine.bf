@@ -1,5 +1,3 @@
-using System;
-
 namespace RSDK;
 
 static
@@ -15,7 +13,7 @@ public struct StateMachine<T>
         LOCKED = 0xFF,
     }
 
-    public void Init() mut => Internal.MemSet(&this, 0, sizeof(StateMachine<T>));
+    public void Init() mut => System.Internal.MemSet(&this, 0, sizeof(StateMachine<T>));
 
     public bool32 Set(function void(T this) statePtr, Priority priorityType = .NORMAL) mut
     {
@@ -59,12 +57,16 @@ public struct StateMachine<T>
             currentState = null;
 
 #if RETRO_USE_MOD_LOADER
-            // bool32 skipState = modTable.HandleRunState_HighPriority(ptr);
+            // ugly hack
+            function void() fn = null;
+            System.Internal.MemCpy(&fn, &ptr, sizeof(function void()));
 
-            // if (!skipState)
+            bool32 skipState = modTable.HandleRunState_HighPriority(fn);
+
+            if (!skipState)
                 ptr(entity);
 
-            // modTable.HandleRunState_LowPriority(ptr, skipState);
+            modTable.HandleRunState_LowPriority(fn, skipState);
 #else
             ptr(entity);
 #endif
@@ -74,7 +76,7 @@ public struct StateMachine<T>
     // TODO?
     public bool32 Matches(function void(T this) other) { return ptr == other; }
 
-    public void Copy(StateMachine<T>* other) mut => Internal.MemCpy(&this, other, sizeof(StateMachine<T>));
+    public void Copy(StateMachine<T>* other) mut => System.Internal.MemCpy(&this, other, sizeof(StateMachine<T>));
 
     private function void(T this) ptr;
     public int32 timer;

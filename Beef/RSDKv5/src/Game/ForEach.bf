@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 
 namespace RSDK.Mod.ForEach;
@@ -6,18 +5,12 @@ namespace RSDK.Mod.ForEach;
 #if RETRO_USE_MOD_LOADER
 public class List
 {
-    public static List<RSDK.String> GetIDs()
+    public static LinkedList<String> GetIDs(LinkedList<String> list)
     {
-        List<RSDK.String> list = null;
-
-        RSDK.String string = .();
+        String string = .();
         while (modTable.ForeachModID(&string) != 0) {
-            RSDK.String copy = .();
-            copy.chars  = string.chars;
-            copy.length = string.length;
-            copy.size   = string.size;
-
-            list.Add(copy);
+            String copy = .(ref string);
+            list.AddLast(copy);
         }
 
         return list;
@@ -27,35 +20,23 @@ public class List
 #if RETRO_MOD_LOADER_VER_2
 public class Settings
 {
-    public List<RSDK.String> Get(char8 *id)
+    public LinkedList<String> Get(char8 *id, LinkedList<String> list)
     {
-        List<RSDK.String> list = null;
-
-        RSDK.String string = .();
+        String string = .();
         while (modTable.ForeachSetting(id, &string) != 0) {
-            RSDK.String copy = .();
-            copy.chars  = string.chars;
-            copy.length = string.length;
-            copy.size   = string.size;
-
-            list.Add(copy);
+            String copy = .(ref string);
+            list.AddLast(copy);
         }
 
         return list;
     }
 
-    public List<RSDK.String> GetCategories(char8 *id)
+    public LinkedList<String> GetCategories(char8 *id, LinkedList<String> list)
     {
-        List<RSDK.String> list = null;
-
-        RSDK.String string = .();
+        String string = .();
         while (modTable.ForeachSettingCategory(id, &string) != 0) {
-            RSDK.String copy = .();
-            copy.chars  = string.chars;
-            copy.length = string.length;
-            copy.size   = string.size;
-
-            list.Add(copy);
+            String copy = .(ref string);
+            list.AddLast(copy);
         }
 
         return list;
@@ -65,35 +46,23 @@ public class Settings
 
 public class Config
 {
-    public List<RSDK.String> Get()
+    public LinkedList<String> Get(LinkedList<String> list)
     {
-        List<RSDK.String> list = null;
-
-        RSDK.String string = .();
+        String string = .();
         while (modTable.ForeachConfig(&string) != 0) {
-            RSDK.String copy = .();
-            copy.chars  = string.chars;
-            copy.length = string.length;
-            copy.size   = string.size;
-
-            list.Add(copy);
+            String copy = .(ref string);
+            list.AddLast(copy);
         }
 
         return list;
     }
 
-    public List<RSDK.String> GetCategories()
+    public LinkedList<String> GetCategories(LinkedList<String> list)
     {
-        List<RSDK.String> list = null;
-
-        RSDK.String string = .();
+        String string = .();
         while (modTable.ForeachConfigCategory(&string) != 0) {
-            RSDK.String copy = .();
-            copy.chars  = string.chars;
-            copy.length = string.length;
-            copy.size   = string.size;
-
-            list.Add(copy);
+            String copy = .(ref string);
+            list.AddLast(copy);
         }
 
         return list;

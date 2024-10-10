@@ -1,14 +1,12 @@
-using System;
-
 namespace RSDK;
 
-[CRepr] public struct ScanlineInfo
+[System.CRepr] public struct ScanlineInfo
 {
-    public RSDK.Vector2 position;
-    public RSDK.Vector2 deform;
+    public Vector2 position;
+    public Vector2 deform;
 }
 
-[CRepr] public struct ScrollInfo
+[System.CRepr] public struct ScrollInfo
 {
     public int32 tilePos;
     public int32 parallaxFactor;
@@ -25,10 +23,10 @@ public struct Tile
     public this() => id = 0xFFFF;
     public this(uint16 ID) => id = ID;
 
-    public uint16 Index() { return id & 0x3FF; }
-    public uint8 Direction() { return (.)((id >> 10) & 3); }
-    public uint8 SolidA() { return (.)((id >> 12) & 3); }
-    public uint8 SolidB() { return (.)((id >> 14) & 3); }
+    public uint16 Index() => id & 0x3FF;
+    public uint8 Direction() => (.)((id >> 10) & 3);
+    public uint8 SolidA() => (.)((id >> 12) & 3);
+    public uint8 SolidB() => (.)((id >> 14) & 3);
 
     public void SetIndex(uint16 index) mut
     {
@@ -53,13 +51,13 @@ public struct Tile
 
     public static void Copy(uint16 dst, uint16 src, uint16 count = 1) => RSDKTable.CopyTile(dst, src, count);
 
-    public int32 GetAngle(uint8 cPlane, uint8 cMode) { return RSDKTable.GetTileAngle(id, cPlane, cMode); }
+    public int32 GetAngle(uint8 cPlane, uint8 cMode) => RSDKTable.GetTileAngle(id, cPlane, cMode);
     public void SetAngle(uint8 cPlane, uint8 cMode, uint8 angle) => RSDKTable.SetTileAngle(id, cPlane, cMode, angle);
-    public uint8 GetFlags(uint8 cPlane) { return RSDKTable.GetTileFlags(id, cPlane); }
+    public uint8 GetFlags(uint8 cPlane) => RSDKTable.GetTileFlags(id, cPlane);
     public void SetFlags(uint8 cPlane, uint8 flag) => RSDKTable.SetTileFlags(id, cPlane, flag);
 }
 
-[CRepr] public struct TileLayer
+[System.CRepr] public struct TileLayer
 {
     public uint8 type;
     public uint8[Const.CAMERA_COUNT] drawGroup;
@@ -67,7 +65,7 @@ public struct Tile
     public uint8 heightShift;
     public uint16 width;
     public uint16 height;
-    public RSDK.Vector2 position;
+    public Vector2 position;
     public int32 parallaxFactor;
     public int32 scrollSpeed;
     public int32 scrollPos;
@@ -75,11 +73,11 @@ public struct Tile
     public int32 deformationOffsetW;
     public int32[0x400] deformationData;
     public int32[0x400] deformationDataW;
-    public function void(ref RSDK.ScanlineInfo*) scanlineCallback;
+    public function void(ref ScanlineInfo*) scanlineCallback;
     public uint16 scrollInfoCount;
-    public RSDK.ScrollInfo[0x100] scrollInfo;
+    public ScrollInfo[0x100] scrollInfo;
     public uint32[4] name;
-    public RSDK.Tile* layout;
+    public Tile* layout;
     public uint8* lineScroll;
 
     public void ProcessParallax() mut => RSDKTable.ProcessParallax(&this);
@@ -94,28 +92,24 @@ public struct SceneLayer
     public void Get(char8* name) mut => id = RSDKTable.GetTileLayerID(name);
     public void Set(uint16 ID) mut => id = ID;
 
-    public RSDK.TileLayer* GetTileLayer() { return RSDKTable.GetTileLayer(id); }
+    public TileLayer* GetTileLayer() => RSDKTable.GetTileLayer(id);
 
-    public void Size(RSDK.Vector2* size, bool32 usePixelUnits) => RSDKTable.GetLayerSize(id, size, usePixelUnits);
+    public void Size(Vector2* size, bool32 usePixelUnits) => RSDKTable.GetLayerSize(id, size, usePixelUnits);
 
-    public Tile GetTile(int32 x, int32 y) { return RSDK.Tile(RSDKTable.GetTile(id, x, y)); }
-    public void SetTile(int32 x, int32 y, RSDK.Tile tile) => RSDKTable.SetTile(id, x, y, tile.id);
+    public Tile GetTile(int32 x, int32 y) => Tile(RSDKTable.GetTile(id, x, y));
+    public void SetTile(int32 x, int32 y, Tile tile) => RSDKTable.SetTile(id, x, y, tile.id);
 
-    public static RSDK.TileLayer* GetTileLayer(char8* name) { return RSDKTable.GetTileLayer(RSDKTable.GetTileLayerID(name)); }
-    public static RSDK.TileLayer* GetTileLayer(uint16 id) { return RSDKTable.GetTileLayer(id); }
+    public static TileLayer* GetTileLayer(char8* name) => RSDKTable.GetTileLayer(RSDKTable.GetTileLayerID(name));
+    public static TileLayer* GetTileLayer(uint16 id) => RSDKTable.GetTileLayer(id);
 
-    public static void Copy(RSDK.SceneLayer dstLayer, int32 dstStartX, int32 dstStartY, RSDK.SceneLayer srcLayer, int32 srcStartX, int32 srcStartY,
+    public static void Copy(Self dstLayer, int32 dstStartX, int32 dstStartY, Self srcLayer, int32 srcStartX, int32 srcStartY,
         int32 countX, int32 countY)
     {
         RSDKTable.CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
     }
 
-    public bool32 Loaded() { return id != (.)(-1); }
+    public bool32 Loaded() => id != (.)(-1);
 
-    public bool32 Matches(RSDK.SceneLayer other) { return id == other.id; }
-    public bool32 Matches(RSDK.SceneLayer* other)
-    {
-        return other != null ? id == other.id : id == (.)(-1);
-    }
-
+    public bool32 Matches(Self other) => id == other.id;
+    public bool32 Matches(Self* other) => other != null ? id == other.id : id == (.)(-1);
 }

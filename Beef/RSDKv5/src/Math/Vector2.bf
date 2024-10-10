@@ -1,8 +1,6 @@
-using System;
-
 namespace RSDK;
 
-[CRepr] public struct Vector2
+[System.CRepr] public struct Vector2
 {
     public int32 x, y = .();
 
@@ -12,13 +10,13 @@ namespace RSDK;
         y = 0;
     }
 
-    public this(RSDK.Vector2 other)
+    public this(Self other)
     {
         x = other.x;
         y = other.y;
     }
 
-    public this(RSDK.Vector2* other)
+    public this(Self* other)
     {
         x = other.x;
         y = other.y;
@@ -30,5 +28,5 @@ namespace RSDK;
         y = Y;
     }
 
-    public bool32 CheckOnScreen(RSDK.Vector2* range) mut => RSDKTable.CheckPosOnScreen(&this, range);
+    public bool32 CheckOnScreen(Self* range) mut => RSDKTable.CheckPosOnScreen(&this, range);
 }

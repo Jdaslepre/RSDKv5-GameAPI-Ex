@@ -1,11 +1,9 @@
-using System;
-
 namespace RSDK;
 
 // numbering these because i want them to appear in
 // a specific order lol
 
-public class EntityGenerator1 : Compiler.Generator
+public class EntityGenerator1 : System.Compiler.Generator
 {
     public override System.String Name => "RSDK Object Class";
 
@@ -49,7 +47,7 @@ public class EntityGenerator1 : Compiler.Generator
 				    // Entity Events
 				    // -------------
 
-				    public new void Update()
+					public new void Update()
 				    {{
 				    }}
 
@@ -100,7 +98,7 @@ public class EntityGenerator1 : Compiler.Generator
     }
 }
 
-public class EntityGenerator2 : Compiler.Generator
+public class EntityGenerator2 : System.Compiler.Generator
 {
     public override System.String Name => "RSDK Object Class (Clean)";
 
@@ -138,7 +136,7 @@ public class EntityGenerator2 : Compiler.Generator
 }
 
 // TODO: Actual modded stuff
-public class EntityGenerator3 : Compiler.Generator
+public class EntityGenerator3 : System.Compiler.Generator
 {
     public override System.String Name => "RSDK Object Class (Modded)";
 
