@@ -24,7 +24,7 @@ public class EntityGenerator1 : System.Compiler.Generator
 
 				namespace GameLogic;
 				
-				[RegisterClass]
+				[RSDK_REGISTER_OBJECT]
 				public struct {name} : GameObject.Entity
 				{{
 				    // -----------------
@@ -119,7 +119,7 @@ public class EntityGenerator2 : System.Compiler.Generator
 
                 namespace GameLogic;
 
-                [RegisterClass]
+                [RSDK_REGISTER_OBJECT]
                 public struct {name} : GameObject.Entity
                 {{
                     // ----------------

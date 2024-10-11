@@ -48,7 +48,7 @@ public struct RegisterClassAttribute : Attribute, IOnTypeInit
 */
 
 [AttributeUsage(.Class | .Struct, .ReflectAttribute, ReflectUser = .All)]
-public struct RegisterClassAttribute : Attribute, IOnTypeInit
+public struct RSDK_REGISTER_OBJECTAttribute : Attribute, IOnTypeInit
 {
     public this() { }
 
@@ -62,24 +62,103 @@ public struct RegisterClassAttribute : Attribute, IOnTypeInit
         System.String regFns = scope .();
 
         regFns.Append(scope $"""
-                                    () => ((Self*)sceneInfo.entity).Update(), () => ((Self*)sceneInfo.entity).LateUpdate(), () => Self.StaticUpdate(),
-                                    () => ((Self*)sceneInfo.entity).Draw(), (data) => ((Self*)sceneInfo.entity).Create(data), () => Self.StageLoad(),
+                                () => ((Self*)sceneInfo.entity).Update(),
+                                () => ((Self*)sceneInfo.entity).LateUpdate(), 
+                                () => Self.StaticUpdate(),
+                                () => ((Self*)sceneInfo.entity).Draw(), 
+                                (data) => ((Self*)sceneInfo.entity).Create(data), 
+                                () => Self.StageLoad(),
+
                                 #if GAME_INCLUDE_EDITOR
-                                    () => Self.EditorLoad(), () => ((Self*)sceneInfo.entity).EditorDraw(),
+                                () => Self.EditorLoad(), 
+                                () => ((Self*)sceneInfo.entity).EditorDraw(),
                                 #else
-                                    () => null, () => null,
+                                () => null, 
+                                () => null,
                                 #endif
-                                    () => Self.Serialize(),
+
+                                () => Self.Serialize(),
+
                                 #if RETRO_REV0U
-                                    (data) => Self.StaticLoad(data)
+                                (data) => Self.StaticLoad(data)
                                 #else
-                                    (data) => null,
+                                (data) => null,
                                 #endif\n
                                 """);
 
 
         Compiler.EmitTypeBody(entityType, scope $"""
-                                [System.Reflect]\npublic static Static* sVars = GameObject.[System.Friend]RegisterInternal<Self, Static>(ref sVars, "{obj}", \n{regFns});\n
+                                [System.Reflect]\npublic static Static* sVars = GameObject.[System.Friend]RegisterObject<Self, Static>(ref sVars, "{obj}", \n{regFns});\n
                                 """);
     }
 }
+
+[AttributeUsage(.Class | .Struct, .ReflectAttribute, ReflectUser = .All)]
+public struct RSDK_REGISTER_STATIC_VARSAttribute : Attribute, IOnTypeInit
+{
+    public this() { }
+
+    [Comptime]
+    public void OnTypeInit(Type entityType, Self* prev)
+    {
+        if (entityType.IsGenericParam)
+            return;
+
+        System.String sVars = entityType.GetName(.. scope .());
+
+        Compiler.EmitTypeBody(entityType, scope $"""
+                                [System.Reflect]\npublic static Static* sVars = GameObject.[System.Friend]RegisterStaticVars<Self, Static>(ref sVars, "{sVars}");\n
+                                """);
+    }
+}
+
+#if RETRO_USE_MOD_LOADER
+[AttributeUsage(.Class | .Struct, .ReflectAttribute, ReflectUser = .All)]
+public struct MOD_REGISTER_OBJECTAttribute : Attribute, IOnTypeInit
+{
+    public System.String inherit;
+
+    public this(System.String _inherit = "") { this.inherit = _inherit; }
+
+    [Comptime]
+    public void OnTypeInit(Type entityType, Self* prev)
+    {
+        if (entityType.IsGenericParam)
+            return;
+
+        System.String obj = entityType.GetName(.. scope .());
+        System.String regFns = scope .();
+
+        regFns.Append(scope $"""
+                                () => ((Self*)sceneInfo.entity).Update(),
+                                () => ((Self*)sceneInfo.entity).LateUpdate(), 
+                                () => Self.StaticUpdate(),
+                                () => ((Self*)sceneInfo.entity).Draw(), 
+                                (data) => ((Self*)sceneInfo.entity).Create(data), 
+                                () => Self.StageLoad(),
+
+                                #if GAME_INCLUDE_EDITOR
+                                () => Self.EditorLoad(), 
+                                () => ((Self*)sceneInfo.entity).EditorDraw(),
+                                #else
+                                () => null, 
+                                () => null,
+                                #endif
+
+                                () => Self.Serialize(),
+
+                                #if RETRO_REV0U
+                                (data) => Self.StaticLoad(data)
+                                #else
+                                (data) => null,
+                                #endif\n
+                                """);
+
+
+        Compiler.EmitTypeBody(entityType, scope $"""
+                                [System.Reflect]\npublic static Static* sVars = GameObject.[System.Friend]ModRegisterObject<Self, Static, ModStatic>(ref sVars, ref modSVars, "{obj}", \n{regFns}, "{this.inherit}");\n
+                                [System.Reflect]\npublic static ModStatic* modSVars = null;\n
+                                """);
+    }
+}
+#endif

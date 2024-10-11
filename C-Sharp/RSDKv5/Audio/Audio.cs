@@ -12,9 +12,9 @@ namespace RSDK
         public void Stop() => RSDKTable.StopChannel(id);
         public void Pause() => RSDKTable.PauseChannel(id);
         public void Resume() => RSDKTable.ResumeChannel(id);
-        public bool32 IsActive() { return RSDKTable.ChannelActive(id); }
-        public uint AudioPos() { return RSDKTable.GetChannelPos(id); }
-        public int PlayStream(string filename, uint startPos, uint loopPoint, bool32 loadASync) { return RSDKTable.PlayStream(filename, id, startPos, loopPoint, loadASync); }
+        public bool32 IsActive() => RSDKTable.ChannelActive(id);
+        public uint AudioPos() => RSDKTable.GetChannelPos(id);
+        public int PlayStream(string filename, uint startPos, uint loopPoint, bool32 loadASync) => RSDKTable.PlayStream(filename, id, startPos, loopPoint, loadASync);
 
         public byte id;
     }
@@ -44,6 +44,6 @@ namespace RSDK
 
     public class Audio
     {
-        public static RSDK.Channel[] channels = new RSDK.Channel[Const.CHANNEL_COUNT];
+        public static Channel[] channels = new Channel[Const.CHANNEL_COUNT];
     }
 }

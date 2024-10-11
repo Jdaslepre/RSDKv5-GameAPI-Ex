@@ -393,19 +393,7 @@ public enum TileCollisionModes : uint8
     public static void AddVarEnumValue(char8 *name)                  => RSDKTable.AddVarEnumValue(name);
 #endif
 
-    [System.CRepr] public struct EntityBase : GameObject.Entity
-    {
-        public void[0x100]* data;
-#if RETRO_REV0U
-        public void *unknown;
-#endif
-    };
-
-    // ------------
-    // Registration
-    // ------------
-
-    public struct Registration
+    public struct ObjectRegistration
     {
         public char8* name;
         private void* padding;
@@ -432,24 +420,35 @@ public enum TileCollisionModes : uint8
         public char8* inherit;
         public bool32 isModded;
 #endif
-    };
+    }
+
+    [System.CRepr] public struct EntityBase : GameObject.Entity
+    {
+        public void[0x100]* data;
+#if RETRO_REV0U
+        public void *unknown;
+#endif
+    }
 
     public static int32 registerObjectListCount = 0;
-    public static Registration[Const.OBJECT_COUNT] registerObjectList;
+    public static ObjectRegistration[Const.OBJECT_COUNT] registerObjectList;
 
 #if RETRO_REV02
     public static int32 registerStaticListCount = 0;
-    public static Registration[Const.OBJECT_COUNT] registerStaticList;
+    public static ObjectRegistration[Const.OBJECT_COUNT] registerStaticList;
 #endif
 
-    private static staticVars* RegisterInternal<entity, staticVars>(ref staticVars* sVars, char8* name, function void() update, function void() lateUpdate, function void() staticUpdate, function void() draw,
+    // Don't directly call these functions, use the attributes instead
+
+    private static staticVars* RegisterObject<entity, staticVars>(ref staticVars* sVars, char8* name,
+        function void() update, function void() lateUpdate, function void() staticUpdate, function void() draw,
         function void(void* data) create, function void() stageLoad, function void() editorLoad, function void() editorDraw,
         function void() serialize, function void(void* staticVars) staticLoad)
     {
         if (registerObjectListCount < Const.OBJECT_COUNT)
         {
             var object = &registerObjectList[registerObjectListCount++];
-            System.Internal.MemSet(object, 0, sizeof(Registration));
+            System.Internal.MemSet(object, 0, sizeof(ObjectRegistration));
             object.name = name;
             object.update = update;
             object.lateUpdate = lateUpdate;
@@ -473,4 +472,62 @@ public enum TileCollisionModes : uint8
         sVars = null;
         return null;
     }
+
+#if RETRO_REV02
+    private static staticVars* RegisterStaticVars<staticVars>(ref staticVars* sVars, char8* name)
+    {
+        if (registerStaticListCount < Const.OBJECT_COUNT)
+        {
+            var object = &registerStaticList[registerStaticListCount++];
+            System.Internal.MemSet(object, 0, sizeof(ObjectRegistration));
+            object.name = name;
+            object.staticVars      = (.)(void**)&sVars;
+            object.staticClassSize = (.)sizeof(staticVars);
+        }
+
+        sVars = null;
+        return null;
+    }
+#endif
+
+#if RETRO_USE_MOD_LOADER
+    private static staticV* ModRegisterObject<entity, staticV, modStaticV>(ref staticV* sVars, ref modStaticV* modsVars, char8* name,
+        function void() update, function void() lateUpdate, function void() staticUpdate, function void() draw,
+        function void(void* data) create, function void() stageLoad, function void() editorLoad, function void() editorDraw,
+        function void() serialize, function void(void* staticVars) staticLoad, char8* inherit)
+    {
+        if (registerObjectListCount < Const.OBJECT_COUNT)
+        {
+            var object = &registerObjectList[registerObjectListCount++];
+            System.Internal.MemSet(object, 0, sizeof(ObjectRegistration));
+            object.name = name;
+            object.update = update;
+            object.lateUpdate = lateUpdate;
+            object.staticUpdate = staticUpdate;
+            object.draw = draw;
+            object.create = create;
+            object.stageLoad = stageLoad;
+#if GAME_INCLUDE_EDITOR
+            object.editorLoad = editorLoad;
+            object.editorDraw = editorDraw;
+#endif
+            object.serialize = serialize;
+#if RETRO_REV0U
+            object.staticLoad = staticLoad;
+#endif
+            object.staticVars         = (.)(void**)&sVars;
+            object.modStaticVars      = (.)(void**)&modsVars;
+            object.entityClassSize    = (.)sizeof(entity);
+            object.staticClassSize    = (.)sizeof(staticV);
+            object.modStaticClassSize = (.)sizeof(modStaticV);
+
+            object.isModded = true;
+            object.inherit  = inherit;
+        }
+
+        sVars = null;
+        modsVars = null;
+        return null;
+    }
+#endif
 }
