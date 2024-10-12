@@ -5,7 +5,7 @@ static
     public static char8* currentState = null;
 }
 
-public struct StateMachine<T>
+[System.CRepr] public struct StateMachine<T>
 {
     public enum Priority : uint8
     {
@@ -13,7 +13,7 @@ public struct StateMachine<T>
         LOCKED = 0xFF,
     }
 
-    public void Init() mut => System.Internal.MemSet(&this, 0, sizeof(StateMachine<T>));
+    public void Init() mut => System.Internal.MemSet(&this, 0, sizeof(Self));
 
     public bool32 Set(function void(T this) statePtr, Priority priorityType = .NORMAL) mut
     {
@@ -51,35 +51,50 @@ public struct StateMachine<T>
     {
         if (timer != 0)
             timer--;
+        if (ptr == null)
+            return;
 
-        if (ptr != null)
-        {
-            currentState = null;
-
+        currentState = null;
 #if RETRO_USE_MOD_LOADER
-            // ugly hack
-            function void() fn = null;
-            System.Internal.MemCpy(&fn, &ptr, sizeof(function void()));
-
-            bool32 skipState = modTable.HandleRunState_HighPriority(fn);
-
-            if (!skipState)
-                ptr(entity);
-
-            modTable.HandleRunState_LowPriority(fn, skipState);
+        modTable.StateMachineRun(*(function void()*)&ptr);
 #else
-            ptr(entity);
+        ptr(entity);
 #endif
-        }
     }
 
     // TODO?
-    public bool32 Matches(function void(T this) other) { return ptr == other; }
+    public bool32 Matches(function void(T this) other) => ptr == other;
 
-    public void Copy(StateMachine<T>* other) mut => System.Internal.MemCpy(&this, other, sizeof(StateMachine<T>));
+    public void Copy(Self* other) mut => System.Internal.MemCpy(&this, other, sizeof(Self));
 
     private function void(T this) ptr;
     public int32 timer;
     private uint8[3] unknown;
     public Priority priority;
+}
+
+// C API StateMachine
+[System.CRepr] public struct StateMachineC<T>
+{
+    public bool32 Set(function void(T this) statePtr) mut
+    {
+        ptr = statePtr;
+
+        return true;
+    }
+
+    public void Run(T entity) mut
+    {
+#if RETRO_USE_MOD_LOADER
+        // Nasty void(T this) -> void() conversion
+        modTable.StateMachineRun(*(function void()*)&ptr);
+#else
+        ptr(entity);
+#endif
+    }
+
+    // TODO?
+    public bool32 Matches(function void(T this) other) { return ptr == other; }
+
+    private function void(T this) ptr;
 }

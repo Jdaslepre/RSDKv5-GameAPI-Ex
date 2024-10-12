@@ -84,14 +84,14 @@ public struct Palette
     public static void SetTintLookupTable(uint16 *lookupTable) => RSDKTable.SetTintLookupTable(lookupTable);
 #endif
 
-    public static void SetPaletteMask(uint32 maskColor) => RSDKTable.SetPaletteMask(maskColor);
+    public static void SetPaletteMask(color maskColor) => RSDKTable.SetPaletteMask(maskColor);
 
-    public void SetEntry(uint8 index, uint32 color) => RSDKTable.SetPaletteEntry(id, index, color);
-    public color GetEntry(uint8 index)              => RSDKTable.GetPaletteEntry(id, index);
+    public void SetEntry(uint8 index, color color) => RSDKTable.SetPaletteEntry(id, index, color);
+    public color GetEntry(uint8 index)             => RSDKTable.GetPaletteEntry(id, index);
 
     public void SetActivePalette(int32 startLine, int32 endLine) => RSDKTable.SetActivePalette(id, startLine, endLine);
 
-    public void Rotate(uint8 startIndex, uint8 endIndex, bool32 right) => RSDKTable.RotatePalette(id, startIndex, endIndex, right ? true : false);
+    public void Rotate(uint8 startIndex, uint8 endIndex, bool32 right) => RSDKTable.RotatePalette(id, startIndex, endIndex, right);
     public void Copy(uint8 sourceBank, uint8 srcBankStart, uint8 destBankStart, uint8 count)
     {
         RSDKTable.CopyPalette(sourceBank, srcBankStart, id, destBankStart, count);
@@ -101,7 +101,7 @@ public struct Palette
         RSDKTable.SetLimitedFade(id, srcBankA, srcBankB, (.)blendAmount, startIndex, endIndex);
     }
 #if RETRO_REV02
-    public void BlendColors(uint32 *srcColorsA, uint32 *srcColorsB, int32 blendAmount, int32 startIndex, int32 count)
+    public void BlendColors(color *srcColorsA, color *srcColorsB, int32 blendAmount, int32 startIndex, int32 count)
     {
         RSDKTable.BlendColors(id, srcColorsA, srcColorsB, blendAmount, startIndex, count);
     }
@@ -128,17 +128,17 @@ public static class Graphics
     // Drawing
     // -------
 
-    public static void DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, uint32 color, int32 alpha, InkEffects inkEffect, bool32 screenRelative)
+    public static void DrawLine(int32 x1, int32 y1, int32 x2, int32 y2, color color, int32 alpha, InkEffects inkEffect, bool32 screenRelative)
     {
         RSDKTable.DrawLine(x1, y1, x2, y2, color, alpha, (.)inkEffect, screenRelative);
     }
 
-    public static void DrawRect(int32 x, int32 y, int32 width, int32 height, uint32 color, int32 alpha, InkEffects inkEffect, bool32 screenRelative)
+    public static void DrawRect(int32 x, int32 y, int32 width, int32 height, color color, int32 alpha, InkEffects inkEffect, bool32 screenRelative)
     {
         RSDKTable.DrawRect(x, y, width, height, color, alpha, (.)inkEffect, screenRelative);
     }
 
-    public static void DrawCircle(int32 x, int32 y, int32 radius, uint32 color, int32 alpha, InkEffects inkEffect, bool screenRelative)
+    public static void DrawCircle(int32 x, int32 y, int32 radius, color color, int32 alpha, InkEffects inkEffect, bool screenRelative)
     {
         RSDKTable.DrawCircle(x, y, radius, color, alpha, (.)inkEffect, screenRelative);
     }
@@ -166,7 +166,7 @@ public static class Graphics
 
     public static void DrawTile(Tile* tiles, int32 countX, int32 countY, Vector2* position, Vector2* offset, bool32 screenRelative)
     {
-        RSDKTable.DrawTile((uint16*)tiles, countX, countY, position, offset, screenRelative);
+        RSDKTable.DrawTile((.)tiles, countX, countY, position, offset, screenRelative);
     }
 
     public static void CopyTile(uint16 dest, uint16 src, uint16 count) => RSDKTable.CopyTile(dest, src, count);
@@ -203,7 +203,7 @@ public static class Graphics
 
     public static int32 GetVideoSetting(VideoSettingsValues id)             => RSDKTable.GetVideoSetting((.)id);
     public static void SetVideoSetting(VideoSettingsValues id, int32 value) => RSDKTable.SetVideoSetting((.)id, value);
-    public static void UpdateWindow()                                            => RSDKTable.UpdateWindow();
+    public static void UpdateWindow()                                       => RSDKTable.UpdateWindow();
 
     // ------------------
     // Entities & Objects

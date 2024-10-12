@@ -405,7 +405,7 @@ public enum GameLanguages
 #endif
 
     public function void(color maskColor) SetPaletteMask;
-    public function void(uint8 bankID, uint8 index, uint32 color) SetPaletteEntry;
+    public function void(uint8 bankID, uint8 index, color color) SetPaletteEntry;
     public function color(uint8 bankID, uint8 index) GetPaletteEntry;
     public function void(uint8 newActiveBank, int32 startLine, int32 endLine) SetActivePalette;
     public function void(uint8 sourceBank, uint8 srcBankStart, uint8 destinationBank, uint8 destBankStart, uint8 count) CopyPalette;
@@ -419,10 +419,10 @@ public enum GameLanguages
 #endif
 
     // Drawing
-    public function void(int32 x, int32 y, int32 width, int32 height, uint32 color, int32 alpha, int32 inkEffect, bool32 screenRelative) DrawRect;
-    public function void(int32 x1, int32 y1, int32 x2, int32 y2, uint32 color, int32 alpha, int32 inkEffect, bool32 screenRelative) DrawLine;
-    public function void(int32 x, int32 y, int32 radius, uint32 color, int32 alpha, int32 inkEffect, bool32 screenRelative) DrawCircle;
-    public function void(int32 x, int32 y, int32 innerRadius, int32 outerRadius, uint32 color, int32 alpha, int32 inkEffect,
+    public function void(int32 x, int32 y, int32 width, int32 height, color color, int32 alpha, int32 inkEffect, bool32 screenRelative) DrawRect;
+    public function void(int32 x1, int32 y1, int32 x2, int32 y2, color color, int32 alpha, int32 inkEffect, bool32 screenRelative) DrawLine;
+    public function void(int32 x, int32 y, int32 radius, color color, int32 alpha, int32 inkEffect, bool32 screenRelative) DrawCircle;
+    public function void(int32 x, int32 y, int32 innerRadius, int32 outerRadius, color color, int32 alpha, int32 inkEffect,
         bool32 screenRelative) DrawCircleOutline;
     public function void(Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect) DrawFace;
     public function void(Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, int32 inkEffect) DrawBlendedFace;
@@ -436,7 +436,7 @@ public enum GameLanguages
 #if RETRO_REV0U
     public function void(Animator* animator, uint16 tileIndex) DrawDynamicAniTiles;
 #endif
-    public function void(uint32 color, int32 alphaR, int32 alphaG, int32 alphaB) FillScreen;
+    public function void(color color, int32 alphaR, int32 alphaG, int32 alphaB) FillScreen;
 
     // Meshes & 3D Scenes
     public function uint16(char8* filename, uint8 scopeType) LoadMesh;
@@ -455,9 +455,9 @@ public enum GameLanguages
     public function uint16(char8* filePath, uint8 scopeType) LoadSpriteAnimation;
     public function uint16(char8* filePath, uint32 frameCount, uint32 listCount, uint8 scopeType) CreateSpriteAnimation;
 #if RETRO_MOD_LOADER_VER_2
-    public function void(uint16 aniFrames, uint16 listID, Animator* animator, uint32 forceApply, int32 frameID) SetSpriteAnimation;
+    public function void(uint16 aniFrames, uint16 listID, Animator* animator, bool32 forceApply, int32 frameID) SetSpriteAnimation;
 #else
-    public function void(uint16 aniFrames, uint16 listID, Animator* animator, uint32 forceApply, int16 frameID) SetSpriteAnimation;
+    public function void(uint16 aniFrames, uint16 listID, Animator* animator, bool32 forceApply, int16 frameID) SetSpriteAnimation;
 #endif
     public function void(uint16 aniFrames, uint16 listID, char8* name, int32 frameOffset, uint16 frameCount, int16 speed, uint8 loopIndex,
         uint8 rotationStyle) EditSpriteAnimation;
