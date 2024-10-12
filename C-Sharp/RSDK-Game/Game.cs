@@ -74,7 +74,7 @@ public unsafe static class Game
     }
 #endif
 
-    public static void LinkEmbeddedLogic()
+    private static void LinkEmbeddedLogic()
     {
 
     }
