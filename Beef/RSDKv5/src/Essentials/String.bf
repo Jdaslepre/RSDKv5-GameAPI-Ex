@@ -3,8 +3,19 @@ namespace RSDK;
 public struct String
 {
     public this() { }
-    public this(ref Self other) => System.Internal.MemCpy(&this, &other, sizeof(Self));
-    public this(Self* other) => System.Internal.MemCpy(&this, other, sizeof(Self));
+    public this(char8* str) => Init(str);
+    public this(ref Self other)
+    {
+        System.String str = scope .();
+        other.ToString(str);
+        Init(str);
+    }
+    public this(Self* other)
+    {
+        System.String str = scope .();
+        other.ToString(str);
+        Init(str);
+    }
 
     public void Init(char8* str, uint32 length = 0) mut => RSDKTable.InitString(&this, str, length);
     public void Set(char8* str) mut => RSDKTable.SetString(&this, str);
