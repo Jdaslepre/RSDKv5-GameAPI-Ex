@@ -22,6 +22,13 @@ public class Game
     #endif
 #endif
 
+    // -------------------------
+    // LINK GAME/MOD LOGIC
+    // -------------------------
+
+    // Don't touch LinkGameLogicDLL or LinkModLogic, if you want code
+    // to be ran after linking, use the LinkEmbeddedLogic function
+
     [Export, CLink, AlwaysInclude]
 #if RETRO_REV02
     public static void LinkGameLogicDLL(RSDK.EngineInfo* info)
@@ -92,6 +99,8 @@ public class Game
                 RSDKTable.RegisterStaticVariables(registration.staticVars, registration.name, registration.staticClassSize);
         }
 #endif
+
+        LinkEmbeddedLogic();
     }
 
 #if RETRO_USE_MOD_LOADER
@@ -101,15 +110,20 @@ public class Game
     [Export, CLink, AlwaysInclude]
     public static bool32 LinkModLogic(RSDK.EngineInfo* info, char8* id)
     {
-#if RETRO_REV02
+    #if RETRO_REV02
         LinkGameLogicDLL(info);
-#else
+    #else
         LinkGameLogicDLL(*info);
-#endif
+    #endif
 
         RSDK.Mod.id = id;
 
         return true;
     }
 #endif
+
+    private static void LinkEmbeddedLogic()
+    {
+
+    }
 }
