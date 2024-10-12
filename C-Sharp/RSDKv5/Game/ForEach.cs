@@ -1,107 +1,104 @@
-﻿using static RSDK.EngineAPI;
+﻿#if RETRO_USE_MOD_LOADER
+namespace RSDK.ForEach;
 
-namespace RSDK.ForEach
+public unsafe class List
 {
-#if RETRO_USE_MOD_LOADER
-    public unsafe class List
+    public static List<String> GetIDs()
     {
-        public static List<RSDK.String> GetIDs()
+        List<String> list = new();
+
+        String str = new();
+        while (modTable->ForeachModID(&str) != false)
         {
-            List<RSDK.String> list = new();
-            
-            RSDK.String str = new();
-            while (modTable.ForeachModID(&str) != 0)
-            {
-                RSDK.String copy = new();
-                copy.chars = str.chars;
-                copy.length = str.length;
-                copy.size = str.size;
+            String copy = new();
+            copy.chars = str.chars;
+            copy.length = str.length;
+            copy.size = str.size;
 
-                list.Add(copy);
-            }
-
-            return list;
+            list.Add(copy);
         }
+
+        return list;
     }
+}
 
 #if RETRO_MOD_LOADER_VER_2
-    public unsafe class Settings
+public unsafe class Settings
+{
+    public List<String> Get(string id)
     {
-        public List<RSDK.String> Get(string id)
+        List<String> list = new();
+
+        String str = new();
+        while (modTable->ForeachSetting(id, &str) != false)
         {
-            List<RSDK.String> list = new();
+            String copy = new();
+            copy.chars = str.chars;
+            copy.length = str.length;
+            copy.size = str.size;
 
-            RSDK.String str = new();
-            while (modTable.ForeachSetting(id, &str) != 0)
-            {
-                RSDK.String copy = new();
-                copy.chars = str.chars;
-                copy.length = str.length;
-                copy.size = str.size;
-
-                list.Add(copy);
-            }
-
-            return list;
+            list.Add(copy);
         }
 
-        public List<RSDK.String> GetCategories(string id)
-        {
-            List<RSDK.String> list = new();
-
-            RSDK.String str = new();
-            while (modTable.ForeachSettingCategory(id, &str) != 0)
-            {
-                RSDK.String copy = new();
-                copy.chars = str.chars;
-                copy.length = str.length;
-                copy.size = str.size;
-
-                list.Add(copy);
-            }
-
-            return list;
-        }
+        return list;
     }
-#endif
 
-    public unsafe class Config
+    public List<String> GetCategories(string id)
     {
-        public List<RSDK.String> Get()
+        List<String> list = new();
+
+        String str = new();
+        while (modTable->ForeachSettingCategory(id, &str) != false)
         {
-            List<RSDK.String> list = new();
+            String copy = new();
+            copy.chars = str.chars;
+            copy.length = str.length;
+            copy.size = str.size;
 
-            RSDK.String str = new();
-            while (modTable.ForeachConfig(&str) != 0)
-            {
-                RSDK.String copy = new();
-                copy.chars = str.chars;
-                copy.length = str.length;
-                copy.size = str.size;
-
-                list.Add(copy);
-            }
-
-            return list;
+            list.Add(copy);
         }
 
-        public List<RSDK.String> GetCategories()
-        {
-            List<RSDK.String> list = new();
-
-            RSDK.String str = new();
-            while (modTable.ForeachConfigCategory(&str) != 0)
-            {
-                RSDK.String copy = new();
-                copy.chars = str.chars;
-                copy.length = str.length;
-                copy.size = str.size;
-
-                list.Add(copy);
-            }
-
-            return list;
-        }
+        return list;
     }
-#endif
 }
+#endif
+
+public unsafe class Config
+{
+    public List<String> Get()
+    {
+        List<String> list = new();
+
+        String str = new();
+        while (modTable->ForeachConfig(&str) != false)
+        {
+            String copy = new();
+            copy.chars = str.chars;
+            copy.length = str.length;
+            copy.size = str.size;
+
+            list.Add(copy);
+        }
+
+        return list;
+    }
+
+    public List<String> GetCategories()
+    {
+        List<String> list = new();
+
+        String str = new();
+        while (modTable->ForeachConfigCategory(&str) != false)
+        {
+            String copy = new();
+            copy.chars = str.chars;
+            copy.length = str.length;
+            copy.size = str.size;
+
+            list.Add(copy);
+        }
+
+        return list;
+    }
+}
+#endif

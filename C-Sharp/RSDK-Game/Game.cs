@@ -1,107 +1,77 @@
-﻿using CS.GameLogic;
-using RSDK;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using static RSDK.EngineAPI;
+﻿using RSDK;
 
 namespace GameLogic
 {
-    public unsafe class Game
+    public unsafe static class Game
     {
-        GlobalVariables.Constructor c = new();
-        GlobalVariables* globals = null;
-
-        public static void** registerGlobals = null;
-        public static int registerGlobalsSize = 0;
-
-        private static delegate* unmanaged<void*, void> registerGlobalsInitCB = null;
-
-        public static void RegisterGlobals(void** globals, int size, delegate* unmanaged<void*, void> initCB)
-        {
-            registerGlobals = globals;
-            registerGlobalsSize = size;
-            registerGlobalsInitCB = initCB;
-        }
-
-
         [UnmanagedCallersOnly(EntryPoint = "LinkGameLogicDLL")]
+#if RETRO_REV02
+        private static void LinkGameLogicDLL_Unmanaged(EngineInfo* info) => LinkGameLogicDLL(info);
+#else
+        private static void LinkGameLogicDLL_Unmanaged(EngineInfo info) => LinkGameLogicDLL(&info);
+#endif
+
+        [UnmanagedCallersOnly(EntryPoint = "LinkModLogic")]
+        private static void LinkModLogic_Unmanaged(EngineInfo* info, char* id) => LinkModLogic(info, id);
+
+        // 1 = RETRO_REV01
+        // 2 = RETRO_REV02
+        // 3 = RETRO_REV0U
+
+        // These are independent from the project's preprocessor macros - and should only be
+        // used and configured for the modInfo export.
+
+        private const byte RETRO_REVISION = 3;
+        private const byte GAME_VERSION = 6;
+#if RETRO_USE_MOD_LOADER
+#if RETRO_MOD_LOADER_VER_2
+        private const byte RETRO_MOD_LOADER_VER = 2;
+#else
+        private const byte RETRO_MOD_LOADER_VER = 1;
+#endif
+#endif
+
+        // -------------------------
+        // LINK GAME/MOD LOGIC
+        // -------------------------
+
+        // Don't touch LinkGameLogicDLL or LinkModLogic, if you want code
+        // to be ran after linking, use the LinkEmbeddedLogic function
+
+#if RETRO_REV02
         private static void LinkGameLogicDLL(EngineInfo* info)
         {
             InitEngineInfo(info);
-            TestInfo(info);
-
-            /*
-            if (registerGlobalsInitCB != null)
-            {
-                IntPtr cb = Marshal.GetFunctionPointerForDelegate(registerGlobalsInitCB);
-                RSDKTable.RegisterGlobalVariables(registerGlobals, registerGlobalsSize, cb);
-            }
-            else
-            {
-                Dev.Print(0, "registerGlobalsInitCB = null");
-            }
-            */
-
-            LinkEmbeddedLogic();
-        }
-
-        public static void LinkEmbeddedLogic()
+#else
+        private static void LinkGameLogicDLL(EngineInfo info)
         {
-            Dev.PrintInt32(Dev.PrintModes.PRINT_NORMAL, "Count", ObjectRegInfo.registerListCount);
+            InitEngineInfo(&info);
+#endif
 
-            GameObject.Register<BSS_Collectable, BSS_Collectable.Static>(ref BSS_Collectable.sVars);
-            GameObject.Register<TitleSeq, TitleSeq.Static>(ref TitleSeq.sVars);
 
-            GameObject.Register<ContinueSetup, ContinueSetup.Static>(ref ContinueSetup.sVars);
-
-            Dev.PrintInt32(Dev.PrintModes.PRINT_NORMAL, "Count", ObjectRegInfo.registerListCount);
         }
 
-        static void TestInfo(EngineInfo* info)
+#if RETRO_USE_MOD_LOADER
+        [UnmanagedCallersOnly(EntryPoint = "modInfo")]
+        public static ModVersionInfo modInfo() 
+        { 
+            return new ModVersionInfo { engineVer = RETRO_REVISION, gameVer = GAME_VERSION, modLoaderVer = RETRO_MOD_LOADER_VER };
+        }
+
+        public static bool32 LinkModLogic(EngineInfo* info, char* ModID)
         {
-            RSDK.Vector2 vec = new();
-            vec.x = (128) << 16;
-            vec.y = (64) << 16;
-
-
-            float f = 2.25f;
-
-            Hitbox hitbox = new();
-            hitbox.left = -32;
-            hitbox.top = 20;
-            hitbox.right = 32;
-            hitbox.bottom = -20;
-
-            Dev.Print(0, "PrintLog");
-            Dev.PrintText(0, "PrintText");
-
-            Dev.PrintVector2(0, "PrintVector2", vec);
-            Dev.PrintVector2(0, "PrintVector2 inl", 20, 40);
-            Dev.PrintVector2(0, "PrintVector2 ptr", &vec);
-
-            Dev.PrintInt32(0, "PrintInt32", vec.x);
-            Dev.PrintUInt32(0, "PrintUInt32", (UInt32)vec.x);
-
-            Dev.PrintFloat(0, "PrintFloat", f);
-
-            Dev.PrintHitbox(0, "PrintHitbox", hitbox);
-            Dev.PrintHitbox(0, "PrintHitbox ptr", &hitbox);
-
-            // StateMachine
-
-            //StateMachine state = new StateMachine(TitleSeq.Example);
-            //state.Run();
-
-            //Dev.Print(0, "Copying:");
-            //StateMachine stateCpy = new StateMachine(state);
-            //stateCpy.Run();
+#if RETRO_REV02
+            LinkGameLogicDLL(info);
+#else
+            LinkGameLogicDLL(*info);
+#endif
+            
+            string? id = Marshal.PtrToStringUni((IntPtr)ModID);
+            if (ModID != null && id != null) { Mod.id = id; }
+            
+            return true;
         }
+#endif
 
     }
 }

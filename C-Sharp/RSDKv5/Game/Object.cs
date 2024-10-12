@@ -106,8 +106,8 @@ namespace RSDK
             public ushort classID;
             public byte active;
 
-            public unsafe void EditableVar(VariableTypes type, string name, int offset) => RSDKTable.SetEditableVar((byte)type, name, (byte)classID, offset);
-            public unsafe int Count(uint isActive = 0) { return RSDKTable.GetEntityCount(classID, isActive); }
+            public unsafe void EditableVar(VariableTypes type, string name, int offset) => RSDKTable->SetEditableVar((byte)type, name, (byte)classID, offset);
+            public unsafe int Count(uint isActive = 0) => RSDKTable->GetEntityCount(classID, isActive);
         }
 
         public interface IEntity
@@ -189,11 +189,11 @@ namespace RSDK
 
         public static Entity* Create(void* data, int x, int y)
         {
-            return (Entity*)RSDKTable.CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y);
+            return (Entity*)RSDKTable->CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y);
         }
         public static Entity* Create(int data, int x, int y)
         {
-            return (Entity*)RSDKTable.CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, MathRSDK.INT_TO_VOID(data), x, y);
+            return (Entity*)RSDKTable->CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, MathRSDK.INT_TO_VOID(data), x, y);
         }
         public static T* Create<T>(void* data, int x, int y)
         {
@@ -231,11 +231,11 @@ namespace RSDK
             T* entity = null;
             if (type == ForeachTypes.FOR_ALL_ENTITIES)
             {
-                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
+                while (RSDKTable->GetAllEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
             }
             else if (type == ForeachTypes.FOR_ACTIVE_ENTITIES)
             {
-                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
+                while (RSDKTable->GetActiveEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
             }
 
             return list;
@@ -275,7 +275,7 @@ namespace RSDK
 
                 fixed (_TypeStatic** pSvars = &sVars)
                 {
-                    RSDKTable.RegisterObject(
+                    RSDKTable->RegisterObject(
                         (void**)pSvars,
                         Object.registerList[Object.registerListCount].name,
                         (uint)sizeof(_TypeEntity),

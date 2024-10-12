@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Text;
 
 namespace RSDK
 {
@@ -31,12 +30,16 @@ namespace RSDK
     }
 
 #if RETRO_USE_MOD_LOADER
-    // Mod Table
     public unsafe struct ModFunctionTable
     {
         // Registration & Core
-        IntPtr RegisterGlobals;
-        IntPtr RegisterObject;
+#if RETRO_REV0U
+        public delegate* unmanaged<string, IntPtr, uint, IntPtr, void> RegisterGlobals;
+        public delegate* unmanaged<void**, void**, string, uint, uint, uint, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, string, void> RegisterObject;
+#else
+        public delegate* unmanaged<string, IntPtr, uint, void> RegisterGlobals;
+        public delegate* unmanaged<void**, void**, string, uint, uint, uint, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, string, void> RegisterObject;
+#endif
         public void* RegisterObject_STD;
         public delegate* unmanaged<void**, string, void> RegisterObjectHook;
         public delegate* unmanaged<string, void*> FindObject;
@@ -44,11 +47,11 @@ namespace RSDK
         public delegate* unmanaged<int, int, void*, void> Super;
 
         // Mod Info
-        public delegate* unmanaged<string, RSDK.String*, RSDK.String*, RSDK.String*, uint*, uint> LoadModInfo;
-        public delegate* unmanaged<string, RSDK.String*, void> GetModPath;
+        public delegate* unmanaged<string, String*, String*, String*, bool32*, bool32> LoadModInfo;
+        public delegate* unmanaged<string, String*, void> GetModPath;
         public delegate* unmanaged<uint, int> GetModCount;
         public delegate* unmanaged<uint, string> GetModIDByIndex;
-        public delegate* unmanaged<RSDK.String*, uint> ForeachModID;
+        public delegate* unmanaged<String*, bool32> ForeachModID;
 
         // Mod Callbacks & Public Functions
         public delegate* unmanaged<int, delegate* unmanaged<void*, void>, void> AddModCallback;
@@ -57,27 +60,27 @@ namespace RSDK
         public delegate* unmanaged<string, string, void*> GetPublicFunction;
 
         // Mod Settings
-        public delegate* unmanaged<string, string, uint, uint> GetSettingsBool;
+        public delegate* unmanaged<string, string, bool32, bool32> GetSettingsBool;
         public delegate* unmanaged<string, string, int, int> GetSettingsInteger;
         public delegate* unmanaged<string, string, float, float> GetSettingsFloat;
-        public delegate* unmanaged<string, string, RSDK.String*, string, void> GetSettingsString;
-        public delegate* unmanaged<string, uint, void> SetSettingsBool;
+        public delegate* unmanaged<string, string, String*, string, void> GetSettingsString;
+        public delegate* unmanaged<string, bool32, void> SetSettingsBool;
         public delegate* unmanaged<string, int, void> SetSettingsInteger;
         public delegate* unmanaged<string, float, void> SetSettingsFloat;
-        public delegate* unmanaged<string, RSDK.String*, void> SetSettingsString;
+        public delegate* unmanaged<string, String*, void> SetSettingsString;
         public delegate* unmanaged<void> SaveSettings;
 
         // Config
-        public delegate* unmanaged<string, uint, uint> GetConfigBool;
+        public delegate* unmanaged<string, bool32, bool32> GetConfigBool;
         public delegate* unmanaged<string, int, int> GetConfigInteger;
         public delegate* unmanaged<string, float, float> GetConfigFloat;
-        public delegate* unmanaged<string, RSDK.String*, string, void> GetConfigString;
-        public delegate* unmanaged<RSDK.String*, uint> ForeachConfig;
-        public delegate* unmanaged<RSDK.String*, uint> ForeachConfigCategory;
+        public delegate* unmanaged<string, String*, string, void> GetConfigString;
+        public delegate* unmanaged<String*, bool32> ForeachConfig;
+        public delegate* unmanaged<String*, bool32> ForeachConfigCategory;
 
         // Achievements
         public delegate* unmanaged<string, string, string, void> RegisterAchievement;
-        public delegate* unmanaged<uint, RSDK.String*, RSDK.String*, RSDK.String*, uint*, void> GetAchievementInfo;
+        public delegate* unmanaged<uint, String*, String*, String*, bool32*, void> GetAchievementInfo;
         public delegate* unmanaged<string, int> GetAchievementIndexByID;
         public delegate* unmanaged<int> GetAchievementCount;
 
@@ -94,14 +97,14 @@ namespace RSDK
 
 #if RETRO_MOD_LOADER_VER_2
         // Mod Settings (Part 2)
-        public delegate* unmanaged<string, RSDK.String*, uint> ForeachSetting;
-        public delegate* unmanaged<string, RSDK.String*, uint> ForeachSettingCategory;
+        public delegate* unmanaged<string, String*, bool32> ForeachSetting;
+        public delegate* unmanaged<string, String*, bool32> ForeachSettingCategory;
 
         // Files
-        public delegate* unmanaged<string, string, uint> ExcludeFile;
-        public delegate* unmanaged<string, uint> ExcludeAllFiles;
-        public delegate* unmanaged<string, string, uint> ReloadFile;
-        public delegate* unmanaged<string, uint> ReloadAllFiles;
+        public delegate* unmanaged<string, string, bool32> ExcludeFile;
+        public delegate* unmanaged<string, bool32> ExcludeAllFiles;
+        public delegate* unmanaged<string, string, bool32> ReloadFile;
+        public delegate* unmanaged<string, bool32> ReloadAllFiles;
 
         // Graphics
         public delegate* unmanaged<ushort, void*> GetSpriteAnimation;
@@ -118,7 +121,7 @@ namespace RSDK
         public delegate* unmanaged<byte, void*> GetShader;
         public delegate* unmanaged<ushort, void*> GetModel;
         public delegate* unmanaged<ushort, void*> GetScene3D;
-        public delegate* unmanaged<RSDK.Animator, ushort, void> DrawDynamicAniTiles;
+        public delegate* unmanaged<Animator, ushort, void> DrawDynamicAniTiles;
 
         // Audio
         public delegate* unmanaged<ushort, void*> GetSfx;
@@ -128,17 +131,17 @@ namespace RSDK
         public delegate* unmanaged<ushort, void**, uint> GetGroupEntities;
 
         // Collision
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> SetPathGripSensors; // expects 5 sensors
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindFloorPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindLWallPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindRoofPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindRWallPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FloorCollision;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> LWallCollision;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> RoofCollision;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> RWallCollision;
+        public delegate* unmanaged<CollisionSensor*, void> SetPathGripSensors; // expects 5 sensors
+        public delegate* unmanaged<CollisionSensor*, void> FindFloorPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FindLWallPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FindRoofPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FindRWallPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FloorCollision;
+        public delegate* unmanaged<CollisionSensor*, void> LWallCollision;
+        public delegate* unmanaged<CollisionSensor*, void> RoofCollision;
+        public delegate* unmanaged<CollisionSensor*, void> RWallCollision;
         public delegate* unmanaged<ushort, ushort, byte, byte, void> CopyCollisionMask;
-        public delegate* unmanaged<RSDK.CollisionMask**, RSDK.TileInfo**, void> GetCollisionInfo;
+        public delegate* unmanaged<CollisionMask**, TileInfo**, void> GetCollisionInfo;
 #endif
     }
 #endif
@@ -169,12 +172,12 @@ namespace RSDK
 #endif
 
         // Achievements
-        public delegate* unmanaged<RSDK.AchievementID*, void> TryUnlockAchievement;
+        public delegate* unmanaged<AchievementID*, void> TryUnlockAchievement;
         public delegate* unmanaged<bool32> GetAchievementsEnabled;
         public delegate* unmanaged<bool32, void> SetAchievementsEnabled;
 #if RETRO_USE_EGS
         public delegate* unmanaged<bool32> CheckAchievementsEnabled;
-        public delegate* unmanaged<RSDK.String**, int, void> SetAchievementNames;
+        public delegate* unmanaged<String**, int, void> SetAchievementNames;
 #endif
 
         // Leaderboards
@@ -182,20 +185,20 @@ namespace RSDK
         public delegate* unmanaged<bool32> CheckLeaderboardsEnabled;
 #endif
         public delegate* unmanaged<void> InitLeaderboards;
-        public delegate* unmanaged<RSDK.LeaderboardID*, bool32, void> FetchLeaderboard;
-        public delegate* unmanaged<RSDK.LeaderboardID*, int, delegate* unmanaged<bool32, int, void>, void> TrackScore;
+        public delegate* unmanaged<LeaderboardID*, bool32, void> FetchLeaderboard;
+        public delegate* unmanaged<LeaderboardID*, int, delegate* unmanaged<bool32, int, void>, void> TrackScore;
         public delegate* unmanaged<int> GetLeaderboardsStatus;
-        public delegate* unmanaged<RSDK.LeaderboardAvail> LeaderboardEntryViewSize;
-        public delegate* unmanaged<RSDK.LeaderboardAvail> LeaderboardEntryLoadSize;
+        public delegate* unmanaged<LeaderboardAvail> LeaderboardEntryViewSize;
+        public delegate* unmanaged<LeaderboardAvail> LeaderboardEntryLoadSize;
         public delegate* unmanaged<int, uint, int, void> LoadLeaderboardEntries;
         public delegate* unmanaged<void> ResetLeaderboardInfo;
-        public delegate* unmanaged<uint, RSDK.LeaderboardEntry*> ReadLeaderboardEntry;
+        public delegate* unmanaged<uint, LeaderboardEntry*> ReadLeaderboardEntry;
 
         // Rich Presence
-        public delegate* unmanaged<int, RSDK.String*, void> SetRichPresence;
+        public delegate* unmanaged<int, String*, void> SetRichPresence;
 
         // Stats
-        public delegate* unmanaged<RSDK.StatInfo*, void> TryTrackStat;
+        public delegate* unmanaged<StatInfo*, void> TryTrackStat;
         public delegate* unmanaged<bool32> GetStatsEnabled;
         public delegate* unmanaged<bool32, void> SetStatsEnabled;
 
@@ -203,7 +206,7 @@ namespace RSDK
         public delegate* unmanaged<void> ClearPrerollErrors;
         public delegate* unmanaged<void> TryAuth;
         public delegate* unmanaged<int> GetUserAuthStatus;
-        public delegate* unmanaged<RSDK.String*, bool32> GetUsername;
+        public delegate* unmanaged<String*, bool32> GetUsername;
 
         // Storage
         public delegate* unmanaged<void> TryInitStorage;
@@ -252,13 +255,13 @@ namespace RSDK
         public delegate* unmanaged<IntPtr, int, IntPtr, void> RegisterGlobalVariables;
         public delegate* unmanaged<void**, string, uint, int, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, void> RegisterObject;
 #else
-        // TODO:
         public delegate* unmanaged<IntPtr, int, void> RegisterGlobalVariables;
-        public IntPtr RegisterObject;
+        public delegate* unmanaged<void**, string, uint, int, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, void> RegisterObject;
 #endif
 #if RETRO_REV02
         public delegate* unmanaged<void**, string, uint, void> RegisterStaticVariables;
 #endif
+
         // Entities & Objects
         public delegate* unmanaged<ushort, void**, bool32> GetActiveEntities;
         public delegate* unmanaged<ushort, void**, bool32> GetAllEntities;
@@ -273,8 +276,8 @@ namespace RSDK
         public delegate* unmanaged<ushort, ushort, void*, void> ResetEntitySlot;
         public delegate* unmanaged<ushort, void*, int, int, void*> CreateEntity;
         public delegate* unmanaged<void*, void*, bool32, void> CopyEntity;
-        public delegate* unmanaged<void*, RSDK.Vector2*, bool32> CheckOnScreen;
-        public delegate* unmanaged<RSDK.Vector2*, RSDK.Vector2*, bool32> CheckPosOnScreen;
+        public delegate* unmanaged<void*, Vector2*, bool32> CheckOnScreen;
+        public delegate* unmanaged<Vector2*, Vector2*, bool32> CheckPosOnScreen;
         public delegate* unmanaged<byte, ushort, void> AddDrawListRef;
         public delegate* unmanaged<byte, ushort, ushort, ushort, void> SwapDrawListEntries;
         public delegate* unmanaged<byte, bool32, delegate* unmanaged<void>, void> SetDrawGroupProperties;
@@ -292,7 +295,7 @@ namespace RSDK
 
         // Cameras
         public delegate* unmanaged<void> ClearCameras;
-        public delegate* unmanaged<RSDK.Vector2*, int, int, bool32, void> AddCamera;
+        public delegate* unmanaged<Vector2*, int, int, bool32, void> AddCamera;
 
         // API (Rev01 only)
 #if !RETRO_REV02
@@ -326,30 +329,30 @@ namespace RSDK
         public delegate* unmanaged<int, int, byte> ATan2;
 
         // Matrices
-        public delegate* unmanaged<RSDK.Matrix*, void> SetIdentityMatrix;
-        public delegate* unmanaged<RSDK.Matrix*, RSDK.Matrix*, RSDK.Matrix*, void> MatrixMultiply;
-        public delegate* unmanaged<RSDK.Matrix*, int, int, int, bool32, void> MatrixTranslateXYZ;
-        public delegate* unmanaged<RSDK.Matrix*, int, int, int, void> MatrixScaleXYZ;
-        public delegate* unmanaged<RSDK.Matrix*, short, void> MatrixRotateX;
-        public delegate* unmanaged<RSDK.Matrix*, short, void> MatrixRotateY;
-        public delegate* unmanaged<RSDK.Matrix*, short, void> MatrixRotateZ;
-        public delegate* unmanaged<RSDK.Matrix*, short, short, short, void> MatrixRotateXYZ;
-        public delegate* unmanaged<RSDK.Matrix*, RSDK.Matrix*, void> MatrixInverse;
-        public delegate* unmanaged<RSDK.Matrix*, RSDK.Matrix*, void> MatrixCopy;
+        public delegate* unmanaged<Matrix*, void> SetIdentityMatrix;
+        public delegate* unmanaged<Matrix*, Matrix*, Matrix*, void> MatrixMultiply;
+        public delegate* unmanaged<Matrix*, int, int, int, bool32, void> MatrixTranslateXYZ;
+        public delegate* unmanaged<Matrix*, int, int, int, void> MatrixScaleXYZ;
+        public delegate* unmanaged<Matrix*, short, void> MatrixRotateX;
+        public delegate* unmanaged<Matrix*, short, void> MatrixRotateY;
+        public delegate* unmanaged<Matrix*, short, void> MatrixRotateZ;
+        public delegate* unmanaged<Matrix*, short, short, short, void> MatrixRotateXYZ;
+        public delegate* unmanaged<Matrix*, Matrix*, void> MatrixInverse;
+        public delegate* unmanaged<Matrix*, Matrix*, void> MatrixCopy;
 
         // Strings
-        public delegate* unmanaged<RSDK.String*, string, uint, void> InitString;
-        public delegate* unmanaged<RSDK.String*, RSDK.String*, void> CopyString;
-        public delegate* unmanaged<RSDK.String*, string, void> SetString;
-        public delegate* unmanaged<RSDK.String*, RSDK.String*, void> AppendString;
-        public delegate* unmanaged<RSDK.String*, string, void> AppendText;
-        public delegate* unmanaged<RSDK.String*, string, uint, void> LoadStringList;
-        public delegate* unmanaged<RSDK.String*, RSDK.String*, int, int, bool32> SplitStringList;
-        public delegate* unmanaged<StringBuilder, RSDK.String*, void> GetCString;
-        public delegate* unmanaged<RSDK.String*, RSDK.String*, bool32, bool32> CompareStrings;
+        public delegate* unmanaged<String*, string, uint, void> InitString;
+        public delegate* unmanaged<String*, String*, void> CopyString;
+        public delegate* unmanaged<String*, string, void> SetString;
+        public delegate* unmanaged<String*, String*, void> AppendString;
+        public delegate* unmanaged<String*, string, void> AppendText;
+        public delegate* unmanaged<String*, string, uint, void> LoadStringList;
+        public delegate* unmanaged<String*, String*, int, int, bool32> SplitStringList;
+        public delegate* unmanaged<char*, String*, void> GetCString;
+        public delegate* unmanaged<String*, String*, bool32, bool32> CompareStrings;
 
         // Screens & Displays
-        public delegate* unmanaged<int*, int*, int*, int*, StringBuilder, void> GetDisplayInfo;
+        public delegate* unmanaged<int*, int*, int*, int*, char*, void> GetDisplayInfo;
         public delegate* unmanaged<int*, int*, void> GetWindowSize;
         public delegate* unmanaged<byte, ushort, ushort, int> SetScreenSize;
         public delegate* unmanaged<byte, int, int, int, int, void> SetClipBounds;
@@ -385,16 +388,16 @@ namespace RSDK
         public delegate* unmanaged<int, int, int, int, uint, int, int, bool32, void> DrawLine;
         public delegate* unmanaged<int, int, int, uint, int, int, bool32, void> DrawCircle;
         public delegate* unmanaged<int, int, int, int, uint, int, int, bool32, void> DrawCircleOutline;
-        public delegate* unmanaged<RSDK.Vector2*, int, int, int, int, int, int, void> DrawFace;
-        public delegate* unmanaged<RSDK.Vector2*, uint*, int, int, int, void> DrawBlendedFace;
-        public delegate* unmanaged<RSDK.Animator*, RSDK.Vector2*, bool32, void> DrawSprite;
+        public delegate* unmanaged<Vector2*, int, int, int, int, int, int, void> DrawFace;
+        public delegate* unmanaged<Vector2*, uint*, int, int, int, void> DrawBlendedFace;
+        public delegate* unmanaged<Animator*, Vector2*, bool32, void> DrawSprite;
         public delegate* unmanaged<ushort, int, bool32, void> DrawDeformedSprite;
-        public delegate* unmanaged<RSDK.Animator*, RSDK.Vector2*, RSDK.String*, int, int, int, int, void*, RSDK.Vector2*, bool32, void> DrawText;
-        public delegate* unmanaged<ushort*, int, int, RSDK.Vector2*, RSDK.Vector2*, bool32, void> DrawTile;
+        public delegate* unmanaged<Animator*, Vector2*, String*, int, int, int, int, void*, Vector2*, bool32, void> DrawText;
+        public delegate* unmanaged<ushort*, int, int, Vector2*, Vector2*, bool32, void> DrawTile;
         public delegate* unmanaged<ushort, ushort, ushort, void> CopyTile;
         public delegate* unmanaged<ushort, ushort, ushort, ushort, ushort, ushort, void> DrawAniTiles;
 #if RETRO_REV0U
-        public delegate* unmanaged<RSDK.Animator*, ushort, void> DrawDynamicAniTiles;
+        public delegate* unmanaged<Animator*, ushort, void> DrawDynamicAniTiles;
 #endif
         public delegate* unmanaged<uint, int, int, int, void> FillScreen;
 
@@ -405,57 +408,57 @@ namespace RSDK
         public delegate* unmanaged<ushort, byte, byte, byte, void> SetDiffuseColor;
         public delegate* unmanaged<ushort, byte, byte, byte, void> SetDiffuseIntensity;
         public delegate* unmanaged<ushort, byte, byte, byte, void> SetSpecularIntensity;
-        public delegate* unmanaged<ushort, ushort, byte, RSDK.Matrix*, RSDK.Matrix*, uint, void> AddModelTo3DScene;
-        public delegate* unmanaged<ushort, RSDK.Animator*, short, byte, bool32, short, void> SetModelAnimation;
-        public delegate* unmanaged<ushort, ushort, RSDK.Animator*, byte, RSDK.Matrix*, RSDK.Matrix*, uint, void> AddMeshFrameTo3DScene;
+        public delegate* unmanaged<ushort, ushort, byte, Matrix*, Matrix*, uint, void> AddModelTo3DScene;
+        public delegate* unmanaged<ushort, Animator*, short, byte, bool32, short, void> SetModelAnimation;
+        public delegate* unmanaged<ushort, ushort, Animator*, byte, Matrix*, Matrix*, uint, void> AddMeshFrameTo3DScene;
         public delegate* unmanaged<ushort, void> Draw3DScene;
 
         // Sprite Animations & Frames
         public delegate* unmanaged<string, byte, ushort> LoadSpriteAnimation;
         public delegate* unmanaged<string, uint, uint, byte, ushort> CreateSpriteAnimation;
 #if RETRO_MOD_LOADER_VER_2
-        public delegate* unmanaged<ushort, ushort, RSDK.Animator*, bool32, int, void> SetSpriteAnimation;
+        public delegate* unmanaged<ushort, ushort, Animator*, bool32, int, void> SetSpriteAnimation;
 #else
-        public delegate* unmanaged<ushort, ushort, RSDK.Animator*, bool32, short, void> SetSpriteAnimation; 
+        public delegate* unmanaged<ushort, ushort, Animator*, bool32, short, void> SetSpriteAnimation; 
 #endif
         public delegate* unmanaged<ushort, ushort, string, int, ushort, short, byte, byte, void> EditSpriteAnimation;
-        public delegate* unmanaged<ushort, ushort, RSDK.String*, void> SetSpriteString;
+        public delegate* unmanaged<ushort, ushort, String*, void> SetSpriteString;
         public delegate* unmanaged<ushort, string, ushort> FindSpriteAnimation;
-        public delegate* unmanaged<ushort, ushort, int, RSDK.SpriteFrame*> GetFrame;
-        public delegate* unmanaged<RSDK.Animator*, byte, RSDK.Hitbox*> GetHitbox;
-        public delegate* unmanaged<RSDK.Animator*, short> GetFrameID;
-        public delegate* unmanaged<ushort, ushort, RSDK.String*, int, int, int, int> GetStringWidth;
-        public delegate* unmanaged<RSDK.Animator*, void> ProcessAnimation;
+        public delegate* unmanaged<ushort, ushort, int, SpriteFrame*> GetFrame;
+        public delegate* unmanaged<Animator*, byte, Hitbox*> GetHitbox;
+        public delegate* unmanaged<Animator*, short> GetFrameID;
+        public delegate* unmanaged<ushort, ushort, String*, int, int, int, int> GetStringWidth;
+        public delegate* unmanaged<Animator*, void> ProcessAnimation;
 
         // Tile Layers
         public delegate* unmanaged<string, ushort> GetTileLayerID;
-        public delegate* unmanaged<ushort, RSDK.TileLayer*> GetTileLayer;
-        public delegate* unmanaged<ushort, RSDK.Vector2*, bool32, void> GetLayerSize;
+        public delegate* unmanaged<ushort, TileLayer*> GetTileLayer;
+        public delegate* unmanaged<ushort, Vector2*, bool32, void> GetLayerSize;
         public delegate* unmanaged<ushort, int, int, ushort> GetTile;
         public delegate* unmanaged<ushort, int, int, ushort, void> SetTile;
         public delegate* unmanaged<ushort, int, int, ushort, int, int, int, int, void> CopyTileLayer;
-        public delegate* unmanaged<RSDK.TileLayer*, void> ProcessParallax;
-        public delegate* unmanaged<RSDK.ScanlineInfo*> GetScanlines;
+        public delegate* unmanaged<TileLayer*, void> ProcessParallax;
+        public delegate* unmanaged<ScanlineInfo*> GetScanlines;
 
         // Object & Tile Collisions
-        public delegate* unmanaged<void*, RSDK.Hitbox*, void*, RSDK.Hitbox*, bool32> CheckObjectCollisionTouchBox;
+        public delegate* unmanaged<void*, Hitbox*, void*, Hitbox*, bool32> CheckObjectCollisionTouchBox;
         public delegate* unmanaged<void*, int, void*, int, bool32> CheckObjectCollisionTouchCircle;
-        public delegate* unmanaged<void*, RSDK.Hitbox*, void*, RSDK.Hitbox*, bool32, byte> CheckObjectCollisionBox;
-        public delegate* unmanaged<void*, RSDK.Hitbox*, void*, RSDK.Hitbox*, bool32, bool32> CheckObjectCollisionPlatform;
+        public delegate* unmanaged<void*, Hitbox*, void*, Hitbox*, bool32, byte> CheckObjectCollisionBox;
+        public delegate* unmanaged<void*, Hitbox*, void*, Hitbox*, bool32, bool32> CheckObjectCollisionPlatform;
         public delegate* unmanaged<void*, ushort, byte, byte, int, int, bool32, bool32> ObjectTileCollision;
         public delegate* unmanaged<void*, ushort, byte, byte, int, int, int, bool32> ObjectTileGrip;
-        public delegate* unmanaged<void*, RSDK.Hitbox*, RSDK.Hitbox*, void> ProcessObjectMovement;
+        public delegate* unmanaged<void*, Hitbox*, Hitbox*, void> ProcessObjectMovement;
 #if RETRO_REV0U
         public delegate* unmanaged<int, byte, byte, byte, byte, byte, void> SetupCollisionConfig;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> SetPathGripSensors; // expects 5 sensors
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindFloorPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindLWallPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindRoofPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FindRWallPosition;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> FloorCollision;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> LWallCollision;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> RoofCollision;
-        public delegate* unmanaged<RSDK.CollisionSensor*, void> RWallCollision;
+        public delegate* unmanaged<CollisionSensor*, void> SetPathGripSensors; // expects 5 sensors
+        public delegate* unmanaged<CollisionSensor*, void> FindFloorPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FindLWallPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FindRoofPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FindRWallPosition;
+        public delegate* unmanaged<CollisionSensor*, void> FloorCollision;
+        public delegate* unmanaged<CollisionSensor*, void> LWallCollision;
+        public delegate* unmanaged<CollisionSensor*, void> RoofCollision;
+        public delegate* unmanaged<CollisionSensor*, void> RWallCollision;
 #endif
         public delegate* unmanaged<ushort, byte, byte, int> GetTileAngle;
         public delegate* unmanaged<ushort, byte, byte, byte, void> SetTileAngle;
@@ -463,7 +466,7 @@ namespace RSDK
         public delegate* unmanaged<ushort, byte, byte, void> SetTileFlags;
 #if RETRO_REV0U
         public delegate* unmanaged<ushort, ushort, byte, byte, void> CopyCollisionMask;
-        public delegate* unmanaged<RSDK.CollisionMask**, RSDK.TileInfo**, void> GetCollisionInfo;
+        public delegate* unmanaged<CollisionMask**, TileInfo**, void> GetCollisionInfo;
 #endif
 
         // Audio
@@ -509,14 +512,14 @@ namespace RSDK
 
         // Printing (Rev02)
 #if RETRO_REV02
-        public delegate* unmanaged<RSDK.Dev.PrintModes, string, void> PrintLog;
-        public delegate* unmanaged<RSDK.Dev.PrintModes, string, void> PrintText;
-        public delegate* unmanaged<RSDK.Dev.PrintModes, RSDK.String*, void> PrintString;
-        public delegate* unmanaged<RSDK.Dev.PrintModes, string, uint, void> PrintUInt32;
-        public delegate* unmanaged<RSDK.Dev.PrintModes, string, int, void> PrintInt32;
-        public delegate* unmanaged<RSDK.Dev.PrintModes, string, float, void> PrintFloat;
-        public delegate* unmanaged<RSDK.Dev.PrintModes, string, RSDK.Vector2, void> PrintVector2;
-        public delegate* unmanaged<RSDK.Dev.PrintModes, string, RSDK.Hitbox, void> PrintHitbox;
+        public delegate* unmanaged<PrintModes, string, void> PrintLog;
+        public delegate* unmanaged<PrintModes, string, void> PrintText;
+        public delegate* unmanaged<PrintModes, String*, void> PrintString;
+        public delegate* unmanaged<PrintModes, string, uint, void> PrintUInt32;
+        public delegate* unmanaged<PrintModes, string, int, void> PrintInt32;
+        public delegate* unmanaged<PrintModes, string, float, void> PrintFloat;
+        public delegate* unmanaged<PrintModes, string, Vector2, void> PrintVector2;
+        public delegate* unmanaged<PrintModes, string, Hitbox, void> PrintHitbox;
 #endif
 
         // Editor
@@ -531,7 +534,7 @@ namespace RSDK
         // Debugging
 #if RETRO_REV02
         public delegate* unmanaged<void> ClearViewableVariables;
-        public delegate* unmanaged<string, void*, RSDK.Dev.ViewableVarTypes, int, int, void> AddViewableVariable;
+        public delegate* unmanaged<string, void*, ViewableVarTypes, int, int, void> AddViewableVariable;
 #endif
 
 #if RETRO_REV0U
@@ -593,11 +596,14 @@ namespace RSDK
 
     public struct GameInfo
     {
-        public char[] gameTitle = new char[0x40];
-        public char[] gameSubtitle = new char[0x100];
-        public char[] version = new char[0x10];
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
+        public char[] gameTitle;
 
-        public GameInfo() { }
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x100)]
+        public char[] gameSubtitle;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
+        public char[] version;
     }
 
     public struct InputState
@@ -667,9 +673,15 @@ namespace RSDK
 
     public struct TouchInfo
     {
-        public float[] x = new float[0x10];
-        public float[] y = new float[0x10];
-        public bool32[] down = new bool32[0x10];
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
+        public float[] x;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
+        public float[] y;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
+        public bool32[] down;
+
         public byte count;
 #if !RETRO_REV02
         public bool32 pauseHold;
@@ -679,108 +691,103 @@ namespace RSDK
         public bool32 anyKeyPress;
         public bool32 unknown2;
 #endif
-
-        public TouchInfo() { }
     }
 
     public struct ScreenInfo
     {
-        public ushort[] frameBuffer = new ushort[Const.SCREEN_XMAX * Const.SCREEN_YSIZE];
-        public RSDK.Vector2 position;
-        public RSDK.Vector2 size;
-        public RSDK.Vector2 center;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = Const.SCREEN_XMAX * Const.SCREEN_YSIZE)]
+        public ushort[] frameBuffer;
+
+        public Vector2 position;
+        public Vector2 size;
+        public Vector2 center;
         public int pitch;
         public int clipBound_X1;
         public int clipBound_Y1;
         public int clipBound_X2;
         public int clipBound_Y2;
         public int waterDrawPos;
-
-        public ScreenInfo() { }
     }
 
     public unsafe struct EngineInfo
     {
-        public IntPtr functionTable;
+        public RSDKFunctionTable* RSDKTable;
 #if RETRO_REV02
-        public IntPtr APITable;
+        public APIFunctionTable* APITable;
 #endif
-        public IntPtr gameInfo;
+        public GameInfo* gameInfo;
 #if RETRO_REV02
-        public RSDK.SKUInfo* currentSKU;
+        public SKUInfo* SKU;
 #endif
-        public RSDK.SceneInfo* sceneInfo;
-        public IntPtr controllerInfo;
-        public IntPtr stickInfoL;
+        public SceneInfo* sceneInfo;
+        public ControllerState* controllerInfo;
+        public AnalogState* stickInfoL;
 #if RETRO_REV02
-        public IntPtr stickInfoR;
-        public IntPtr triggerInfoL;
-        public IntPtr triggerInfoR;
+        public AnalogState* stickInfoR;
+        public TriggerState* triggerInfoL;
+        public TriggerState* triggerInfoR;
 #endif
-        public IntPtr touchInfo;
+        public TouchInfo* touchInfo;
 #if RETRO_REV02
-        public IntPtr unknownInfo;
+        public UnknownInfo* unknownInfo;
 #endif
-        public IntPtr screenInfo;
+        public ScreenInfo* screenInfo;
 #if RETRO_REV02 && RETRO_REV0U
         public IntPtr hedgehogLink;
 #endif
 #if RETRO_USE_MOD_LOADER
-        public IntPtr modFunctionTable;
+        public ModFunctionTable* modTable;
 #endif
     }
 
     public unsafe class EngineAPI
     {
-        public static RSDKFunctionTable RSDKTable = new();
-        public static APIFunctionTable APITable = new();
+        public static RSDKFunctionTable* RSDKTable = null;
+        public static APIFunctionTable* APITable = null;
 #if RETRO_USE_MOD_LOADER
-        public static ModFunctionTable modTable = new();
+        public static ModFunctionTable* modTable = null;
 #endif
         public static SceneInfo* sceneInfo = null;
 
-        public static GameInfo gameInfo = new();
-        public static SKUInfo *SKU = null;
+        public static GameInfo* gameInfo = null;
+        public static SKUInfo* SKU = null;
 
-        public static ControllerState controllerInfo = new();
-        public static AnalogState analogStickInfoL = new();
-        public static AnalogState analogStickInfoR = new();
-        public static TriggerState triggerInfoL = new();
-        public static TriggerState triggerInfoR = new();
-        public static TouchInfo touchInfo = new();
+        public static ControllerState* controllerInfo = null;
+        public static AnalogState* analogStickInfoL = null;
+        public static AnalogState* analogStickInfoR = null;
+        public static TriggerState* triggerInfoL = null;
+        public static TriggerState* triggerInfoR = null;
+        public static TouchInfo* touchInfo = null;
 
-        public static UnknownInfo unknownInfo = new();
+        public static UnknownInfo* unknownInfo = null;
 
-        public static ScreenInfo screenInfo = new();
+        public static ScreenInfo* screenInfo = null;
 
         public static void InitEngineInfo(EngineInfo* info)
         {
-            RSDKTable = Marshal.PtrToStructure<RSDKFunctionTable>(info->functionTable);
+            RSDKTable = info->RSDKTable;
 #if RETRO_REV02
-            APITable = Marshal.PtrToStructure<APIFunctionTable>(info->APITable);
+            APITable = info->APITable;
 #endif
-            gameInfo = Marshal.PtrToStructure<GameInfo>(info->gameInfo);
+            gameInfo = info->gameInfo;
 #if RETRO_REV02
-            SKU = info->currentSKU;
+            SKU = info->SKU;
 #endif
             sceneInfo = info->sceneInfo;
-            controllerInfo = Marshal.PtrToStructure<ControllerState>(info->controllerInfo);
-
-            analogStickInfoL = Marshal.PtrToStructure<AnalogState>(info->stickInfoL);
+            controllerInfo = info->controllerInfo;
+            analogStickInfoL = info->stickInfoL;
 #if RETRO_REV02
-            analogStickInfoR = Marshal.PtrToStructure<AnalogState>(info->stickInfoR);
-            triggerInfoL = Marshal.PtrToStructure<TriggerState>(info->triggerInfoL);
-            triggerInfoR = Marshal.PtrToStructure<TriggerState>(info->triggerInfoR);
+            analogStickInfoR = info->stickInfoR;
+            triggerInfoL = info->triggerInfoL;
+            triggerInfoR = info->triggerInfoR;
 #endif
-            touchInfo = Marshal.PtrToStructure<TouchInfo>(info->touchInfo);
-
+            touchInfo = info->touchInfo;
 #if RETRO_REV02
-            unknownInfo = Marshal.PtrToStructure<UnknownInfo>(info->unknownInfo);
+            unknownInfo = info->unknownInfo;
 #endif
-            screenInfo = Marshal.PtrToStructure<ScreenInfo>(info->screenInfo);
-
+            screenInfo = info->screenInfo;
 #if RETRO_USE_MOD_LOADER
-            modTable = Marshal.PtrToStructure<ModFunctionTable>(info->modFunctionTable);
+            modTable = info->modTable;
 #endif
         }
     }
