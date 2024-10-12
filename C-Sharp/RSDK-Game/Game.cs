@@ -64,7 +64,7 @@ public unsafe static class Game
 #if RETRO_REV02
         LinkGameLogicDLL(info);
 #else
-            LinkGameLogicDLL(*info);
+        LinkGameLogicDLL(*info);
 #endif
 
         string? id = Marshal.PtrToStringUni((IntPtr)ModID);
