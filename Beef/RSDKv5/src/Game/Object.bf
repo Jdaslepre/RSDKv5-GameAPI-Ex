@@ -464,7 +464,7 @@ public enum TileCollisionModes : uint8
 #if RETRO_REV0U
             object.staticLoad = staticLoad;
 #endif
-            object.staticVars      = (.)(void**)&sVars;
+            object.staticVars      = (.)&sVars;
             object.entityClassSize = (.)sizeof(entity);
             object.staticClassSize = (.)sizeof(staticVars);
         }
@@ -515,8 +515,8 @@ public enum TileCollisionModes : uint8
 #if RETRO_REV0U
             object.staticLoad = staticLoad;
 #endif
-            object.staticVars         = (.)(void**)&sVars;
-            object.modStaticVars      = (.)(void**)&modsVars;
+            object.staticVars         = (.)&sVars;
+            object.modStaticVars      = (.)&modsVars;
             object.entityClassSize    = (.)sizeof(entity);
             object.staticClassSize    = (.)sizeof(staticV);
             object.modStaticClassSize = (.)sizeof(modStaticV);

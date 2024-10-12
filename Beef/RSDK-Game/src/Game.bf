@@ -1,9 +1,11 @@
 using System;
+
 using RSDK;
+using RSDK.Mod;
 
 namespace GameLogic;
 
-public class Game
+public static class Game
 {
     // 1 = RETRO_REV01
     // 2 = RETRO_REV02
@@ -12,13 +14,13 @@ public class Game
     // These are independent from the project's preprocessor macros - and should only be
     // used and configured for the modInfo export.
 
-    private const int RETRO_REVISION = 3;
-    private const int GAME_VERSION = 6;
+    private const uint8 RETRO_REVISION = 3;
+    private const uint8 GAME_VERSION = 6;
 #if RETRO_USE_MOD_LOADER
     #if RETRO_MOD_LOADER_VER_2
-    private const int RETRO_MOD_LOADER_VER = 2;
+    private const uint8 RETRO_MOD_LOADER_VER = 2;
     #else
-    private const int RETRO_MOD_LOADER_VER = 1;
+    private const uint8 RETRO_MOD_LOADER_VER = 1;
     #endif
 #endif
 
@@ -31,11 +33,11 @@ public class Game
 
     [Export, CLink, AlwaysInclude]
 #if RETRO_REV02
-    public static void LinkGameLogicDLL(RSDK.EngineInfo* info)
+    public static void LinkGameLogicDLL(EngineInfo* info)
     {
         InitEngineInfo(info);
 #else
-    public static void LinkGameLogicDLL(RSDK.EngineInfo info)
+    public static void LinkGameLogicDLL(ref EngineInfo info)
     {
         InitEngineInfo(&info);
 #endif
@@ -95,18 +97,18 @@ public class Game
 
 #if RETRO_USE_MOD_LOADER
     [Export]
-    public static RSDK.Mod.ModVersionInfo modInfo = .() { engineVer = RETRO_REVISION, gameVer = GAME_VERSION, modLoaderVer = RETRO_MOD_LOADER_VER };
+    public static ModVersionInfo modInfo = .() { engineVer = RETRO_REVISION, gameVer = GAME_VERSION, modLoaderVer = RETRO_MOD_LOADER_VER };
 
     [Export, CLink, AlwaysInclude]
-    public static bool32 LinkModLogic(RSDK.EngineInfo* info, char8* id)
+    public static bool32 LinkModLogic(EngineInfo* info, char8* id)
     {
     #if RETRO_REV02
         LinkGameLogicDLL(info);
     #else
-        LinkGameLogicDLL(*info);
+        LinkGameLogicDLL(ref *info);
     #endif
 
-        RSDK.Mod.id = id;
+        Mod.id = id;
 
         return true;
     }

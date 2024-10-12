@@ -6,7 +6,7 @@ public struct SpriteSheet
 
     public void Init() mut => id = (.)(-1);
 
-    public void Load(char8* path, Scopes scopeType) mut { id = RSDKTable.LoadSpriteSheet(path, (.)scopeType); }
+    public void Load(char8* path, Scopes scopeType) mut => id = RSDKTable.LoadSpriteSheet(path, (.)scopeType);
 
     public bool32 Loaded() => id != (.)(-1);
 
@@ -40,7 +40,7 @@ public struct SpriteAnimation
 
     public uint16 FindAnimation(char8* name) => RSDKTable.FindSpriteAnimation(id, name);
 
-    public SpriteFrame* GetFrame(int32 animID, int32 frameID) => RSDKTable.GetFrame(id, (.)animID, frameID);
+    public SpriteFrame* GetFrame(uint16 animID, int32 frameID) => RSDKTable.GetFrame(id, animID, frameID);
 
     public bool32 Loaded() => id != (.)(-1);
 

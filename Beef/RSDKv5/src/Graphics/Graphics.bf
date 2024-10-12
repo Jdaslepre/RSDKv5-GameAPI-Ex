@@ -39,7 +39,7 @@ public enum InkEffects : uint8
     UNMASKED,
 }
 
-public enum VideoSettingsValues
+public enum VideoSettingsValues : int32
 {
     WINDOWED,
     BORDERED,
@@ -91,7 +91,10 @@ public struct Palette
 
     public void SetActivePalette(int32 startLine, int32 endLine) => RSDKTable.SetActivePalette(id, startLine, endLine);
 
-    public void Rotate(uint8 startIndex, uint8 endIndex, bool32 right) => RSDKTable.RotatePalette(id, startIndex, endIndex, right);
+    public void Rotate(uint8 startIndex, uint8 endIndex, bool32 right)
+    {
+        RSDKTable.RotatePalette(id, startIndex, endIndex, right);
+    }
     public void Copy(uint8 sourceBank, uint8 srcBankStart, uint8 destBankStart, uint8 count)
     {
         RSDKTable.CopyPalette(sourceBank, srcBankStart, id, destBankStart, count);
@@ -144,19 +147,19 @@ public static class Graphics
     }
 
     public static void DrawCircleOutline(int32 x, int32 y, int32 innerRadius, int32 outerRadius, uint32 color, int32 alpha, uint8 inkEffect,
-        bool screenRelative)
+        bool32 screenRelative)
     {
         RSDKTable.DrawCircleOutline(x, y, innerRadius, outerRadius, color, alpha, inkEffect, screenRelative);
     }
 
-    public static void DrawFace(Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect)
+    public static void DrawFace(Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, InkEffects inkEffect)
     {
-        RSDKTable.DrawFace(vertices, vertCount, r, g, b, alpha, inkEffect);
+        RSDKTable.DrawFace(vertices, vertCount, r, g, b, alpha, (.)inkEffect);
     }
 
-    public static void DrawBlendedFace(Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, int32 inkEffect)
+    public static void DrawBlendedFace(Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, InkEffects inkEffect)
     {
-        RSDKTable.DrawBlendedFace(vertices, vertColors, vertCount, alpha, inkEffect);
+        RSDKTable.DrawBlendedFace(vertices, vertColors, vertCount, alpha, (.)inkEffect);
     }
 
     public static void DrawDeformedSprite(SpriteSheet sheet, int32 inkEffect, bool32 screenRelative)
@@ -169,14 +172,20 @@ public static class Graphics
         RSDKTable.DrawTile((.)tiles, countX, countY, position, offset, screenRelative);
     }
 
-    public static void CopyTile(uint16 dest, uint16 src, uint16 count) => RSDKTable.CopyTile(dest, src, count);
+    public static void CopyTile(uint16 dest, uint16 src, uint16 count)
+    {
+        RSDKTable.CopyTile(dest, src, count);
+    }
 
     public static void DrawAniTiles(SpriteSheet sheet, uint16 tileIndex, uint16 srcX, uint16 srcY, uint16 width, uint16 height)
     {
         RSDKTable.DrawAniTiles(sheet.id, tileIndex, srcX, srcY, width, height);
     }
 
-    public static void FillScreen(color color, int32 alphaR, int32 alphaG, int32 alphaB) => RSDKTable.FillScreen(color, alphaR, alphaG, alphaB);
+    public static void FillScreen(color color, int32 alphaR, int32 alphaG, int32 alphaB)
+    {
+        RSDKTable.FillScreen(color, alphaR, alphaG, alphaB);
+    }
 
     // ------------------
     // Screens & Displays

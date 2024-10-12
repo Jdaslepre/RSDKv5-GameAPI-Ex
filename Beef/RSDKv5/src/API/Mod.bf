@@ -44,15 +44,24 @@ public enum ModSuper
 
 static
 {
+    // --------------------------------
     // Mod Callbacks & Public Functions
+    // --------------------------------
+
     public static void AddModCallback(int32 callbackID, function void(void*) callback) => modTable.AddModCallback(callbackID, callback);
     public static void AddPublicFunction(char8* functionName, void* functionPtr) => modTable.AddPublicFunction(functionName, functionPtr);
     public static void* GetPublicFunction(char8* id, char8* functionName) => modTable.GetPublicFunction(id, functionName);
 
+    // -------
     // Shaders
+    // -------
+
     public static void LoadShader(char8* shaderName, bool32 linear) => modTable.LoadShader(shaderName, linear);
 
+    // ----
     // Misc
+    // ----
+
     public static void* GetGlobals() => modTable.GetGlobals();
 
     public static class List

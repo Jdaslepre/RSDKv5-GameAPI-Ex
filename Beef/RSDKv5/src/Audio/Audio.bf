@@ -22,7 +22,7 @@ public struct Channel
 
 static
 {
-    public static Channel[Const.CHANNEL_COUNT] channels = .();
+    public static Channel[Const.CHANNEL_COUNT] channels = .(.(0), .(1), .(2), .(3), .(4), .(5), .(6), .(7), .(8), .(9), .(10), .(11), .(12), .(13), .(14), .(15));;
 }
 
 public struct SoundFX
@@ -45,6 +45,6 @@ public struct SoundFX
 
     public bool32 Loaded() mut => id != (.)(-1);
 
-    public bool32 Matches(Self other)  => this.id == other.id;
+    public bool32 Matches(Self other)  => id == other.id;
     public bool32 Matches(Self* other) => other != null ? id == other.id : id == (.)(-1);
 }

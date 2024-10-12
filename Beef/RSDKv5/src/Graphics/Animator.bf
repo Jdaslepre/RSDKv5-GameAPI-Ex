@@ -56,7 +56,7 @@ public struct Animator
 
     public int32 GetFrameID() mut                           => RSDKTable.GetFrameID(&this);
     public Hitbox* GetHitbox(uint8 id) mut                  => RSDKTable.GetHitbox(&this, id);
-    public SpriteFrame* GetFrame(SpriteAnimation aniFrames) => aniFrames.GetFrame(animationID, frameID);
+    public SpriteFrame* GetFrame(SpriteAnimation aniFrames) => aniFrames.GetFrame((.)animationID, frameID);
 
     public void DrawSprite(Vector2* position, bool32 screenRelative) mut => RSDKTable.DrawSprite(&this, position, screenRelative);
     public void DrawString(Vector2* position, String* string, int32 endFrame, int32 textLength, int32 align, int32 spacing, Vector2* charOffsets, bool32 screenRelative) mut
