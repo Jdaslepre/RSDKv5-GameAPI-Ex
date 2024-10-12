@@ -57,36 +57,26 @@ public class Game
             {
 #if RETRO_USE_MOD_LOADER
                 if (registration.isModded) {
+                    modTable.RegisterObject(registration.staticVars, registration.modStaticVars, registration.name, registration.entityClassSize,
+                        registration.staticClassSize, registration.modStaticClassSize, registration.update,
+                        registration.lateUpdate, registration.staticUpdate, registration.draw, registration.create,
+                        registration.stageLoad, registration.editorLoad, registration.editorDraw, registration.serialize,
                 #if RETRO_REV0U
-                    modTable.RegisterObject(registration.staticVars, registration.modStaticVars, registration.name, registration.entityClassSize,
-                                             registration.staticClassSize, registration.modStaticClassSize, registration.update,
-                                             registration.lateUpdate, registration.staticUpdate, registration.draw, registration.create,
-                                             registration.stageLoad, registration.editorLoad, registration.editorDraw, registration.serialize,
-                                             registration.staticLoad, registration.inherit);
-                #else
-                    modTable.RegisterObject(registration.staticVars, registration.modStaticVars, registration.name, registration.entityClassSize,
-                                             registration.staticClassSize, registration.modStaticClassSize, registration.update,
-                                             registration.lateUpdate, registration.staticUpdate, registration.draw, registration.create,
-                                             registration.stageLoad, registration.editorLoad, registration.editorDraw, registration.serialize,
-                                             registration.inherit);
+                        registration.staticLoad,
                 #endif
-
+                        registration.inherit);
                     continue;
                 }
 #endif
 
-
-#if RETRO_REV0U
                 RSDKTable.RegisterObject(registration.staticVars, registration.name, registration.entityClassSize, registration.staticClassSize,
                     => registration.update, => registration.lateUpdate, => registration.staticUpdate, => registration.draw,
                     => registration.create, => registration.stageLoad, => registration.editorLoad, => registration.editorDraw,
-                    => registration.serialize, => registration.staticLoad);
-#else
-                RSDKTable.RegisterObject(registration.staticVars, registration.name, registration.entityClassSize, registration.staticClassSize,
-                    => registration.update, => registration.lateUpdate, => registration.staticUpdate, => registration.draw,
-                    => registration.create, => registration.stageLoad, => registration.editorDraw, => registration.editorLoad,
-                    => registration.serialize);
-#endif
+                    => registration.serialize
+                #if RETRO_REV0U
+                    , => registration.staticLoad
+                #endif
+                    );
             }
         }
 
