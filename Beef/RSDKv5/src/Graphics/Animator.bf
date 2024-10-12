@@ -34,10 +34,10 @@ public struct Animator
     }
 
 #if RETRO_MOD_LOADER_VER_2
-    public void SetAnimation(SpriteAnimation *spriteAni, uint16 listID, uint32 forceApply, int32 frameID) mut
+    public void SetAnimation(SpriteAnimation *spriteAni, uint16 listID, bool32 forceApply, int32 frameID) mut
     {
 #else
-    public void SetAnimation(SpriteAnimation* spriteAni, uint16 listID, uint32 forceApply, int16 frameID) mut
+    public void SetAnimation(SpriteAnimation* spriteAni, uint16 listID, bool32 forceApply, int16 frameID) mut
     {
 #endif
         RSDKTable.SetSpriteAnimation(spriteAni != null ? spriteAni.id : (.)(-1), listID, &this, forceApply, frameID);
