@@ -288,7 +288,7 @@ public unsafe class Input
     public static uint GetFilteredInputDeviceID(bool32 confirmOnly, bool32 unassignedOnly, uint maxInactiveTimer) => RSDKTable->GetFilteredInputDeviceID(confirmOnly, unassignedOnly, maxInactiveTimer);
 
     public static int GetInputDeviceType(uint deviceID) => RSDKTable->GetInputDeviceType(deviceID);
-    public static uint IsInputDeviceAssigned(uint deviceID) => RSDKTable->IsInputDeviceAssigned(deviceID);
+    public static bool32 IsInputDeviceAssigned(uint deviceID) => RSDKTable->IsInputDeviceAssigned(deviceID);
     public static int GetInputDeviceUnknown(uint deviceID) => RSDKTable->GetInputDeviceUnknown(deviceID);
 
     public static int InputDeviceUnknown1(uint deviceID, int unknown1, int unknown2) => RSDKTable->InputDeviceUnknown1(deviceID, unknown1, unknown2);

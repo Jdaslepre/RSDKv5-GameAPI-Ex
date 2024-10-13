@@ -33,17 +33,17 @@ namespace RSDK
 
     public enum ActiveFlags : byte
     {
-        ACTIVE_NEVER, // never update
-        ACTIVE_ALWAYS, // always update (even if paused/frozen)
-        ACTIVE_NORMAL, // always update (unless paused/frozen)
-        ACTIVE_PAUSED, // update only when paused/frozen
-        ACTIVE_BOUNDS, // update if in x & y bounds
-        ACTIVE_XBOUNDS, // update only if in x bounds (y bounds dont matter)
-        ACTIVE_YBOUNDS, // update only if in y bounds (x bounds dont matter)
-        ACTIVE_RBOUNDS, // update based on radius boundaries (updateRange.x == radius)
+        NEVER, // never update
+        ALWAYS, // always update (even if paused/frozen)
+        NORMAL, // always update (unless paused/frozen)
+        PAUSED, // update only when paused/frozen
+        BOUNDS, // update if in x & y bounds
+        XBOUNDS, // update only if in x bounds (y bounds dont matter)
+        YBOUNDS, // update only if in y bounds (x bounds dont matter)
+        RBOUNDS, // update based on radius boundaries (updateRange.x == radius)
 
         // Not really even a real active value, but some objects set their active states to this so here it is I suppose
-        ACTIVE_DISABLED = 0xFF,
+        DISABLED = 0xFF,
     }
 
     public enum VariableTypes : byte
@@ -112,53 +112,61 @@ namespace RSDK
 
         public interface IEntity
         {
-            void Create(void* data);
-            void Update();
-            void Draw();
-            void LateUpdate();
-#if GAME_INCLUDE_EDITOR
-            void EditorDraw();
+            public abstract void Update();
+            public abstract void LateUpdate();
+            public abstract static void StaticUpdate();
+            public abstract void Draw();
+            public abstract void Create(void* data);
+            public abstract static void StageLoad();
+#if RETRO_REV0U
+            public abstract static void StaticLoad(void* sVars);
 #endif
-            void StageLoad();
-            void Serialize();
-            void StaticUpdate();
-            void StaticLoad(void* sVars);
+            public abstract static void Serialize();
 #if GAME_INCLUDE_EDITOR
-            void EditorLoad();
+            public abstract static void EditorLoad();
+            public abstract void EditorDraw();
 #endif
         }
 
         [StructLayout(LayoutKind.Sequential)]
         public class Entity : IEntity
         {
-            public void Create(void* data) { }
+            // ----------------------
+            // Standard Entity Events
+            // ----------------------
+
             public void Update() { }
-            public void Draw() { }
             public void LateUpdate() { }
-#if GAME_INCLUDE_EDITOR
-            public void EditorDraw() { }
-#endif
-            public void StageLoad() { }
-            public void Serialize() { }
-            public void StaticUpdate() { }
-            public void StaticLoad(void* data)
+            public static void StaticUpdate() { }
+            public void Draw() { }
+            public void Create(void* data) { }
+            public static void StageLoad() { }
+#if RETRO_REV0U
+            public static void StaticLoad(void* data)
             {
                 var sVars = (Static*)data;
 
                 sVars->classID = (ushort)DefaultObjects.TYPE_DEFAULTOBJECT;
-                sVars->active = (byte)ActiveFlags.ACTIVE_NEVER;
+                sVars->active = (byte)ActiveFlags.NEVER;
             }
-#if GAME_INCLUDE_EDITOR
-            public void EditorLoad() { }
 #endif
+            public static void Serialize() { }
+#if GAME_INCLUDE_EDITOR
+            public static void EditorLoad() { }
+            public void EditorDraw() { }
+#endif
+
+            // ----------------
+            // Entity Variables
+            // ----------------
 
 #if RETRO_REV0U
             private void* vfTable;
 #endif
-            public RSDK.Vector2 position;
-            public RSDK.Vector2 scale;
-            public RSDK.Vector2 velocity;
-            public RSDK.Vector2 updateRange;
+            public Vector2 position;
+            public Vector2 scale;
+            public Vector2 velocity;
+            public Vector2 updateRange;
             public int angle;
             public int alpha;
             public int rotation;
@@ -168,7 +176,7 @@ namespace RSDK
             public ushort classID;
             public bool32 inRange;
             public bool32 isPermanent;
-            public int tileCollisions;
+            public bool32 tileCollisions;
             public bool32 interaction;
             public bool32 onGround;
             public ActiveFlags active;
@@ -182,8 +190,20 @@ namespace RSDK
             public TileCollisionModes collisionMode;
             public DrawFX drawFX;
             public InkEffects inkEffect;
-            public byte visible;
-            public byte onScreen;
+            public Boolean<byte> visible;
+            public Boolean<byte> onScreen;
+
+            // ----------------------
+            // Extra Entity Functions
+            // ----------------------
+
+            public void Init()
+            {
+                active = ActiveFlags.BOUNDS;
+                visible = false;
+                updateRange.x = MathRSDK.TO_FIXED(128);
+                updateRange.y = MathRSDK.TO_FIXED(128);
+            }
         }
 
 

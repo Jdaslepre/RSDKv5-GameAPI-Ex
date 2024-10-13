@@ -473,7 +473,7 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<string, ushort> GetSfx;
     public delegate* unmanaged<ushort, int, int, int> PlaySfx;
     public delegate* unmanaged<ushort, void> StopSfx;
-    public delegate* unmanaged<string, uint, uint, uint, uint, int> PlayStream;
+    public delegate* unmanaged<string, uint, uint, uint, bool32, int> PlayStream;
     public delegate* unmanaged<byte, float, float, float, void> SetChannelAttributes;
     public delegate* unmanaged<uint, void> StopChannel;
     public delegate* unmanaged<uint, void> PauseChannel;

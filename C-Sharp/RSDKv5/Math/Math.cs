@@ -1,6 +1,6 @@
 ﻿namespace RSDK;
 
-public unsafe class MathRSDK
+public unsafe static class MathRSDK
 {
     // RSDK.Math.Min   -> System.Math.Min
     // RSDK.Math.Max   -> System.Math.Max

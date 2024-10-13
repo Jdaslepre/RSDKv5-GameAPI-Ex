@@ -30,7 +30,7 @@ public unsafe struct String
 
     public static void Copy(String* dst, String* src) => RSDKTable->CopyString(dst, src);
     public static void Copy(String* dst, string src) => RSDKTable->SetString(dst, src);
-    public static uint Compare(String* strA, String* strB, uint exactMatch) { return RSDKTable->CompareStrings(strA, strB, exactMatch); }
+    public static bool32 Compare(String* strA, String* strB, uint exactMatch) { return RSDKTable->CompareStrings(strA, strB, exactMatch); }
 
     public void CStr(char* buffer) { fixed (String* s = &this) RSDKTable->GetCString(buffer, s); }
 
