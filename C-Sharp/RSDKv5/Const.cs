@@ -32,7 +32,7 @@ public class Const
 #if RETRO_REV02
     public const int SCREEN_COUNT = 4;
 #else
-        public const int SCREEN_COUNT = 2;
+    public const int SCREEN_COUNT = 2;
 #endif
     public const int CAMERA_COUNT = 4;
 }

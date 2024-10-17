@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using static RSDK.EngineAPI;
+using static RSDK.GameObject;
 
 namespace RSDK
 {
@@ -204,8 +206,59 @@ namespace RSDK
                 updateRange.x = MathRSDK.TO_FIXED(128);
                 updateRange.y = MathRSDK.TO_FIXED(128);
             }
+
+            // can't really do &this, so hoping that sceneInfo->entity will be fine...
+
+            public ushort Slot() => (ushort)RSDKTable->GetEntitySlot(This<Entity>());
+            public void Destroy() => RSDKTable->ResetEntity(This<Entity>(), (ushort)DefaultObjects.TYPE_DEFAULTOBJECT, null);
+
+            public void Reset(uint type, void* data) => RSDKTable->ResetEntity(This<Entity>(), (ushort)type, data);
+            public void Reset(uint type, int data) => RSDKTable->ResetEntity(This<Entity>(), (ushort)type, MathRSDK.INT_TO_VOID(data));
+
+            public void Copy(Entity* dst, bool32 clearThis) => RSDKTable->CopyEntity(dst, This<Entity>(), clearThis);
+
+            public bool32 CheckOnScreen(Vector2* range) => RSDKTable->CheckOnScreen(This<Entity>(), range);
+
+            public void AddDrawListRef(byte drawGroup) => RSDKTable->AddDrawListRef(drawGroup, Slot());
+
+            public bool32 TileCollision(ushort collisionLayers, byte collisionMode, byte collisionPlane, int xOffset, int yOffset, bool32 setPos)
+            {
+                return RSDKTable->ObjectTileCollision(This<Entity>(), collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, setPos);
+            }
+
+            public bool32 TileGrip(ushort collisionLayers, byte collisionMode, byte collisionPlane, int xOffset, int yOffset, int tolerance)
+            {
+                return RSDKTable->ObjectTileGrip(This<Entity>(), collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, tolerance);
+            }
+
+            public void ProcessMovement(Hitbox* outerBox, Hitbox* innerBox) => RSDKTable->ProcessObjectMovement(This<Entity>(), outerBox, innerBox);
+
+            public bool32 CheckCollisionTouchBox(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox)
+            {
+                return RSDKTable->CheckObjectCollisionTouchBox(This<Entity>(), thisHitbox, other, otherHitbox);
+            }
+
+            public bool32 CheckCollisionTouchCircle(int thisRadius, Entity* other, int otherRadius)
+            {
+                return RSDKTable->CheckObjectCollisionTouchCircle(This<Entity>(), thisRadius, other, otherRadius);
+            }
+
+            public byte CheckCollisionBox(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox, uint setPos = 1)
+            {
+                return RSDKTable->CheckObjectCollisionBox(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
+            }
+
+            public bool32 CheckCollisionPlatform(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox, uint setPos = 1)
+            {
+                return RSDKTable->CheckObjectCollisionPlatform(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
+            }
+
+#if RETRO_USE_MOD_LOADER
+            public void Super(int callback, void* data = null) => modTable->Super(classID, callback, data);
+#endif
         }
 
+        public static T* This<T>() => (T*)sceneInfo->entity;
 
         public static Entity* Create(void* data, int x, int y)
         {
@@ -221,7 +274,7 @@ namespace RSDK
             Type entityType = typeof(T);
             FieldInfo fieldSVars = entityType.GetField("sVars", BindingFlags.Static | BindingFlags.Public);
             var sVars = (GameObject.Static*)fieldSVars.GetValue(null);
-            
+
             return (T*)RSDKTable.CreateEntity(sVars->classID, data, x, y);
             */
 
@@ -233,6 +286,29 @@ namespace RSDK
             return (T*)RSDKTable->CreateEntity(T::sVars->classID, INT_TO_VOID(data), x, y);
         }
         */
+
+        public static void Reset(ushort slot, ushort type, void* data) => RSDKTable->ResetEntitySlot(slot, type, data);
+        public static void Reset(ushort slot, ushort type, int data) => RSDKTable->ResetEntitySlot(slot, type, MathRSDK.INT_TO_VOID(data));
+
+        
+        public static void Reset<T>(ushort slot, void* data)
+        {
+            var sVars = (Static*)Managed.GetFieldPtr<Static>(typeof(T), "sVars");
+            RSDKTable->ResetEntitySlot(slot, sVars->classID, data);
+        }
+        public static void Reset<T>(ushort slot, int data)
+        {
+            /*
+            FieldInfo sVarsField = typeof(T).GetField("sVars", BindingFlags.Static | BindingFlags.Public);
+            IntPtr sVarsPtr = (IntPtr)sVarsField.GetValue(null);
+            Static* sVars = (Static*)sVarsPtr.ToPointer();
+            */
+
+            // typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
+
+            var sVars = (Static*)Managed.GetFieldPtr<Static>(typeof(T), "sVars");
+            RSDKTable->ResetEntitySlot(slot, sVars->classID, MathRSDK.INT_TO_VOID(data));
+        }
 
         // ... TODO
 
@@ -277,19 +353,19 @@ namespace RSDK
                 Object.registerList[Object.registerListCount] = new ObjectRegistration
                 {
                     name = E.Name,
-                    update = Managed.GetFieldPtr<Action>(E, "_Update"),
-                    lateUpdate = Managed.GetFieldPtr<Action>(E, "_LateUpdate"),
-                    staticUpdate = Managed.GetFieldPtr<Action>(E, "StaticUpdate"),
-                    draw = Managed.GetFieldPtr<Action>(E, "_Draw"),
-                    create = Managed.GetFieldPtr<DelegateTypes.TakesVoidPtr>(E, "_Create"),
-                    stageLoad = Managed.GetFieldPtr<Action>(E, "StageLoad"),
+                    update = Managed.GetFunctionPtr<Action>(E, "_Update"),
+                    lateUpdate = Managed.GetFunctionPtr<Action>(E, "_LateUpdate"),
+                    staticUpdate = Managed.GetFunctionPtr<Action>(E, "StaticUpdate"),
+                    draw = Managed.GetFunctionPtr<Action>(E, "_Draw"),
+                    create = Managed.GetFunctionPtr<DelegateTypes.TakesVoidPtr>(E, "_Create"),
+                    stageLoad = Managed.GetFunctionPtr<Action>(E, "StageLoad"),
 #if GAME_INCLUDE_EDITOR
-                    editorLoad = Managed.GetFieldPtr<Action>(E, "EditorLoad"),
-                    editorDraw = Managed.GetFieldPtr<Action>(E, "_EditorDraw"),
+                    editorLoad = Managed.GetFunctionPtr<Action>(E, "EditorLoad"),
+                    editorDraw = Managed.GetFunctionPtr<Action>(E, "_EditorDraw"),
 #endif
-                    serialize = Managed.GetFieldPtr<Action>(E, "Serialize"),
+                    serialize = Managed.GetFunctionPtr<Action>(E, "Serialize"),
 #if RETRO_REV0U
-                    staticLoad = Managed.GetFieldPtr<DelegateTypes.TakesVoidPtr>(E, "StaticLoad"),
+                    staticLoad = Managed.GetFunctionPtr<DelegateTypes.TakesVoidPtr>(E, "StaticLoad"),
 #endif
                 };
 

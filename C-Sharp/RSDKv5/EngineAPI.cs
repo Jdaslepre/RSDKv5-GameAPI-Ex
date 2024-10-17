@@ -4,9 +4,9 @@ namespace RSDK;
 
 public enum Scopes
 {
-    SCOPE_NONE,
-    SCOPE_GLOBAL,
-    SCOPE_STAGE,
+    None,
+    Global,
+    Stage,
 }
 
 public enum GameRegions

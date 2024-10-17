@@ -28,6 +28,16 @@ public unsafe struct String
         fixed (String* s = &this) RSDKTable->SetString(s, str);
     }
 
+    public void Append(String* str) { fixed (String* s = &this) RSDKTable->AppendString(s, str); }
+    public void Append(string str)
+    {
+        var tempStr = new String();
+        tempStr.Set(str);
+
+        fixed (String* s = &this)
+            RSDKTable->AppendString(s, &tempStr);
+    }
+
     public static void Copy(String* dst, String* src) => RSDKTable->CopyString(dst, src);
     public static void Copy(String* dst, string src) => RSDKTable->SetString(dst, src);
     public static bool32 Compare(String* strA, String* strB, uint exactMatch) { return RSDKTable->CompareStrings(strA, strB, exactMatch); }
