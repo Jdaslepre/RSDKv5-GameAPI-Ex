@@ -20,6 +20,14 @@ public struct String
     public void Init(char8* str, uint32 length = 0) mut => RSDKTable.InitString(&this, str, length);
     public void Set(char8* str) mut => RSDKTable.SetString(&this, str);
 
+    public void Append(Self* str) mut => RSDKTable.AppendString(&this, str);
+    public void Append(char8* str) mut
+    {
+        var tempStr = scope Self();
+        tempStr.Set(str);
+        RSDKTable.AppendString(&this, tempStr);
+    }
+
     public static void Copy(Self* dst, Self* src) => RSDKTable.CopyString(dst, src);
     public static void Copy(Self* dst, char8* src) => RSDKTable.SetString(dst, src);
     public static bool32 Compare(Self* strA, Self* strB, bool32 exactMatch) => RSDKTable.CompareStrings(strA, strB, exactMatch);
