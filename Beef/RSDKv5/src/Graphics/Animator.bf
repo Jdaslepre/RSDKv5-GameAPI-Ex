@@ -1,17 +1,17 @@
 namespace RSDK;
 
+public enum RotationSytles
+{
+    ROTSTYLE_NONE,
+    ROTSTYLE_FULL,
+    ROTSTYLE_45DEG,
+    ROTSTYLE_90DEG,
+    ROTSTYLE_180DEG,
+    ROTSTYLE_STATICFRAMES,
+}
+
 public struct Animator
 {
-    public enum RotationSyles
-    {
-        ROTSTYLE_NONE,
-        ROTSTYLE_FULL,
-        ROTSTYLE_45DEG,
-        ROTSTYLE_90DEG,
-        ROTSTYLE_180DEG,
-        ROTSTYLE_STATICFRAMES,
-    };
-
     public SpriteFrame* frames;
     public int32 frameID;
     public int16 animationID;
