@@ -23,6 +23,22 @@ public struct Hitbox
     public short top;
     public short right;
     public short bottom;
+
+    public Hitbox()
+    {
+        left = 0;
+        top = 0;
+        right = 0;
+        bottom = 0;
+    }
+
+    public Hitbox(short Left, short Top, short Right, short Bottom)
+    {
+        left = Left;
+        top = Top;
+        right = Right;
+        bottom = Bottom;
+    }
 }
 
 #if RETRO_REV0U || RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2

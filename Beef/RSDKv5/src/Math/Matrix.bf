@@ -1,6 +1,6 @@
 namespace RSDK;
 
-public struct Matrix
+[System.CRepr] public struct Matrix
 {
     public int32[4][4] values = .();
 
