@@ -1,6 +1,6 @@
 ﻿namespace RSDK;
 
-public enum RotationSyles
+public enum RotationStyles
 {
     ROTSTYLE_NONE,
     ROTSTYLE_FULL,
