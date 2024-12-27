@@ -56,13 +56,6 @@ public static class Dev
     public static void ClearViewableVariables() => RSDKTable.ClearViewableVariables();
     public static void AddViewableVariable(char8 *name, int *value, ViewableVarTypes type, int32 min, int32 max) => RSDKTable.AddViewableVariable(name, value, (.)type, min, max);
 #else
-    public static void Print(char8* message, uint8 severity, ...)
-    {
-        VarArgs vArgs = VarArgs();
-        vArgs.Start!();
-        // RSDKTable.PrintMessage(message, vArgs.ToVAList(), (.)PrintMessageTypes.MESSAGE_STRING);
-        RSDKTable.PrintMessage(message, (.)PrintMessageTypes.MESSAGE_STRING);
-        vArgs.End!();
-    }
+    public static void Print(void* message, PrintMessageTypes type) => RSDKTable.PrintMessage(message, (.)type);
 #endif
 }

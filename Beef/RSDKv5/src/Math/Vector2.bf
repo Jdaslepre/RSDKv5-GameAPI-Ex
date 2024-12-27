@@ -2,7 +2,15 @@ namespace RSDK;
 
 [System.CRepr] public struct Vector2
 {
-    public int32 x, y = .();
+    // ---------
+    // Variables
+    // ---------
+
+    public int32 x = 0, y = 0;
+
+    // ------------
+    // Constructors
+    // ------------
 
     public this()
     {
@@ -28,5 +36,85 @@ namespace RSDK;
         y = Y;
     }
 
+    // ---------
+    // Functions
+    // ---------
+
     public bool32 CheckOnScreen(Self* range) mut => RSDKTable.CheckPosOnScreen(&this, range);
+
+    // ---------
+    // Operators
+    // ---------
+
+    public void operator +=(Self other) mut
+    {
+        x += other.x;
+        y += other.y;
+    }
+    public void operator -=(Self other) mut
+    {
+        x -= other.x;
+        y -= other.y;
+    }
+    public void operator *=(Self other) mut
+    {
+        x *= other.x;
+        y *= other.y;
+    }
+    public void operator /=(Self other) mut
+    {
+        x /= other.x;
+        y /= other.y;
+    }
+    public void operator &=(Self other) mut
+    {
+        x &= other.x;
+        y &= other.y;
+    }
+    public void operator %=(Self other) mut
+    {
+        x %= other.x;
+        y %= other.y;
+    }
+    public void operator ^=(Self other) mut
+    {
+        x ^= other.x;
+        y ^= other.y;
+    }
+
+    public static Self operator +(ref Self lhs, ref Self rhs)
+    {
+        lhs += rhs;
+        return lhs;
+    }
+    public static Self operator -(ref Self lhs, ref Self rhs)
+    {
+        lhs -= rhs;
+        return lhs;
+    }
+    public static Self operator *(ref Self lhs, ref Self rhs)
+    {
+        lhs *= rhs;
+        return lhs;
+    }
+    public static Self operator /(ref Self lhs, ref Self rhs)
+    {
+        lhs /= rhs;
+        return lhs;
+    }
+    public static Self operator &(ref Self lhs, ref Self rhs)
+    {
+        lhs &= rhs;
+        return lhs;
+    }
+    public static Self operator %(ref Self lhs, ref Self rhs)
+    {
+        lhs %= rhs;
+        return lhs;
+    }
+    public static Self operator ^(ref Self lhs, ref Self rhs)
+    {
+        lhs ^= rhs;
+        return lhs;
+    }
 }

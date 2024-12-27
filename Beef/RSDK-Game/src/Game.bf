@@ -116,6 +116,5 @@ public static class Game
 
     private static void LinkEmbeddedLogic()
     {
-
     }
 }
