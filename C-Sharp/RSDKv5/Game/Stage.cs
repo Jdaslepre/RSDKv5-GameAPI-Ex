@@ -86,14 +86,14 @@ public unsafe struct SceneInfo
 
 public unsafe static class Stage
 {
-    public static bool32 CheckSceneFolder(string folderName) => RSDKTable->CheckSceneFolder(folderName);
-    public static bool32 CheckValidScene() => RSDKTable->CheckValidScene();
-    public static void SetScene(string categoryName, string sceneName) => RSDKTable->SetScene(categoryName, sceneName);
-    public static void LoadScene() => RSDKTable->LoadScene();
-    public static void SetEngineState(EngineStates state) => RSDKTable->SetEngineState((byte)state);
+    public static bool32 CheckSceneFolder(string folderName) => RSDKTable.CheckSceneFolder(folderName);
+    public static bool32 CheckValidScene() => RSDKTable.CheckValidScene();
+    public static void SetScene(string categoryName, string sceneName) => RSDKTable.SetScene(categoryName, sceneName);
+    public static void LoadScene() => RSDKTable.LoadScene();
+    public static void SetEngineState(EngineStates state) => RSDKTable.SetEngineState((byte)state);
 #if RETRO_REV02
-    public static void ForceHardReset(bool32 shouldHardReset) => RSDKTable->ForceHardReset(shouldHardReset);
+    public static void ForceHardReset(bool32 shouldHardReset) => RSDKTable.ForceHardReset(shouldHardReset);
 #endif
 
-    public static ScanlineInfo* GetScanlines() => RSDKTable->GetScanlines();
+    public static ScanlineInfo* GetScanlines() => RSDKTable.GetScanlines();
 }

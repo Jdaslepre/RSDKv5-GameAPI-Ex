@@ -121,7 +121,7 @@ public unsafe struct ModFunctionTable
     public delegate* unmanaged<byte, void*> GetShader;
     public delegate* unmanaged<ushort, void*> GetModel;
     public delegate* unmanaged<ushort, void*> GetScene3D;
-    public delegate* unmanaged<Animator, ushort, void> DrawDynamicAniTiles;
+    public delegate* unmanaged<ref Animator, ushort, void> DrawDynamicAniTiles;
 
     // Audio
     public delegate* unmanaged<ushort, void*> GetSfx;
@@ -131,15 +131,15 @@ public unsafe struct ModFunctionTable
     public delegate* unmanaged<ushort, void**, uint> GetGroupEntities;
 
     // Collision
-    public delegate* unmanaged<CollisionSensor*, void> SetPathGripSensors; // expects 5 sensors
-    public delegate* unmanaged<CollisionSensor*, void> FindFloorPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FindLWallPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FindRoofPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FindRWallPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FloorCollision;
-    public delegate* unmanaged<CollisionSensor*, void> LWallCollision;
-    public delegate* unmanaged<CollisionSensor*, void> RoofCollision;
-    public delegate* unmanaged<CollisionSensor*, void> RWallCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> SetPathGripSensors; // expects 5 sensors
+    public delegate* unmanaged<ref CollisionSensor, void> FindFloorPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FindLWallPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FindRoofPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FindRWallPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FloorCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> LWallCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> RoofCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> RWallCollision;
     public delegate* unmanaged<ushort, ushort, byte, byte, void> CopyCollisionMask;
     public delegate* unmanaged<CollisionMask**, TileInfo**, void> GetCollisionInfo;
 #endif
@@ -160,33 +160,33 @@ public unsafe struct APIFunctionTable
     public delegate* unmanaged<uint, bool32> IsOverlayEnabled;
     public delegate* unmanaged<int, bool32> CheckDLC;
 #if RETRO_USE_EGS
-        public delegate* unmanaged<bool32> SetupExtensionOverlay;
-        public delegate* unmanaged<int, bool32> CanShowExtensionOverlay;
+    public delegate* unmanaged<bool32> SetupExtensionOverlay;
+    public delegate* unmanaged<int, bool32> CanShowExtensionOverlay;
 #endif
     public delegate* unmanaged<int, bool32> ShowExtensionOverlay;
 #if RETRO_USE_EGS
-        public delegate* unmanaged<int, bool32> CanShowAltExtensionOverlay;
-        public delegate* unmanaged<int, bool32> ShowAltExtensionOverlay;
-        public delegate* unmanaged<int> GetConnectingStringID;
-        public delegate* unmanaged<int, void> ShowLimitedVideoOptions;
+    public delegate* unmanaged<int, bool32> CanShowAltExtensionOverlay;
+    public delegate* unmanaged<int, bool32> ShowAltExtensionOverlay;
+    public delegate* unmanaged<int> GetConnectingStringID;
+    public delegate* unmanaged<int, void> ShowLimitedVideoOptions;
 #endif
 
     // Achievements
-    public delegate* unmanaged<AchievementID*, void> TryUnlockAchievement;
+    public delegate* unmanaged<ref AchievementID, void> TryUnlockAchievement;
     public delegate* unmanaged<bool32> GetAchievementsEnabled;
     public delegate* unmanaged<bool32, void> SetAchievementsEnabled;
 #if RETRO_USE_EGS
-        public delegate* unmanaged<bool32> CheckAchievementsEnabled;
-        public delegate* unmanaged<String**, int, void> SetAchievementNames;
+    public delegate* unmanaged<bool32> CheckAchievementsEnabled;
+    public delegate* unmanaged<String**, int, void> SetAchievementNames;
 #endif
 
     // Leaderboards
 #if RETRO_USE_EGS
-        public delegate* unmanaged<bool32> CheckLeaderboardsEnabled;
+    public delegate* unmanaged<bool32> CheckLeaderboardsEnabled;
 #endif
     public delegate* unmanaged<void> InitLeaderboards;
-    public delegate* unmanaged<LeaderboardID*, bool32, void> FetchLeaderboard;
-    public delegate* unmanaged<LeaderboardID*, int, delegate* unmanaged<bool32, int, void>, void> TrackScore;
+    public delegate* unmanaged<ref LeaderboardID, bool32, void> FetchLeaderboard;
+    public delegate* unmanaged<ref LeaderboardID, int, delegate* unmanaged<bool32, int, void>, void> TrackScore;
     public delegate* unmanaged<int> GetLeaderboardsStatus;
     public delegate* unmanaged<LeaderboardAvail> LeaderboardEntryViewSize;
     public delegate* unmanaged<LeaderboardAvail> LeaderboardEntryLoadSize;
@@ -195,10 +195,10 @@ public unsafe struct APIFunctionTable
     public delegate* unmanaged<uint, LeaderboardEntry*> ReadLeaderboardEntry;
 
     // Rich Presence
-    public delegate* unmanaged<int, String*, void> SetRichPresence;
+    public delegate* unmanaged<int, ref String, void> SetRichPresence;
 
     // Stats
-    public delegate* unmanaged<StatInfo*, void> TryTrackStat;
+    public delegate* unmanaged<ref StatInfo, void> TryTrackStat;
     public delegate* unmanaged<bool32> GetStatsEnabled;
     public delegate* unmanaged<bool32, void> SetStatsEnabled;
 
@@ -242,7 +242,7 @@ public unsafe struct APIFunctionTable
     public delegate* unmanaged<ushort, uint, int, string, void*, bool32> GetUserDBValue;
     public delegate* unmanaged<ushort, ushort, uint> GetUserDBRowUUID;
     public delegate* unmanaged<ushort, uint, ushort> GetUserDBRowByID;
-    public delegate* unmanaged<ushort, ushort, StringBuilder, UIntPtr, string, void> GetUserDBRowCreationTime; // is this correct?
+    public delegate* unmanaged<ushort, ushort, StringBuilder, UIntPtr, string, void> GetUserDBRowCreationTime;
     public delegate* unmanaged<ushort, ushort, bool32> RemoveDBRow;
     public delegate* unmanaged<ushort, bool32> RemoveAllDBRows;
 }
@@ -255,8 +255,8 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<IntPtr, int, IntPtr, void> RegisterGlobalVariables;
     public delegate* unmanaged<void**, string, uint, int, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, void> RegisterObject;
 #else
-        public delegate* unmanaged<IntPtr, int, void> RegisterGlobalVariables;
-        public delegate* unmanaged<void**, string, uint, int, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, void> RegisterObject;
+    public delegate* unmanaged<IntPtr, int, void> RegisterGlobalVariables;
+    public delegate* unmanaged<void**, string, uint, int, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, IntPtr, void> RegisterObject;
 #endif
 #if RETRO_REV02
     public delegate* unmanaged<void**, string, uint, void> RegisterStaticVariables;
@@ -277,7 +277,7 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<ushort, void*, int, int, void*> CreateEntity;
     public delegate* unmanaged<void*, void*, bool32, void> CopyEntity;
     public delegate* unmanaged<void*, Vector2*, bool32> CheckOnScreen;
-    public delegate* unmanaged<Vector2*, Vector2*, bool32> CheckPosOnScreen;
+    public delegate* unmanaged<ref Vector2, ref Vector2, bool32> CheckPosOnScreen;
     public delegate* unmanaged<byte, ushort, void> AddDrawListRef;
     public delegate* unmanaged<byte, ushort, ushort, ushort, void> SwapDrawListEntries;
     public delegate* unmanaged<byte, bool32, delegate* unmanaged<void>, void> SetDrawGroupProperties;
@@ -341,15 +341,15 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<Matrix*, Matrix*, void> MatrixCopy;
 
     // Strings
-    public delegate* unmanaged<String*, string, uint, void> InitString;
+    public delegate* unmanaged<ref String, string, uint, void> InitString;
     public delegate* unmanaged<String*, String*, void> CopyString;
-    public delegate* unmanaged<String*, string, void> SetString;
-    public delegate* unmanaged<String*, String*, void> AppendString;
-    public delegate* unmanaged<String*, string, void> AppendText;
-    public delegate* unmanaged<String*, string, uint, void> LoadStringList;
-    public delegate* unmanaged<String*, String*, int, int, bool32> SplitStringList;
-    public delegate* unmanaged<char*, String*, void> GetCString;
-    public delegate* unmanaged<String*, String*, bool32, bool32> CompareStrings;
+    public delegate* unmanaged<ref String, string, void> SetString;
+    public delegate* unmanaged<ref String, ref String, void> AppendString;
+    public delegate* unmanaged<ref String, string, void> AppendText;
+    public delegate* unmanaged<ref String, string, uint, void> LoadStringList;
+    public delegate* unmanaged<ref String, ref String, int, int, bool32> SplitStringList;
+    public delegate* unmanaged<char*, ref String, void> GetCString;
+    public delegate* unmanaged<ref String, ref String, bool32, bool32> CompareStrings;
 
     // Screens & Displays
     public delegate* unmanaged<int*, int*, int*, int*, char*, void> GetDisplayInfo;
@@ -390,14 +390,14 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<int, int, int, int, uint, int, int, bool32, void> DrawCircleOutline;
     public delegate* unmanaged<Vector2*, int, int, int, int, int, int, void> DrawFace;
     public delegate* unmanaged<Vector2*, uint*, int, int, int, void> DrawBlendedFace;
-    public delegate* unmanaged<Animator*, Vector2*, bool32, void> DrawSprite;
+    public delegate* unmanaged<ref Animator, Vector2*, bool32, void> DrawSprite;
     public delegate* unmanaged<ushort, int, bool32, void> DrawDeformedSprite;
-    public delegate* unmanaged<Animator*, Vector2*, String*, int, int, int, int, void*, Vector2*, bool32, void> DrawText;
+    public delegate* unmanaged<ref Animator, Vector2*, String*, int, int, int, int, void*, Vector2*, bool32, void> DrawText;
     public delegate* unmanaged<ushort*, int, int, Vector2*, Vector2*, bool32, void> DrawTile;
     public delegate* unmanaged<ushort, ushort, ushort, void> CopyTile;
     public delegate* unmanaged<ushort, ushort, ushort, ushort, ushort, ushort, void> DrawAniTiles;
 #if RETRO_REV0U
-    public delegate* unmanaged<Animator*, ushort, void> DrawDynamicAniTiles;
+    public delegate* unmanaged<ref Animator, ushort, void> DrawDynamicAniTiles;
 #endif
     public delegate* unmanaged<uint, int, int, int, void> FillScreen;
 
@@ -408,27 +408,27 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<ushort, byte, byte, byte, void> SetDiffuseColor;
     public delegate* unmanaged<ushort, byte, byte, byte, void> SetDiffuseIntensity;
     public delegate* unmanaged<ushort, byte, byte, byte, void> SetSpecularIntensity;
-    public delegate* unmanaged<ushort, ushort, byte, Matrix*, Matrix*, uint, void> AddModelTo3DScene;
-    public delegate* unmanaged<ushort, Animator*, short, byte, bool32, short, void> SetModelAnimation;
-    public delegate* unmanaged<ushort, ushort, Animator*, byte, Matrix*, Matrix*, uint, void> AddMeshFrameTo3DScene;
+    public delegate* unmanaged<ushort, ushort, byte, ref Matrix, ref Matrix, uint, void> AddModelTo3DScene;
+    public delegate* unmanaged<ushort, ref Animator, short, byte, bool32, short, void> SetModelAnimation;
+    public delegate* unmanaged<ushort, ushort, ref Animator, byte, ref Matrix, ref Matrix, uint, void> AddMeshFrameTo3DScene;
     public delegate* unmanaged<ushort, void> Draw3DScene;
 
     // Sprite Animations & Frames
     public delegate* unmanaged<string, byte, ushort> LoadSpriteAnimation;
     public delegate* unmanaged<string, uint, uint, byte, ushort> CreateSpriteAnimation;
 #if RETRO_MOD_LOADER_VER_2
-    public delegate* unmanaged<ushort, ushort, Animator*, bool32, int, void> SetSpriteAnimation;
+    public delegate* unmanaged<ushort, ushort, ref Animator, bool32, int, void> SetSpriteAnimation;
 #else
-        public delegate* unmanaged<ushort, ushort, Animator*, bool32, short, void> SetSpriteAnimation; 
+    public delegate* unmanaged<ushort, ushort, ref Animator, bool32, short, void> SetSpriteAnimation; 
 #endif
     public delegate* unmanaged<ushort, ushort, string, int, ushort, short, byte, byte, void> EditSpriteAnimation;
-    public delegate* unmanaged<ushort, ushort, String*, void> SetSpriteString;
+    public delegate* unmanaged<ushort, ushort, ref String, void> SetSpriteString;
     public delegate* unmanaged<ushort, string, ushort> FindSpriteAnimation;
     public delegate* unmanaged<ushort, ushort, int, SpriteFrame*> GetFrame;
-    public delegate* unmanaged<Animator*, byte, Hitbox*> GetHitbox;
-    public delegate* unmanaged<Animator*, short> GetFrameID;
-    public delegate* unmanaged<ushort, ushort, String*, int, int, int, int> GetStringWidth;
-    public delegate* unmanaged<Animator*, void> ProcessAnimation;
+    public delegate* unmanaged<ref Animator, byte, Hitbox*> GetHitbox;
+    public delegate* unmanaged<ref Animator, short> GetFrameID;
+    public delegate* unmanaged<ushort, ushort, ref String, int, int, int, int> GetStringWidth;
+    public delegate* unmanaged<ref Animator, void> ProcessAnimation;
 
     // Tile Layers
     public delegate* unmanaged<string, ushort> GetTileLayerID;
@@ -450,15 +450,15 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<void*, Hitbox*, Hitbox*, void> ProcessObjectMovement;
 #if RETRO_REV0U
     public delegate* unmanaged<int, byte, byte, byte, byte, byte, void> SetupCollisionConfig;
-    public delegate* unmanaged<CollisionSensor*, void> SetPathGripSensors; // expects 5 sensors
-    public delegate* unmanaged<CollisionSensor*, void> FindFloorPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FindLWallPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FindRoofPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FindRWallPosition;
-    public delegate* unmanaged<CollisionSensor*, void> FloorCollision;
-    public delegate* unmanaged<CollisionSensor*, void> LWallCollision;
-    public delegate* unmanaged<CollisionSensor*, void> RoofCollision;
-    public delegate* unmanaged<CollisionSensor*, void> RWallCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> SetPathGripSensors; // expects 5 sensors
+    public delegate* unmanaged<ref CollisionSensor, void> FindFloorPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FindLWallPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FindRoofPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FindRWallPosition;
+    public delegate* unmanaged<ref CollisionSensor, void> FloorCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> LWallCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> RoofCollision;
+    public delegate* unmanaged<ref CollisionSensor, void> RWallCollision;
 #endif
     public delegate* unmanaged<ushort, byte, byte, int> GetTileAngle;
     public delegate* unmanaged<ushort, byte, byte, byte, void> SetTileAngle;
@@ -512,14 +512,14 @@ public unsafe struct RSDKFunctionTable
 
     // Printing (Rev02)
 #if RETRO_REV02
-    public delegate* unmanaged<PrintModes, string, void> PrintLog;
-    public delegate* unmanaged<PrintModes, string, void> PrintText;
-    public delegate* unmanaged<PrintModes, String*, void> PrintString;
-    public delegate* unmanaged<PrintModes, string, uint, void> PrintUInt32;
-    public delegate* unmanaged<PrintModes, string, int, void> PrintInt32;
-    public delegate* unmanaged<PrintModes, string, float, void> PrintFloat;
-    public delegate* unmanaged<PrintModes, string, Vector2, void> PrintVector2;
-    public delegate* unmanaged<PrintModes, string, Hitbox, void> PrintHitbox;
+    public delegate* unmanaged<int, string, void> PrintLog;
+    public delegate* unmanaged<int, string, void> PrintText;
+    public delegate* unmanaged<int, ref String, void> PrintString;
+    public delegate* unmanaged<int, string, uint, void> PrintUInt32;
+    public delegate* unmanaged<int, string, int, void> PrintInt32;
+    public delegate* unmanaged<int, string, float, void> PrintFloat;
+    public delegate* unmanaged<int, string, Vector2, void> PrintVector2;
+    public delegate* unmanaged<int, string, Hitbox, void> PrintHitbox;
 #endif
 
     // Editor
@@ -534,7 +534,7 @@ public unsafe struct RSDKFunctionTable
     // Debugging
 #if RETRO_REV02
     public delegate* unmanaged<void> ClearViewableVariables;
-    public delegate* unmanaged<string, void*, ViewableVarTypes, int, int, void> AddViewableVariable;
+    public delegate* unmanaged<string, void*, int, int, int, void> AddViewableVariable;
 #endif
 
 #if RETRO_REV0U
@@ -711,9 +711,9 @@ public struct ScreenInfo
 
 public unsafe struct EngineInfo
 {
-    public RSDKFunctionTable* RSDKTable;
+    public IntPtr RSDKTable;
 #if RETRO_REV02
-    public APIFunctionTable* APITable;
+    public IntPtr APITable;
 #endif
     public GameInfo* gameInfo;
 #if RETRO_REV02
@@ -742,8 +742,9 @@ public unsafe struct EngineInfo
 
 public unsafe class EngineAPI
 {
-    public static RSDKFunctionTable* RSDKTable = null;
-    public static APIFunctionTable* APITable = null;
+    internal static RSDKFunctionTable RSDKTable;
+    internal static APIFunctionTable APITable;
+
 #if RETRO_USE_MOD_LOADER
     public static ModFunctionTable* modTable = null;
 #endif
@@ -763,31 +764,37 @@ public unsafe class EngineAPI
 
     public static ScreenInfo* screenInfo = null;
 
-    public static void InitEngineInfo(EngineInfo* info)
+    public static void InitEngineInfo(ref EngineInfo info)
     {
-        RSDKTable = info->RSDKTable;
+        RSDKTable = new RSDKFunctionTable();
+        APITable = new APIFunctionTable();
+
+        if (info.RSDKTable != IntPtr.Zero)
+            RSDKTable = Marshal.PtrToStructure<RSDKFunctionTable>(info.RSDKTable);
+
 #if RETRO_REV02
-        APITable = info->APITable;
+        if (info.APITable != IntPtr.Zero)
+            APITable = Marshal.PtrToStructure<APIFunctionTable>(info.APITable);
 #endif
-        gameInfo = info->gameInfo;
+        gameInfo = info.gameInfo;
 #if RETRO_REV02
-        SKU = info->SKU;
+        SKU = info.SKU;
 #endif
-        sceneInfo = info->sceneInfo;
-        controllerInfo = info->controllerInfo;
-        analogStickInfoL = info->stickInfoL;
+        sceneInfo = info.sceneInfo;
+        controllerInfo = info.controllerInfo;
+        analogStickInfoL = info.stickInfoL;
 #if RETRO_REV02
-        analogStickInfoR = info->stickInfoR;
-        triggerInfoL = info->triggerInfoL;
-        triggerInfoR = info->triggerInfoR;
+        analogStickInfoR = info.stickInfoR;
+        triggerInfoL = info.triggerInfoL;
+        triggerInfoR = info.triggerInfoR;
 #endif
-        touchInfo = info->touchInfo;
+        touchInfo = info.touchInfo;
 #if RETRO_REV02
-        unknownInfo = info->unknownInfo;
+        unknownInfo = info.unknownInfo;
 #endif
-        screenInfo = info->screenInfo;
+        screenInfo = info.screenInfo;
 #if RETRO_USE_MOD_LOADER
-        modTable = info->modTable;
+        modTable = info.modTable;
 #endif
     }
 }

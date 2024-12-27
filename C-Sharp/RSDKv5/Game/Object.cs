@@ -1,10 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using static RSDK.EngineAPI;
-using static RSDK.GameObject;
 
 namespace RSDK
 {
@@ -108,8 +103,8 @@ namespace RSDK
             public ushort classID;
             public byte active;
 
-            public unsafe void EditableVar(VariableTypes type, string name, int offset) => RSDKTable->SetEditableVar((byte)type, name, (byte)classID, offset);
-            public unsafe int Count(uint isActive = 0) => RSDKTable->GetEntityCount(classID, isActive);
+            public unsafe void EditableVar(VariableTypes type, string name, int offset) => RSDKTable.SetEditableVar((byte)type, name, (byte)classID, offset);
+            public unsafe int Count(uint isActive = 0) => RSDKTable.GetEntityCount(classID, isActive);
         }
 
         public interface IEntity
@@ -209,48 +204,48 @@ namespace RSDK
 
             // can't really do &this, so hoping that sceneInfo->entity will be fine...
 
-            public ushort Slot() => (ushort)RSDKTable->GetEntitySlot(This<Entity>());
-            public void Destroy() => RSDKTable->ResetEntity(This<Entity>(), (ushort)DefaultObjects.TYPE_DEFAULTOBJECT, null);
+            public ushort Slot() => (ushort)RSDKTable.GetEntitySlot(This<Entity>());
+            public void Destroy() => RSDKTable.ResetEntity(This<Entity>(), (ushort)DefaultObjects.TYPE_DEFAULTOBJECT, null);
 
-            public void Reset(uint type, void* data) => RSDKTable->ResetEntity(This<Entity>(), (ushort)type, data);
-            public void Reset(uint type, int data) => RSDKTable->ResetEntity(This<Entity>(), (ushort)type, MathRSDK.INT_TO_VOID(data));
+            public void Reset(uint type, void* data) => RSDKTable.ResetEntity(This<Entity>(), (ushort)type, data);
+            public void Reset(uint type, int data) => RSDKTable.ResetEntity(This<Entity>(), (ushort)type, MathRSDK.INT_TO_VOID(data));
 
-            public void Copy(Entity* dst, bool32 clearThis) => RSDKTable->CopyEntity(dst, This<Entity>(), clearThis);
+            public void Copy(Entity* dst, bool32 clearThis) => RSDKTable.CopyEntity(dst, This<Entity>(), clearThis);
 
-            public bool32 CheckOnScreen(Vector2* range) => RSDKTable->CheckOnScreen(This<Entity>(), range);
+            public bool32 CheckOnScreen(Vector2* range) => RSDKTable.CheckOnScreen(This<Entity>(), range);
 
-            public void AddDrawListRef(byte drawGroup) => RSDKTable->AddDrawListRef(drawGroup, Slot());
+            public void AddDrawListRef(byte drawGroup) => RSDKTable.AddDrawListRef(drawGroup, Slot());
 
             public bool32 TileCollision(ushort collisionLayers, byte collisionMode, byte collisionPlane, int xOffset, int yOffset, bool32 setPos)
             {
-                return RSDKTable->ObjectTileCollision(This<Entity>(), collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, setPos);
+                return RSDKTable.ObjectTileCollision(This<Entity>(), collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, setPos);
             }
 
             public bool32 TileGrip(ushort collisionLayers, byte collisionMode, byte collisionPlane, int xOffset, int yOffset, int tolerance)
             {
-                return RSDKTable->ObjectTileGrip(This<Entity>(), collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, tolerance);
+                return RSDKTable.ObjectTileGrip(This<Entity>(), collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, tolerance);
             }
 
-            public void ProcessMovement(Hitbox* outerBox, Hitbox* innerBox) => RSDKTable->ProcessObjectMovement(This<Entity>(), outerBox, innerBox);
+            public void ProcessMovement(Hitbox* outerBox, Hitbox* innerBox) => RSDKTable.ProcessObjectMovement(This<Entity>(), outerBox, innerBox);
 
             public bool32 CheckCollisionTouchBox(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox)
             {
-                return RSDKTable->CheckObjectCollisionTouchBox(This<Entity>(), thisHitbox, other, otherHitbox);
+                return RSDKTable.CheckObjectCollisionTouchBox(This<Entity>(), thisHitbox, other, otherHitbox);
             }
 
             public bool32 CheckCollisionTouchCircle(int thisRadius, Entity* other, int otherRadius)
             {
-                return RSDKTable->CheckObjectCollisionTouchCircle(This<Entity>(), thisRadius, other, otherRadius);
+                return RSDKTable.CheckObjectCollisionTouchCircle(This<Entity>(), thisRadius, other, otherRadius);
             }
 
             public byte CheckCollisionBox(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox, uint setPos = 1)
             {
-                return RSDKTable->CheckObjectCollisionBox(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
+                return RSDKTable.CheckObjectCollisionBox(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
             }
 
             public bool32 CheckCollisionPlatform(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox, uint setPos = 1)
             {
-                return RSDKTable->CheckObjectCollisionPlatform(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
+                return RSDKTable.CheckObjectCollisionPlatform(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
             }
 
 #if RETRO_USE_MOD_LOADER
@@ -262,11 +257,11 @@ namespace RSDK
 
         public static Entity* Create(void* data, int x, int y)
         {
-            return (Entity*)RSDKTable->CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y);
+            return (Entity*)RSDKTable.CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y);
         }
         public static Entity* Create(int data, int x, int y)
         {
-            return (Entity*)RSDKTable->CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, MathRSDK.INT_TO_VOID(data), x, y);
+            return (Entity*)RSDKTable.CreateEntity((ushort)DefaultObjects.TYPE_DEFAULTOBJECT, MathRSDK.INT_TO_VOID(data), x, y);
         }
         public static T* Create<T>(void* data, int x, int y)
         {
@@ -283,18 +278,18 @@ namespace RSDK
         /*
         template<typename T> static inline T *Create(int32 data, int32 x, int32 y)
         {
-            return (T*)RSDKTable->CreateEntity(T::sVars->classID, INT_TO_VOID(data), x, y);
+            return (T*)RSDKTable.CreateEntity(T::sVars->classID, INT_TO_VOID(data), x, y);
         }
         */
 
-        public static void Reset(ushort slot, ushort type, void* data) => RSDKTable->ResetEntitySlot(slot, type, data);
-        public static void Reset(ushort slot, ushort type, int data) => RSDKTable->ResetEntitySlot(slot, type, MathRSDK.INT_TO_VOID(data));
+        public static void Reset(ushort slot, ushort type, void* data) => RSDKTable.ResetEntitySlot(slot, type, data);
+        public static void Reset(ushort slot, ushort type, int data) => RSDKTable.ResetEntitySlot(slot, type, MathRSDK.INT_TO_VOID(data));
 
         
         public static void Reset<T>(ushort slot, void* data)
         {
             var sVars = (Static*)Managed.GetFieldPtr<Static>(typeof(T), "sVars");
-            RSDKTable->ResetEntitySlot(slot, sVars->classID, data);
+            RSDKTable.ResetEntitySlot(slot, sVars->classID, data);
         }
         public static void Reset<T>(ushort slot, int data)
         {
@@ -307,7 +302,7 @@ namespace RSDK
             // typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
 
             var sVars = (Static*)Managed.GetFieldPtr<Static>(typeof(T), "sVars");
-            RSDKTable->ResetEntitySlot(slot, sVars->classID, MathRSDK.INT_TO_VOID(data));
+            RSDKTable.ResetEntitySlot(slot, sVars->classID, MathRSDK.INT_TO_VOID(data));
         }
 
         // ... TODO
@@ -327,11 +322,11 @@ namespace RSDK
             T* entity = null;
             if (type == ForeachTypes.FOR_ALL_ENTITIES)
             {
-                while (RSDKTable->GetAllEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
+                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
             }
             else if (type == ForeachTypes.FOR_ACTIVE_ENTITIES)
             {
-                while (RSDKTable->GetActiveEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
+                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast((IntPtr)entity);
             }
 
             return list;
@@ -371,7 +366,7 @@ namespace RSDK
 
                 fixed (_TypeStatic** pSvars = &sVars)
                 {
-                    RSDKTable->RegisterObject(
+                    RSDKTable.RegisterObject(
                         (void**)pSvars,
                         Object.registerList[Object.registerListCount].name,
                         (uint)sizeof(_TypeEntity),

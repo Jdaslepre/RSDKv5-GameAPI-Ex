@@ -2,24 +2,20 @@
 
 public struct Vector2
 {
-    public int x, y;
+    public int x = 0, y = 0;
 
-    public Vector2()
-    {
-        x = 0;
-        y = 0;
-    }
+    public Vector2() => x = y = 0;
 
-    public Vector2(RSDK.Vector2 other)
+    public Vector2(Vector2 other)
     {
         x = other.x;
         y = other.y;
     }
 
-    public unsafe Vector2(RSDK.Vector2* other)
+    public Vector2(ref Vector2 other)
     {
-        x = other->x;
-        y = other->y;
+        x = other.x;
+        y = other.y;
     }
 
     public Vector2(int x, int y)
@@ -28,8 +24,16 @@ public struct Vector2
         this.y = y;
     }
 
-    public unsafe bool32 CheckOnScreen(Vector2 range)
+    public static Vector2 operator +(Vector2 lhs, Vector2 rhs)
     {
-        fixed (RSDK.Vector2* v = &this) { return RSDKTable->CheckPosOnScreen(v, &range); }
+        return new(lhs.x + rhs.x, lhs.y + rhs.y);
     }
+
+    public static Vector2 operator -(Vector2 lhs, Vector2 rhs)
+    {
+        return new(lhs.x - rhs.x, lhs.y - rhs.y);
+    }
+
+    public unsafe bool32 CheckOnScreen(ref Vector2 range) => RSDKTable.CheckPosOnScreen(ref this, ref range);
+    public unsafe bool32 CheckOnScreen(Vector2 range) => RSDKTable.CheckPosOnScreen(ref this, ref range);
 }

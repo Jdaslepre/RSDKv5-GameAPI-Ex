@@ -1,6 +1,6 @@
 ﻿namespace RSDK;
 
-public class Const
+public static class Const
 {
     // RSDKv5/EngineAPI.cs
     public const int SCREEN_XMAX = 1280;

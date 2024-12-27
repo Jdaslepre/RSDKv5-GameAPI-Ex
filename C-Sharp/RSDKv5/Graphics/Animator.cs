@@ -31,7 +31,7 @@ public unsafe struct Animator
     public void SetAnimation(SpriteAnimation spriteAni, ushort listID, bool32 forceApply, int16 frameID)
     {
 #endif
-        fixed (Animator* ani = &this) RSDKTable->SetSpriteAnimation(spriteAni.id, listID, ani, forceApply, frameID);
+        RSDKTable.SetSpriteAnimation(spriteAni.id, listID, ref this, forceApply, frameID);
     }
 
 #if RETRO_MOD_LOADER_VER_2
@@ -41,31 +41,31 @@ public unsafe struct Animator
     public void SetAnimation(SpriteAnimation* spriteAni, ushort listID, bool32 forceApply, int16 frameID)
     {
 #endif
-        fixed (Animator* ani = &this) RSDKTable->SetSpriteAnimation(spriteAni != null ? spriteAni->id : unchecked((ushort)-1), listID, ani, forceApply, frameID);
+        RSDKTable.SetSpriteAnimation(spriteAni != null ? spriteAni->id : unchecked((ushort)-1), listID, ref this, forceApply, frameID);
     }
 
     public void SetAnimation(Mesh mesh, short speed, byte loopIndex, bool32 forceApply, short frameID)
     {
-        fixed (Animator* ani = &this) RSDKTable->SetModelAnimation(mesh.id, ani, speed, loopIndex, forceApply, frameID);
+        RSDKTable.SetModelAnimation(mesh.id, ref this, speed, loopIndex, forceApply, frameID);
     }
     public void SetAnimation(Mesh* mesh, short speed, byte loopIndex, bool32 forceApply, short frameID)
     {
-        fixed (Animator* ani = &this) RSDKTable->SetModelAnimation(mesh != null ? mesh->id : unchecked((ushort)-1), ani, speed, loopIndex, forceApply, frameID);
+        RSDKTable.SetModelAnimation(mesh != null ? mesh->id : unchecked((ushort)-1), ref this, speed, loopIndex, forceApply, frameID);
     }
 
-    public void Process() { fixed (Animator* ani = &this) RSDKTable->ProcessAnimation(ani); }
-    public int GetFrameID() { fixed (Animator* ani = &this) return RSDKTable->GetFrameID(ani); }
-    public Hitbox* GetHitbox(byte id) { fixed (Animator* ani = &this) return RSDKTable->GetHitbox(ani, id); }
+    public void Process() => RSDKTable.ProcessAnimation(ref this);
+    public int GetFrameID() => RSDKTable.GetFrameID(ref this);
+    public Hitbox* GetHitbox(byte id) => RSDKTable.GetHitbox(ref this, id);
     public SpriteFrame* GetFrame(SpriteAnimation spriteAni) => spriteAni.GetFrame(animationID, frameID);
-    public void DrawSprite(Vector2* drawPos, bool32 screenRelative) { fixed (Animator* ani = &this) RSDKTable->DrawSprite(ani, drawPos, screenRelative); }
+    public void DrawSprite(Vector2* drawPos, bool32 screenRelative) => RSDKTable.DrawSprite(ref this, drawPos, screenRelative);
     public void DrawString(Vector2* position, String* @string, int endFrame, int textLength, int align, int spacing, Vector2* charOffsets, bool32 screenRelative)
     {
-        fixed (Animator* ani = &this) RSDKTable->DrawText(ani, position, @string, endFrame, textLength, align, spacing, null, charOffsets, screenRelative);
+        RSDKTable.DrawText(ref this, position, @string, endFrame, textLength, align, spacing, null, charOffsets, screenRelative);
     }
 
 #if RETRO_REV0U
-    public void DrawTiles(ushort tileID) { fixed (RSDK.Animator* ani = &this) RSDKTable->DrawDynamicAniTiles(ani, tileID); }
+    public void DrawTiles(ushort tileID) => RSDKTable.DrawDynamicAniTiles(ref this, tileID);
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
-    public void DrawTiles(ushort tileID) { fixed (RSDK.Animator* ani = &this) modTable->DrawDynamicAniTiles(ani, tileID); }
+    public void DrawTiles(ushort tileID) => modTable->DrawDynamicAniTiles(ref this, tileID);
 #endif
 }

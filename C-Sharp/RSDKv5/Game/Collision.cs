@@ -46,32 +46,32 @@ public unsafe struct CollisionSensor
 {
     public Vector2 position;
     public bool32 collided;
-    public byte angle;
+    public Byte angle;
 
 #if RETRO_REV0U
     // expects an array of 5 sensors
-    public static void SetPathGripSensors(CollisionSensor* sensors) => RSDKTable->SetPathGripSensors(sensors);
+    public static void SetPathGripSensors(CollisionSensor sensors) => RSDKTable.SetPathGripSensors(ref sensors);
 
-    public void FindFloorPosition() { fixed (CollisionSensor* s = &this) RSDKTable->FindFloorPosition(s); }
-    public void FindLWallPosition() { fixed (CollisionSensor* s = &this) RSDKTable->FindLWallPosition(s); }
-    public void FindRoofPosition() { fixed (CollisionSensor* s = &this) RSDKTable->FindRoofPosition(s); }
-    public void FindRWallPosition() { fixed (CollisionSensor* s = &this) RSDKTable->FindRWallPosition(s); }
-    public void FloorCollision() { fixed (CollisionSensor* s = &this) RSDKTable->FloorCollision(s); }
-    public void LWallCollision() { fixed (CollisionSensor* s = &this) RSDKTable->LWallCollision(s); }
-    public void RoofCollision() { fixed (CollisionSensor* s = &this) RSDKTable->RoofCollision(s); }
-    public void RWallCollision() { fixed (CollisionSensor* s = &this) RSDKTable->RWallCollision(s); }
+    public void FindFloorPosition() => RSDKTable.FindFloorPosition(ref this);
+    public void FindLWallPosition() => RSDKTable.FindLWallPosition(ref this);
+    public void FindRoofPosition() => RSDKTable.FindRoofPosition(ref this);
+    public void FindRWallPosition() => RSDKTable.FindRWallPosition(ref this);
+    public void FloorCollision() => RSDKTable.FloorCollision(ref this);
+    public void LWallCollision() => RSDKTable.LWallCollision(ref this);
+    public void RoofCollision() => RSDKTable.RoofCollision(ref this);
+    public void RWallCollision() => RSDKTable.RWallCollision(ref this);
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
     // expects an array of 5 sensors
-    public static void SetPathGripSensors(CollisionSensor* sensors) => modTable.SetPathGripSensors(sensors);
+    public static void SetPathGripSensors(CollisionSensor sensors) => modTable.SetPathGripSensors(ref sensors);
 
-    public void FindFloorPosition() { fixed (CollisionSensor* s = &this) modTable.FindFloorPosition(s); }
-    public void FindLWallPosition() { fixed (CollisionSensor* s = &this) modTable.FindLWallPosition(s); }
-    public void FindRoofPosition() { fixed (CollisionSensor* s = &this) modTable.FindRoofPosition(s); }
-    public void FindRWallPosition() { fixed (CollisionSensor* s = &this) modTable.FindRWallPosition(s); }
-    public void FloorCollision() { fixed (CollisionSensor* s = &this) modTable.FloorCollision(s); }
-    public void LWallCollision() { fixed (CollisionSensor* s = &this) modTable.LWallCollision(s); }
-    public void RoofCollision() { fixed (CollisionSensor* s = &this) modTable.RoofCollision(s); }
-    public void RWallCollision() { fixed (CollisionSensor* s = &this) modTable.RWallCollision(s); }
+    public void FindFloorPosition() => modTable.FindFloorPosition(ref this);
+    public void FindLWallPosition() => modTable.FindLWallPosition(ref this);
+    public void FindRoofPosition() => modTable.FindRoofPosition(ref this);
+    public void FindRWallPosition() => modTable.FindRWallPosition(ref this);
+    public void FloorCollision() => modTable.FloorCollision(ref this);
+    public void LWallCollision() => modTable.LWallCollision(ref this);
+    public void RoofCollision() => modTable.RoofCollision(ref this);
+    public void RWallCollision() => modTable.RWallCollision(ref this);
 #endif
 }
 #endif
@@ -106,13 +106,13 @@ public unsafe static class Collision
     public static void SetupCollisionConfig(int minDistance, byte lowTolerance, byte highTolerance, byte floorAngleTolerance, byte wallAngleTolerance,
                                      byte roofAngleTolerance)
     {
-        RSDKTable->SetupCollisionConfig(minDistance, lowTolerance, highTolerance, floorAngleTolerance, wallAngleTolerance, roofAngleTolerance);
+        RSDKTable.SetupCollisionConfig(minDistance, lowTolerance, highTolerance, floorAngleTolerance, wallAngleTolerance, roofAngleTolerance);
     }
 #endif
 
 #if RETRO_REV0U
-    public static void CopyCollisionMask(ushort dst, ushort src, byte cPlane, byte cMode) => RSDKTable->CopyCollisionMask(dst, src, cPlane, cMode);
-    public static void GetCollisionInfo(CollisionMask** masks, TileInfo** tileInfo) => RSDKTable->GetCollisionInfo(masks, tileInfo);
+    public static void CopyCollisionMask(ushort dst, ushort src, byte cPlane, byte cMode) => RSDKTable.CopyCollisionMask(dst, src, cPlane, cMode);
+    public static void GetCollisionInfo(CollisionMask** masks, TileInfo** tileInfo) => RSDKTable.GetCollisionInfo(masks, tileInfo);
 #elif RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
     public static void CopyCollisionMask(ushort dst, ushort src, byte cPlane, byte cMode) => modTable.CopyCollisionMask(dst, src, cPlane, cMode);
     public static void GetCollisionInfo(CollisionMask **masks, TileInfo **tileInfo) => modTable.GetCollisionInfo(masks, tileInfo);

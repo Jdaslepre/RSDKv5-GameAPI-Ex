@@ -284,27 +284,27 @@ public enum KeyMappings
 public unsafe class Input
 {
 #if RETRO_REV02
-    public static uint GetInputDeviceID(byte controllerID) => RSDKTable->GetInputDeviceID(controllerID);
-    public static uint GetFilteredInputDeviceID(bool32 confirmOnly, bool32 unassignedOnly, uint maxInactiveTimer) => RSDKTable->GetFilteredInputDeviceID(confirmOnly, unassignedOnly, maxInactiveTimer);
+    public static uint GetInputDeviceID(byte controllerID) => RSDKTable.GetInputDeviceID(controllerID);
+    public static uint GetFilteredInputDeviceID(bool32 confirmOnly, bool32 unassignedOnly, uint maxInactiveTimer) => RSDKTable.GetFilteredInputDeviceID(confirmOnly, unassignedOnly, maxInactiveTimer);
 
-    public static int GetInputDeviceType(uint deviceID) => RSDKTable->GetInputDeviceType(deviceID);
-    public static bool32 IsInputDeviceAssigned(uint deviceID) => RSDKTable->IsInputDeviceAssigned(deviceID);
-    public static int GetInputDeviceUnknown(uint deviceID) => RSDKTable->GetInputDeviceUnknown(deviceID);
+    public static int GetInputDeviceType(uint deviceID) => RSDKTable.GetInputDeviceType(deviceID);
+    public static bool32 IsInputDeviceAssigned(uint deviceID) => RSDKTable.IsInputDeviceAssigned(deviceID);
+    public static int GetInputDeviceUnknown(uint deviceID) => RSDKTable.GetInputDeviceUnknown(deviceID);
 
-    public static int InputDeviceUnknown1(uint deviceID, int unknown1, int unknown2) => RSDKTable->InputDeviceUnknown1(deviceID, unknown1, unknown2);
-    public static int InputDeviceUnknown2(uint deviceID, int unknown1, int unknown2) => RSDKTable->InputDeviceUnknown2(deviceID, unknown1, unknown2);
+    public static int InputDeviceUnknown1(uint deviceID, int unknown1, int unknown2) => RSDKTable.InputDeviceUnknown1(deviceID, unknown1, unknown2);
+    public static int InputDeviceUnknown2(uint deviceID, int unknown1, int unknown2) => RSDKTable.InputDeviceUnknown2(deviceID, unknown1, unknown2);
 
-    public static int GetInputSlotUnknown(byte inputSlot) => RSDKTable->GetInputSlotUnknown(inputSlot);
+    public static int GetInputSlotUnknown(byte inputSlot) => RSDKTable.GetInputSlotUnknown(inputSlot);
 
-    public static int InputSlotUnknown1(byte inputSlot, int unknown1, int unknown2) => RSDKTable->InputSlotUnknown1(inputSlot, unknown1, unknown2);
-    public static int InputSlotUnknown2(byte inputSlot, int unknown1, int unknown2) => RSDKTable->InputSlotUnknown2(inputSlot, unknown1, unknown2);
+    public static int InputSlotUnknown1(byte inputSlot, int unknown1, int unknown2) => RSDKTable.InputSlotUnknown1(inputSlot, unknown1, unknown2);
+    public static int InputSlotUnknown2(byte inputSlot, int unknown1, int unknown2) => RSDKTable.InputSlotUnknown2(inputSlot, unknown1, unknown2);
 
-    public static void AssignInputSlotToDevice(byte inputSlot, uint inputID) => RSDKTable->AssignInputSlotToDevice(inputSlot, inputID);
-    public static bool32 IsInputSlotAssigned(byte inputSlot) => RSDKTable->IsInputSlotAssigned(inputSlot);
-    public static void ResetInputSlotAssignments() => RSDKTable->ResetInputSlotAssignments();
+    public static void AssignInputSlotToDevice(byte inputSlot, uint inputID) => RSDKTable.AssignInputSlotToDevice(inputSlot, inputID);
+    public static bool32 IsInputSlotAssigned(byte inputSlot) => RSDKTable.IsInputSlotAssigned(inputSlot);
+    public static void ResetInputSlotAssignments() => RSDKTable.ResetInputSlotAssignments();
 #endif
 
 #if !RETRO_REV02
-        public static void GetUnknownInputValue(int inputSlot, int type, int *value) => RSDKTable->GetUnknownInputValue(inputSlot, type, value);
+    public static void GetUnknownInputValue(int inputSlot, int type, int *value) => RSDKTable.GetUnknownInputValue(inputSlot, type, value);
 #endif
 }

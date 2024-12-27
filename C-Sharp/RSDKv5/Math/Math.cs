@@ -26,25 +26,25 @@ public unsafe static class MathRSDK
     public static float FROM_FIXED_F(float x) { return x / 65536.0f; }
 
     // Functions
-    public static int Sin1024(int angle) { return RSDKTable->Sin1024(angle); }
-    public static int Cos1024(int angle) { return RSDKTable->Cos1024(angle); }
-    public static int Tan1024(int angle) { return RSDKTable->Tan1024(angle); }
-    public static int ASin1024(int angle) { return RSDKTable->ASin1024(angle); }
-    public static int ACos1024(int angle) { return RSDKTable->ACos1024(angle); }
-    public static int Sin512(int angle) { return RSDKTable->Sin512(angle); }
-    public static int Cos512(int angle) { return RSDKTable->Cos512(angle); }
-    public static int Tan512(int angle) { return RSDKTable->Tan512(angle); }
-    public static int ASin512(int angle) { return RSDKTable->ASin512(angle); }
-    public static int ACos512(int angle) { return RSDKTable->ACos512(angle); }
-    public static int Sin256(int angle) { return RSDKTable->Sin256(angle); }
-    public static int Cos256(int angle) { return RSDKTable->Cos256(angle); }
-    public static int Tan256(int angle) { return RSDKTable->Tan256(angle); }
-    public static int ASin256(int angle) { return RSDKTable->ASin256(angle); }
-    public static int ACos256(int angle) { return RSDKTable->ACos256(angle); }
+    public static int Sin1024(int angle) { return RSDKTable.Sin1024(angle); }
+    public static int Cos1024(int angle) { return RSDKTable.Cos1024(angle); }
+    public static int Tan1024(int angle) { return RSDKTable.Tan1024(angle); }
+    public static int ASin1024(int angle) { return RSDKTable.ASin1024(angle); }
+    public static int ACos1024(int angle) { return RSDKTable.ACos1024(angle); }
+    public static int Sin512(int angle) { return RSDKTable.Sin512(angle); }
+    public static int Cos512(int angle) { return RSDKTable.Cos512(angle); }
+    public static int Tan512(int angle) { return RSDKTable.Tan512(angle); }
+    public static int ASin512(int angle) { return RSDKTable.ASin512(angle); }
+    public static int ACos512(int angle) { return RSDKTable.ACos512(angle); }
+    public static int Sin256(int angle) { return RSDKTable.Sin256(angle); }
+    public static int Cos256(int angle) { return RSDKTable.Cos256(angle); }
+    public static int Tan256(int angle) { return RSDKTable.Tan256(angle); }
+    public static int ASin256(int angle) { return RSDKTable.ASin256(angle); }
+    public static int ACos256(int angle) { return RSDKTable.ACos256(angle); }
 
-    public static int Rand(int min, int max) { return RSDKTable->Rand(min, max); }
-    public static int RandSeeded(int min, int max, int* seed) { return RSDKTable->RandSeeded(min, max, seed); }
-    public static void SetRandSeed(int seed) => RSDKTable->SetRandSeed(seed);
+    public static int Rand(int min, int max) { return RSDKTable.Rand(min, max); }
+    public static int RandSeeded(int min, int max, int* seed) { return RSDKTable.RandSeeded(min, max, seed); }
+    public static void SetRandSeed(int seed) => RSDKTable.SetRandSeed(seed);
 
-    public static byte ATan2(int x, int y) { return RSDKTable->ATan2(x, y); }
+    public static byte ATan2(int x, int y) { return RSDKTable.ATan2(x, y); }
 }

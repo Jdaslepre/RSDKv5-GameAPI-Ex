@@ -1,4 +1,5 @@
-﻿using RSDK;
+﻿using System.Runtime.InteropServices;
+using RSDK;
 
 namespace GameLogic;
 
@@ -6,9 +7,9 @@ public unsafe static class Game
 {
     [UnmanagedCallersOnly(EntryPoint = "LinkGameLogicDLL")]
 #if RETRO_REV02
-    private static void LinkGameLogicDLL_Unmanaged(EngineInfo* info) => LinkGameLogicDLL(info);
+    private static void LinkGameLogicDLL_Unmanaged(EngineInfo* info) => LinkGameLogicDLL(ref *info);
 #else
-    private static void LinkGameLogicDLL_Unmanaged(EngineInfo info) => LinkGameLogicDLL(&info);
+    private static void LinkGameLogicDLL_Unmanaged(EngineInfo info) => LinkGameLogicDLL(ref info);
 #endif
 
     [UnmanagedCallersOnly(EntryPoint = "LinkModLogic")]
@@ -38,16 +39,9 @@ public unsafe static class Game
     // Don't touch LinkGameLogicDLL or LinkModLogic, if you want code
     // to be ran after linking, use the LinkEmbeddedLogic function
 
-#if RETRO_REV02
-    private static void LinkGameLogicDLL(EngineInfo* info)
+    private static void LinkGameLogicDLL(ref EngineInfo info)
     {
-        InitEngineInfo(info);
-#else
-    private static void LinkGameLogicDLL(EngineInfo info)
-    {
-        InitEngineInfo(&info);
-#endif
-
+        InitEngineInfo(ref info);
 
         LinkEmbeddedLogic();
     }
@@ -62,7 +56,7 @@ public unsafe static class Game
     public static bool32 LinkModLogic(EngineInfo* info, char* ModID)
     {
 #if RETRO_REV02
-        LinkGameLogicDLL(info);
+        LinkGameLogicDLL(ref *info);
 #else
         LinkGameLogicDLL(*info);
 #endif

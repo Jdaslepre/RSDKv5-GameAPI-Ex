@@ -6,11 +6,11 @@ public struct Mesh
 
     public void Init() => id = 0xFFFF;
 
-    public unsafe void Load(string path, Scopes scope) => id = RSDKTable->LoadMesh(path, (byte)scope);
+    public unsafe void Load(string path, Scopes scope) => id = RSDKTable.LoadMesh(path, (byte)scope);
 
     public bool32 Loaded() => id != 0xFFFF;
 
-    public bool32 Matches(RSDK.Mesh other) => id == other.id;
+    public bool32 Matches(Mesh other) => id == other.id;
     public unsafe bool32 Matches(Mesh* other) => other != null ? id == other->id : id == 0xFFFF;
 }
 
@@ -36,21 +36,19 @@ public unsafe struct Scene3D
 
     public void Init() => id = 0xFFFF;
 
-    public void Create(string identifier, ushort faceCount, Scopes scope) => id = RSDKTable->Create3DScene(identifier, faceCount, (byte)scope);
-    public void Prepare() => RSDKTable->Prepare3DScene(id);
-    public void Draw() => RSDKTable->Draw3DScene(id);
+    public void Create(string identifier, ushort faceCount, Scopes scope) => id = RSDKTable.Create3DScene(identifier, faceCount, (byte)scope);
+    public void Prepare() => RSDKTable.Prepare3DScene(id);
+    public void Draw() => RSDKTable.Draw3DScene(id);
 
-    public void SetDiffuseColor(byte x, byte y, byte z) => RSDKTable->SetDiffuseColor(id, x, y, z);
-    public void SetDiffuseIntensity(byte x, byte y, byte z) => RSDKTable->SetDiffuseIntensity(id, x, y, z);
-    public void SetSpecularIntensity(byte x, byte y, byte z) => RSDKTable->SetSpecularIntensity(id, x, y, z);
+    public void SetDiffuseColor(byte x, byte y, byte z) => RSDKTable.SetDiffuseColor(id, x, y, z);
+    public void SetDiffuseIntensity(byte x, byte y, byte z) => RSDKTable.SetDiffuseIntensity(id, x, y, z);
+    public void SetSpecularIntensity(byte x, byte y, byte z) => RSDKTable.SetSpecularIntensity(id, x, y, z);
 
-    public void AddModel(Mesh modelFrames, DrawTypes drawMode, ref Matrix matWorld, ref Matrix matView, uint color)
+    public void AddModel(Mesh modelFrames, DrawTypes drawMode, Matrix matWorld, Matrix matView, uint color)
     {
-        fixed (Matrix* w = &matWorld)
-        fixed (Matrix* v = &matView)
-            RSDKTable->AddModelTo3DScene(modelFrames.id, id, (byte)drawMode, w, v, color);
+        RSDKTable.AddModelTo3DScene(modelFrames.id, id, (byte)drawMode, ref matWorld, ref matView, color);
     }
-    public void AddMesh(Mesh modelFrames, Animator* animator, DrawTypes drawMode, Matrix* matWorld, Matrix* matNormal, uint color) => RSDKTable->AddMeshFrameTo3DScene(modelFrames.id, id, animator, (byte)drawMode, matWorld, matNormal, color);
+    public void AddMesh(Mesh modelFrames, Animator animator, DrawTypes drawMode, Matrix matWorld, Matrix matNormal, uint color) => RSDKTable.AddMeshFrameTo3DScene(modelFrames.id, id, ref animator, (byte)drawMode, ref matWorld, ref matNormal, color);
 
     public bool32 Loaded() => id != 0xFFFF;
 

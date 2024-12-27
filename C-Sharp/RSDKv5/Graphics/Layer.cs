@@ -49,12 +49,12 @@ public unsafe struct Tile
         id |= (ushort)((solid & 3) << 14);
     }
 
-    public static void Copy(ushort dst, ushort src, ushort count = 1) => RSDKTable->CopyTile(dst, src, count);
+    public static void Copy(ushort dst, ushort src, ushort count = 1) => RSDKTable.CopyTile(dst, src, count);
 
-    public int GetAngle(byte cPlane, byte cMode) => RSDKTable->GetTileAngle(id, cPlane, cMode);
-    public void SetAngle(byte cPlane, byte cMode, byte angle) => RSDKTable->SetTileAngle(id, cPlane, cMode, angle);
-    public byte GetFlags(byte cPlane) => RSDKTable->GetTileFlags(id, cPlane);
-    public void SetFlags(byte cPlane, byte flag) => RSDKTable->SetTileFlags(id, cPlane, flag);
+    public int GetAngle(byte cPlane, byte cMode) => RSDKTable.GetTileAngle(id, cPlane, cMode);
+    public void SetAngle(byte cPlane, byte cMode, byte angle) => RSDKTable.SetTileAngle(id, cPlane, cMode, angle);
+    public byte GetFlags(byte cPlane) => RSDKTable.GetTileFlags(id, cPlane);
+    public void SetFlags(byte cPlane, byte flag) => RSDKTable.SetTileFlags(id, cPlane, flag);
 }
 
 public unsafe struct TileLayer
@@ -93,7 +93,7 @@ public unsafe struct TileLayer
     public Tile* layout;
     public byte* lineScroll;
 
-    public void ProcessParallax() { fixed (TileLayer* l = &this) RSDKTable->ProcessParallax(l); }
+    public void ProcessParallax() { fixed (TileLayer* l = &this) RSDKTable.ProcessParallax(l); }
 }
 
 public unsafe struct SceneLayer
@@ -102,22 +102,22 @@ public unsafe struct SceneLayer
 
     public void Init() => id = 0xFFFF;
 
-    public void Get(string name) => id = RSDKTable->GetTileLayerID(name);
+    public void Get(string name) => id = RSDKTable.GetTileLayerID(name);
     public void Set(ushort id) => this.id = id;
 
-    public TileLayer* GetTileLayer() => RSDKTable->GetTileLayer(id);
-    public void Size(Vector2* size, bool32 usePixelUnits) => RSDKTable->GetLayerSize(id, size, usePixelUnits);
+    public TileLayer* GetTileLayer() => RSDKTable.GetTileLayer(id);
+    public void Size(Vector2* size, bool32 usePixelUnits) => RSDKTable.GetLayerSize(id, size, usePixelUnits);
 
-    public Tile GetTile(int x, int y) => new Tile(RSDKTable->GetTile(id, x, y));
-    public void SetTile(int x, int y, Tile tile) => RSDKTable->SetTile(id, x, y, tile.id);
+    public Tile GetTile(int x, int y) => new Tile(RSDKTable.GetTile(id, x, y));
+    public void SetTile(int x, int y, Tile tile) => RSDKTable.SetTile(id, x, y, tile.id);
 
-    public static TileLayer* GetTileLayer(string name) => RSDKTable->GetTileLayer(RSDKTable->GetTileLayerID(name));
-    public static TileLayer* GetTileLayer(ushort id) => RSDKTable->GetTileLayer(id);
+    public static TileLayer* GetTileLayer(string name) => RSDKTable.GetTileLayer(RSDKTable.GetTileLayerID(name));
+    public static TileLayer* GetTileLayer(ushort id) => RSDKTable.GetTileLayer(id);
 
     public static void Copy(SceneLayer dstLayer, int dstStartX, int dstStartY, SceneLayer srcLayer, int srcStartX, int srcStartY,
                             int countX, int countY)
     {
-        RSDKTable->CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
+        RSDKTable.CopyTileLayer(dstLayer.id, dstStartX, dstStartY, srcLayer.id, srcStartX, srcStartY, countX, countY);
     }
 
     public bool32 Loaded() => id != 0xFFFF;

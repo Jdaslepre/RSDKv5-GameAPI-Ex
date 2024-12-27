@@ -6,7 +6,7 @@ public unsafe struct SpriteSheet
 
     public void Init() => id = 0xFFFF;
 
-    public void Load(string path, Scopes scope) => id = RSDKTable->LoadSpriteSheet(path, (byte)scope);
+    public void Load(string path, Scopes scope) => id = RSDKTable.LoadSpriteSheet(path, (byte)scope);
 
     public bool32 Loaded() => id != 0xFFFF;
 
@@ -33,14 +33,14 @@ public unsafe struct SpriteAnimation
 
     public void Init() => id = 0xFFFF;
 
-    public void Load(string path, Scopes scope) => id = RSDKTable->LoadSpriteAnimation(path, (byte)scope);
-    public void Create(string filename, uint frameCount, uint listCount, Scopes scope) => id = RSDKTable->CreateSpriteAnimation(filename, frameCount, listCount, (byte)scope);
+    public void Load(string path, Scopes scope) => id = RSDKTable.LoadSpriteAnimation(path, (byte)scope);
+    public void Create(string filename, uint frameCount, uint listCount, Scopes scope) => id = RSDKTable.CreateSpriteAnimation(filename, frameCount, listCount, (byte)scope);
 
-    public void Edit(ushort listID, string name, int frameOffset, ushort frameCount, short speed, byte loopIndex, byte rotationStyle) => RSDKTable->EditSpriteAnimation(id, listID, name, frameOffset, frameCount, speed, loopIndex, rotationStyle);
+    public void Edit(ushort listID, string name, int frameOffset, ushort frameCount, short speed, byte loopIndex, byte rotationStyle) => RSDKTable.EditSpriteAnimation(id, listID, name, frameOffset, frameCount, speed, loopIndex, rotationStyle);
 
-    public ushort FindAnimation(string name) => RSDKTable->FindSpriteAnimation(id, name);
+    public ushort FindAnimation(string name) => RSDKTable.FindSpriteAnimation(id, name);
 
-    public SpriteFrame* GetFrame(ushort animID, int frameID) => RSDKTable->GetFrame(id, animID, frameID);
+    public SpriteFrame* GetFrame(ushort animID, int frameID) => RSDKTable.GetFrame(id, animID, frameID);
 
     public bool32 Loaded() => id != 0xFFFF;
 

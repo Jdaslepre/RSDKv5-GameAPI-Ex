@@ -8,32 +8,32 @@ public struct ModVersionInfo
     public byte modLoaderVer;
 }
 
-public enum ModCallbackEvents : int
+public static class ModCallbackEvents
 {
-    MODCB_ONGAMESTARTUP,
-    MODCB_ONSTATICLOAD,
-    MODCB_ONSTAGELOAD,
-    MODCB_ONUPDATE,
-    MODCB_ONLATEUPDATE,
-    MODCB_ONSTATICUPDATE,
-    MODCB_ONDRAW,
-    MODCB_ONSTAGEUNLOAD,
-    MODCB_ONSHADERLOAD,
-    MODCB_ONVIDEOSKIPCB,
-    MODCB_ONSCANLINECB,
+    public const int MODCB_ONGAMESTARTUP = 0;
+    public const int MODCB_ONSTATICLOAD = 1;
+    public const int MODCB_ONSTAGELOAD = 2;
+    public const int MODCB_ONUPDATE = 3;
+    public const int MODCB_ONLATEUPDATE = 4;
+    public const int MODCB_ONSTATICUPDATE = 5;
+    public const int MODCB_ONDRAW = 6;
+    public const int MODCB_ONSTAGEUNLOAD = 7;
+    public const int MODCB_ONSHADERLOAD = 8;
+    public const int MODCB_ONVIDEOSKIPCB = 9;
+    public const int MODCB_ONSCANLINECB = 10;
 }
 
-public enum ModSuper
+public static class ModSuper
 {
-    SUPER_UPDATE,
-    SUPER_LATEUPDATE,
-    SUPER_STATICUPDATE,
-    SUPER_DRAW,
-    SUPER_CREATE,
-    SUPER_STAGELOAD,
-    SUPER_EDITORDRAW,
-    SUPER_EDITORLOAD,
-    SUPER_SERIALIZE
+    public const int SUPER_UPDATE = 0;
+    public const int SUPER_LATEUPDATE = 1;
+    public const int SUPER_STATICUPDATE = 2;
+    public const int SUPER_DRAW = 3;
+    public const int SUPER_CREATE = 4;
+    public const int SUPER_STAGELOAD = 5;
+    public const int SUPER_EDITORLOAD = 6;
+    public const int SUPER_EDITORDRAW = 7;
+    public const int SUPER_SERIALIZE = 8;
 }
 
 public unsafe class Mod
