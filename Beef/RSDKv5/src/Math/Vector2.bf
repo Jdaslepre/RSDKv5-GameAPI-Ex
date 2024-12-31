@@ -117,4 +117,14 @@ namespace RSDK;
         lhs ^= rhs;
         return lhs;
     }
+    public static Self operator <<(ref Self lhs, ref Self rhs)
+    {
+        lhs <<= rhs;
+        return lhs;
+    }
+    public static Self operator >>(ref Self lhs, ref Self rhs)
+    {
+        lhs >>= rhs;
+        return lhs;
+    }
 }

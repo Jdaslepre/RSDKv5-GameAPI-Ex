@@ -50,4 +50,6 @@ public struct Vector2
     public static Vector2 operator &(Vector2 lhs, Vector2 rhs) => new(lhs.x & rhs.x, lhs.y & rhs.y);
     public static Vector2 operator %(Vector2 lhs, Vector2 rhs) => new(lhs.x % rhs.x, lhs.y % rhs.y);
     public static Vector2 operator ^(Vector2 lhs, Vector2 rhs) => new(lhs.x ^ rhs.x, lhs.y ^ rhs.y);
+    public static Vector2 operator <<(Vector2 lhs, Vector2 rhs) => new(lhs.x << rhs.x, lhs.y << rhs.y);
+    public static Vector2 operator >>(Vector2 lhs, Vector2 rhs) => new(lhs.x >> rhs.x, lhs.y >> rhs.y);
 }
