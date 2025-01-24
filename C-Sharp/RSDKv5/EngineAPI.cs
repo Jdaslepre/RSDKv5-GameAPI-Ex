@@ -206,7 +206,7 @@ public unsafe struct APIFunctionTable
     public delegate* unmanaged<void> ClearPrerollErrors;
     public delegate* unmanaged<void> TryAuth;
     public delegate* unmanaged<int> GetUserAuthStatus;
-    public delegate* unmanaged<String*, bool32> GetUsername;
+    public delegate* unmanaged<ref String, bool32> GetUsername;
 
     // Storage
     public delegate* unmanaged<void> TryInitStorage;
@@ -276,7 +276,7 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<ushort, ushort, void*, void> ResetEntitySlot;
     public delegate* unmanaged<ushort, void*, int, int, void*> CreateEntity;
     public delegate* unmanaged<void*, void*, bool32, void> CopyEntity;
-    public delegate* unmanaged<void*, Vector2*, bool32> CheckOnScreen;
+    public delegate* unmanaged<void*, ref Vector2, bool32> CheckOnScreen;
     public delegate* unmanaged<ref Vector2, ref Vector2, bool32> CheckPosOnScreen;
     public delegate* unmanaged<byte, ushort, void> AddDrawListRef;
     public delegate* unmanaged<byte, ushort, ushort, ushort, void> SwapDrawListEntries;
@@ -295,11 +295,11 @@ public unsafe struct RSDKFunctionTable
 
     // Cameras
     public delegate* unmanaged<void> ClearCameras;
-    public delegate* unmanaged<Vector2*, int, int, bool32, void> AddCamera;
+    public delegate* unmanaged<ref Vector2, int, int, bool32, void> AddCamera;
 
     // API (Rev01 only)
 #if !RETRO_REV02
-        public delegate* unmanaged<string, void*> GetAPIFunction;
+    public delegate* unmanaged<string, void*> GetAPIFunction;
 #endif
 
     // Window/Video Settings
@@ -388,12 +388,12 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<int, int, int, int, uint, int, int, bool32, void> DrawLine;
     public delegate* unmanaged<int, int, int, uint, int, int, bool32, void> DrawCircle;
     public delegate* unmanaged<int, int, int, int, uint, int, int, bool32, void> DrawCircleOutline;
-    public delegate* unmanaged<Vector2*, int, int, int, int, int, int, void> DrawFace;
-    public delegate* unmanaged<Vector2*, uint*, int, int, int, void> DrawBlendedFace;
-    public delegate* unmanaged<ref Animator, Vector2*, bool32, void> DrawSprite;
-    public delegate* unmanaged<ushort, int, bool32, void> DrawDeformedSprite;
-    public delegate* unmanaged<ref Animator, Vector2*, String*, int, int, int, int, void*, Vector2*, bool32, void> DrawText;
-    public delegate* unmanaged<ushort*, int, int, Vector2*, Vector2*, bool32, void> DrawTile;
+    public delegate* unmanaged<ref Vector2, int, int, int, int, int, int, void> DrawFace;
+    public delegate* unmanaged<ref Vector2, uint*, int, int, int, void> DrawBlendedFace;
+    public delegate* unmanaged<ref Animator, ref Vector2, bool32, void> DrawSprite;
+    public delegate* unmanaged<ushort, int, int, void> DrawDeformedSprite;
+    public delegate* unmanaged<ref Animator, ref Vector2, ref String, int, int, int, int, void*, ref Vector2, bool32, void> DrawText;
+    public delegate* unmanaged<ushort*, int, int, ref Vector2, ref Vector2, bool32, void> DrawTile;
     public delegate* unmanaged<ushort, ushort, ushort, void> CopyTile;
     public delegate* unmanaged<ushort, ushort, ushort, ushort, ushort, ushort, void> DrawAniTiles;
 #if RETRO_REV0U
@@ -433,21 +433,21 @@ public unsafe struct RSDKFunctionTable
     // Tile Layers
     public delegate* unmanaged<string, ushort> GetTileLayerID;
     public delegate* unmanaged<ushort, TileLayer*> GetTileLayer;
-    public delegate* unmanaged<ushort, Vector2*, bool32, void> GetLayerSize;
+    public delegate* unmanaged<ushort, ref Vector2, bool32, void> GetLayerSize;
     public delegate* unmanaged<ushort, int, int, ushort> GetTile;
     public delegate* unmanaged<ushort, int, int, ushort, void> SetTile;
     public delegate* unmanaged<ushort, int, int, ushort, int, int, int, int, void> CopyTileLayer;
-    public delegate* unmanaged<TileLayer*, void> ProcessParallax;
+    public delegate* unmanaged<ref TileLayer, void> ProcessParallax;
     public delegate* unmanaged<ScanlineInfo*> GetScanlines;
 
     // Object & Tile Collisions
-    public delegate* unmanaged<void*, Hitbox*, void*, Hitbox*, bool32> CheckObjectCollisionTouchBox;
+    public delegate* unmanaged<void*, ref Hitbox, void*, ref Hitbox, bool32> CheckObjectCollisionTouchBox;
     public delegate* unmanaged<void*, int, void*, int, bool32> CheckObjectCollisionTouchCircle;
-    public delegate* unmanaged<void*, Hitbox*, void*, Hitbox*, bool32, byte> CheckObjectCollisionBox;
-    public delegate* unmanaged<void*, Hitbox*, void*, Hitbox*, bool32, bool32> CheckObjectCollisionPlatform;
+    public delegate* unmanaged<void*, ref Hitbox, void*, ref Hitbox, bool32, byte> CheckObjectCollisionBox;
+    public delegate* unmanaged<void*, ref Hitbox, void*, ref Hitbox, bool32, bool32> CheckObjectCollisionPlatform;
     public delegate* unmanaged<void*, ushort, byte, byte, int, int, bool32, bool32> ObjectTileCollision;
     public delegate* unmanaged<void*, ushort, byte, byte, int, int, int, bool32> ObjectTileGrip;
-    public delegate* unmanaged<void*, Hitbox*, Hitbox*, void> ProcessObjectMovement;
+    public delegate* unmanaged<void*, ref Hitbox, ref Hitbox, void> ProcessObjectMovement;
 #if RETRO_REV0U
     public delegate* unmanaged<int, byte, byte, byte, byte, byte, void> SetupCollisionConfig;
     public delegate* unmanaged<ref CollisionSensor, void> SetPathGripSensors; // expects 5 sensors

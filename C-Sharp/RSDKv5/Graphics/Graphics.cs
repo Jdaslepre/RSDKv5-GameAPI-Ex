@@ -118,7 +118,7 @@ public unsafe static class Graphics
     // Cameras
     // -------
 
-    public static void AddCamera(Vector2* targetPos, int offsetX, int offsetY, bool32 worldRelative) => RSDKTable.AddCamera(targetPos, offsetX, offsetY, worldRelative);
+    public static void AddCamera(ref Vector2 targetPos, int offsetX, int offsetY, bool32 worldRelative) => RSDKTable.AddCamera(ref targetPos, offsetX, offsetY, worldRelative);
     public static void ClearCameras() => RSDKTable.ClearCameras();
 
     // -------
@@ -146,14 +146,14 @@ public unsafe static class Graphics
         RSDKTable.DrawCircleOutline(x, y, innerRadius, outerRadius, color, alpha, (byte)inkEffect, screenRelative);
     }
 
-    public static void DrawFace(Vector2* vertices, int vertCount, int r, int g, int b, int alpha, InkEffects inkEffect)
+    public static void DrawFace(ref Vector2 vertices, int vertCount, int r, int g, int b, int alpha, InkEffects inkEffect)
     {
-        RSDKTable.DrawFace(vertices, vertCount, r, g, b, alpha, (int)inkEffect);
+        RSDKTable.DrawFace(ref vertices, vertCount, r, g, b, alpha, (int)inkEffect);
     }
 
-    public static void DrawBlendedFace(Vector2* vertices, uint* vertColors, int vertCount, int alpha, InkEffects inkEffect)
+    public static void DrawBlendedFace(ref Vector2 vertices, uint* vertColors, int vertCount, int alpha, InkEffects inkEffect)
     {
-        RSDKTable.DrawBlendedFace(vertices, vertColors, vertCount, alpha, (int)inkEffect);
+        RSDKTable.DrawBlendedFace(ref vertices, vertColors, vertCount, alpha, (int)inkEffect);
     }
 
     public static void DrawDeformedSprite(SpriteSheet sheet, int inkEffect, bool32 screenRelative)
@@ -161,9 +161,9 @@ public unsafe static class Graphics
         RSDKTable.DrawDeformedSprite(sheet.id, inkEffect, screenRelative);
     }
 
-    public static void DrawTile(Tile* tiles, int countX, int countY, Vector2* position, Vector2* offset, bool32 screenRelative)
+    public static void DrawTile(Tile* tiles, int countX, int countY, ref Vector2 position, ref Vector2 offset, bool32 screenRelative)
     {
-        RSDKTable.DrawTile((ushort*)tiles, countX, countY, position, offset, screenRelative);
+        RSDKTable.DrawTile((ushort*)tiles, countX, countY, ref position, ref offset, screenRelative);
     }
 
     public static void CopyTile(ushort dest, ushort src, ushort count)

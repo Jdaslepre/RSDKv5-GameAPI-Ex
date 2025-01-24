@@ -12,7 +12,7 @@ public enum RotationStyles
 
 public unsafe struct Animator
 {
-    SpriteFrame* frames;
+    IntPtr frames;
     public int frameID;
     public ushort animationID;
     public ushort prevAnimationID;
@@ -57,10 +57,10 @@ public unsafe struct Animator
     public int GetFrameID() => RSDKTable.GetFrameID(ref this);
     public Hitbox* GetHitbox(byte id) => RSDKTable.GetHitbox(ref this, id);
     public SpriteFrame* GetFrame(SpriteAnimation spriteAni) => spriteAni.GetFrame(animationID, frameID);
-    public void DrawSprite(Vector2* drawPos, bool32 screenRelative) => RSDKTable.DrawSprite(ref this, drawPos, screenRelative);
-    public void DrawString(Vector2* position, String* @string, int endFrame, int textLength, int align, int spacing, Vector2* charOffsets, bool32 screenRelative)
+    public void DrawSprite(ref Vector2 drawPos, bool32 screenRelative) => RSDKTable.DrawSprite(ref this, ref drawPos, screenRelative);
+    public void DrawString(ref Vector2 position, ref String @string, int endFrame, int textLength, int align, int spacing, ref Vector2 charOffsets, bool32 screenRelative)
     {
-        RSDKTable.DrawText(ref this, position, @string, endFrame, textLength, align, spacing, null, charOffsets, screenRelative);
+        RSDKTable.DrawText(ref this, ref position, ref @string, endFrame, textLength, align, spacing, null, ref charOffsets, screenRelative);
     }
 
 #if RETRO_REV0U

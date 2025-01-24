@@ -93,7 +93,7 @@ public unsafe struct TileLayer
     public Tile* layout;
     public byte* lineScroll;
 
-    public void ProcessParallax() { fixed (TileLayer* l = &this) RSDKTable.ProcessParallax(l); }
+    public void ProcessParallax() => RSDKTable.ProcessParallax(ref this);
 }
 
 public unsafe struct SceneLayer
@@ -106,7 +106,7 @@ public unsafe struct SceneLayer
     public void Set(ushort id) => this.id = id;
 
     public TileLayer* GetTileLayer() => RSDKTable.GetTileLayer(id);
-    public void Size(Vector2* size, bool32 usePixelUnits) => RSDKTable.GetLayerSize(id, size, usePixelUnits);
+    public void Size(ref Vector2 size, bool32 usePixelUnits) => RSDKTable.GetLayerSize(id, ref size, usePixelUnits);
 
     public Tile GetTile(int x, int y) => new Tile(RSDKTable.GetTile(id, x, y));
     public void SetTile(int x, int y, Tile tile) => RSDKTable.SetTile(id, x, y, tile.id);

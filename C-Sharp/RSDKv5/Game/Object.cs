@@ -212,7 +212,7 @@ namespace RSDK
 
             public void Copy(Entity* dst, bool32 clearThis) => RSDKTable.CopyEntity(dst, This<Entity>(), clearThis);
 
-            public bool32 CheckOnScreen(Vector2* range) => RSDKTable.CheckOnScreen(This<Entity>(), range);
+            public bool32 CheckOnScreen(ref Vector2 range) => RSDKTable.CheckOnScreen(This<Entity>(), ref range);
 
             public void AddDrawListRef(byte drawGroup) => RSDKTable.AddDrawListRef(drawGroup, Slot());
 
@@ -226,11 +226,11 @@ namespace RSDK
                 return RSDKTable.ObjectTileGrip(This<Entity>(), collisionLayers, collisionMode, collisionPlane, xOffset, yOffset, tolerance);
             }
 
-            public void ProcessMovement(Hitbox* outerBox, Hitbox* innerBox) => RSDKTable.ProcessObjectMovement(This<Entity>(), outerBox, innerBox);
+            public void ProcessMovement(ref Hitbox outerBox, ref Hitbox innerBox) => RSDKTable.ProcessObjectMovement(This<Entity>(), ref outerBox, ref innerBox);
 
-            public bool32 CheckCollisionTouchBox(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox)
+            public bool32 CheckCollisionTouchBox(ref Hitbox thisHitbox, Entity* other, ref Hitbox otherHitbox)
             {
-                return RSDKTable.CheckObjectCollisionTouchBox(This<Entity>(), thisHitbox, other, otherHitbox);
+                return RSDKTable.CheckObjectCollisionTouchBox(This<Entity>(), ref thisHitbox, other, ref otherHitbox);
             }
 
             public bool32 CheckCollisionTouchCircle(int thisRadius, Entity* other, int otherRadius)
@@ -238,14 +238,14 @@ namespace RSDK
                 return RSDKTable.CheckObjectCollisionTouchCircle(This<Entity>(), thisRadius, other, otherRadius);
             }
 
-            public byte CheckCollisionBox(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox, uint setPos = 1)
+            public byte CheckCollisionBox(ref Hitbox thisHitbox, Entity* other, ref Hitbox otherHitbox, uint setPos = 1)
             {
-                return RSDKTable.CheckObjectCollisionBox(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
+                return RSDKTable.CheckObjectCollisionBox(This<Entity>(), ref thisHitbox, other, ref otherHitbox, setPos);
             }
 
-            public bool32 CheckCollisionPlatform(Hitbox* thisHitbox, Entity* other, Hitbox* otherHitbox, uint setPos = 1)
+            public bool32 CheckCollisionPlatform(ref Hitbox thisHitbox, Entity* other, ref Hitbox otherHitbox, uint setPos = 1)
             {
-                return RSDKTable.CheckObjectCollisionPlatform(This<Entity>(), thisHitbox, other, otherHitbox, setPos);
+                return RSDKTable.CheckObjectCollisionPlatform(This<Entity>(), ref thisHitbox, other, ref otherHitbox, setPos);
             }
 
 #if RETRO_USE_MOD_LOADER
@@ -285,7 +285,7 @@ namespace RSDK
         public static void Reset(ushort slot, ushort type, void* data) => RSDKTable.ResetEntitySlot(slot, type, data);
         public static void Reset(ushort slot, ushort type, int data) => RSDKTable.ResetEntitySlot(slot, type, MathRSDK.INT_TO_VOID(data));
 
-        
+
         public static void Reset<T>(ushort slot, void* data)
         {
             var sVars = (Static*)Managed.GetFieldPtr<Static>(typeof(T), "sVars");

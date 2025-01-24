@@ -7,16 +7,16 @@ public unsafe class Auth
 {
     public void ClearPrerollErrors() => APITable.ClearPrerollErrors();
     public void TryAuth() => APITable.TryAuth();
-    public static int GetUserAuthStatus() { return APITable.GetUserAuthStatus(); }
-    public static bool32 GetUsername(RSDK.String* username) { return APITable.GetUsername(username); }
+    public static int GetUserAuthStatus() => APITable.GetUserAuthStatus();
+    public static bool32 GetUsername(ref String username) => APITable.GetUsername(ref username);
 }
 #endif
 
 public unsafe class Storage
 {
     // load user file from game dir
-    public static bool32 LoadFile(string fileName, void* buffer, uint size) { return RSDKTable.LoadUserFile(fileName, buffer, size); }
-    public static bool32 SaveFile(string fileName, void* buffer, uint size) { return RSDKTable.SaveUserFile(fileName, buffer, size); }
+    public static bool32 LoadFile(string fileName, void* buffer, uint size) => RSDKTable.LoadUserFile(fileName, buffer, size);
+    public static bool32 SaveFile(string fileName, void* buffer, uint size) => RSDKTable.SaveUserFile(fileName, buffer, size);
 
 #if RETRO_REV02
     // load user file from user dir (e.g. cloud saves or etc)
@@ -26,8 +26,8 @@ public unsafe class Storage
 
     // Storage
     public static void TryInitStorage() => APITable.TryInitStorage();
-    public static int GetStorageStatus() { return APITable.GetStorageStatus(); }
-    public static int GetSaveStatus() { return APITable.GetSaveStatus(); }
+    public static int GetStorageStatus() => APITable.GetStorageStatus();
+    public static int GetSaveStatus() => APITable.GetSaveStatus();
     public static void ClearSaveStatus() => APITable.ClearSaveStatus();
     public static void SetSaveStatusContinue() => APITable.SetSaveStatusContinue();
     public static void SetSaveStatusOK() => APITable.SetSaveStatusOK();
@@ -73,9 +73,9 @@ public unsafe class Storage
         public void Clear() => APITable.ClearUserDB(id);
         public static void ClearAll() => APITable.ClearAllUserDBs();
 
-        public bool32 Loaded() { return id != unchecked((ushort)-1); }
+        public bool32 Loaded() => id != unchecked((ushort)-1);
 
-        public bool32 Matches(UserDB other) { return id == other.id; }
+        public bool32 Matches(UserDB other) => id == other.id;
         public bool32 Matches(UserDB* other)
         {
             if (other != null)
@@ -87,17 +87,17 @@ public unsafe class Storage
         // Sorting
         public void SetupSorting() => APITable.SetupUserDBRowSorting(id);
         public void Sort(int type, string name, bool32 sortAscending) => APITable.SortDBRows(id, type, name, sortAscending);
-        public bool32 RowsChanged() { return APITable.GetUserDBRowsChanged(id); }
+        public bool32 RowsChanged() => APITable.GetUserDBRowsChanged(id);
         public void AddSortFilter(Types type, string name, void* value) => APITable.AddRowSortFilter(id, (int)type, name, value);
-        public int SortedRowCount() { return APITable.GetSortedUserDBRowCount(id); }
-        public int GetSortedRowID(ushort row) { return APITable.GetSortedUserDBRowID(id, row); }
+        public int SortedRowCount() => APITable.GetSortedUserDBRowCount(id);
+        public int GetSortedRowID(ushort row) => APITable.GetSortedUserDBRowID(id, row);
 
         // Rows
-        public int AddRow() { return APITable.AddUserDBRow(id); }
+        public int AddRow() => APITable.AddUserDBRow(id);
         public void RemoveRow(ushort row) => APITable.RemoveDBRow(id, row);
         public void RemoveAllRows(ushort row) => APITable.RemoveAllDBRows(id);
-        public uint GetRowUUID(ushort row) { return APITable.GetUserDBRowUUID(id, row); }
-        public int GetRowByID(uint uuid) { return APITable.GetUserDBRowByID(id, uuid); }
+        public uint GetRowUUID(ushort row) => APITable.GetUserDBRowUUID(id, row);
+        public int GetRowByID(uint uuid) => APITable.GetUserDBRowByID(id, uuid);
         public void GetRowCreationTime(ushort row, StringBuilder buffer, uint bufferSize, string format) => APITable.GetUserDBRowCreationTime(id, row, buffer, bufferSize, format);
 
 
