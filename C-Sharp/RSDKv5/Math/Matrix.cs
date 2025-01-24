@@ -10,10 +10,10 @@ public unsafe struct Matrix
     public void SetIdentity() => RSDKTable.SetIdentityMatrix(ref this);
     public void TranslateXYZ(int x, int y, int z, uint setIdentity = 1) => RSDKTable.MatrixTranslateXYZ(ref this, x, y, z, setIdentity);
     public void ScaleXYZ(int x, int y, int z) => RSDKTable.MatrixScaleXYZ(ref this, x, y, z);
-    public void RotateX(int angle) => RSDKTable.MatrixRotateX(ref this, (short)angle);
-    public void RotateY(int angle) => RSDKTable.MatrixRotateY(ref this, (short)angle);
-    public void RotateZ(int angle) => RSDKTable.MatrixRotateZ(ref this, (short)angle);
-    public void RotateXYZ(int x, int y, int z) => RSDKTable.MatrixRotateXYZ(ref this, (short)x, (short)y, (short)z);
+    public void RotateX(short angle) => RSDKTable.MatrixRotateX(ref this, angle);
+    public void RotateY(short angle) => RSDKTable.MatrixRotateY(ref this, angle);
+    public void RotateZ(short angle) => RSDKTable.MatrixRotateZ(ref this, angle);
+    public void RotateXYZ(short x, short y, short z) => RSDKTable.MatrixRotateXYZ(ref this, x, y, z);
     public void Inverse() => RSDKTable.MatrixInverse(ref this, ref this);
 
     public static void Multiply(ref Matrix dest, ref Matrix matrixA, ref Matrix matrixB) => RSDKTable.MatrixMultiply(ref dest, ref matrixA, ref matrixB);
