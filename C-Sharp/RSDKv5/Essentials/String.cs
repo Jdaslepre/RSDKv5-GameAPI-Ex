@@ -23,7 +23,7 @@ public unsafe struct String
     public void Append(ref String str) => RSDKTable.AppendString(ref this, ref str);
     public void Append(string str) => RSDKTable.AppendText(ref this, str);
 
-    public static void Copy(String* dst, String* src) => RSDKTable.CopyString(dst, src);
+    public static void Copy(ref String dst, ref String src) => RSDKTable.CopyString(ref dst, ref src);
     public static void Copy(ref String dst, string src) => RSDKTable.SetString(ref dst, src);
     public static bool32 Compare(String strA, String strB, bool32 exactMatch) { return RSDKTable.CompareStrings(ref strA, ref strB, exactMatch); }
 

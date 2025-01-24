@@ -329,20 +329,20 @@ public unsafe struct RSDKFunctionTable
     public delegate* unmanaged<int, int, byte> ATan2;
 
     // Matrices
-    public delegate* unmanaged<Matrix*, void> SetIdentityMatrix;
-    public delegate* unmanaged<Matrix*, Matrix*, Matrix*, void> MatrixMultiply;
-    public delegate* unmanaged<Matrix*, int, int, int, bool32, void> MatrixTranslateXYZ;
-    public delegate* unmanaged<Matrix*, int, int, int, void> MatrixScaleXYZ;
-    public delegate* unmanaged<Matrix*, short, void> MatrixRotateX;
-    public delegate* unmanaged<Matrix*, short, void> MatrixRotateY;
-    public delegate* unmanaged<Matrix*, short, void> MatrixRotateZ;
-    public delegate* unmanaged<Matrix*, short, short, short, void> MatrixRotateXYZ;
-    public delegate* unmanaged<Matrix*, Matrix*, void> MatrixInverse;
-    public delegate* unmanaged<Matrix*, Matrix*, void> MatrixCopy;
+    public delegate* unmanaged<ref Matrix, void> SetIdentityMatrix;
+    public delegate* unmanaged<ref Matrix, ref Matrix, ref Matrix, void> MatrixMultiply;
+    public delegate* unmanaged<ref Matrix, int, int, int, bool32, void> MatrixTranslateXYZ;
+    public delegate* unmanaged<ref Matrix, int, int, int, void> MatrixScaleXYZ;
+    public delegate* unmanaged<ref Matrix, short, void> MatrixRotateX;
+    public delegate* unmanaged<ref Matrix, short, void> MatrixRotateY;
+    public delegate* unmanaged<ref Matrix, short, void> MatrixRotateZ;
+    public delegate* unmanaged<ref Matrix, short, short, short, void> MatrixRotateXYZ;
+    public delegate* unmanaged<ref Matrix, ref Matrix, void> MatrixInverse;
+    public delegate* unmanaged<ref Matrix, ref Matrix, void> MatrixCopy;
 
     // Strings
     public delegate* unmanaged<ref String, string, uint, void> InitString;
-    public delegate* unmanaged<String*, String*, void> CopyString;
+    public delegate* unmanaged<ref String, ref String, void> CopyString;
     public delegate* unmanaged<ref String, string, void> SetString;
     public delegate* unmanaged<ref String, ref String, void> AppendString;
     public delegate* unmanaged<ref String, string, void> AppendText;
