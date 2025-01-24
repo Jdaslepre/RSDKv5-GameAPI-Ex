@@ -27,29 +27,29 @@ static
 
 public enum Scopes : uint8
 {
-    NONE,
-    GLOBAL,
-    STAGE,
+    SCOPE_NONE,
+    SCOPE_GLOBAL,
+    SCOPE_STAGE,
 }
 
 public enum GameRegions
 {
-    US,
-    JP,
-    EU,
+    REGION_US,
+    REGION_JP,
+    REGION_EU,
 }
 
 public enum GameLanguages
 {
-    EN,
-    FR,
-    IT,
-    GE,
-    SP,
-    JP,
-    KO,
-    SC,
-    TC,
+    LANGUAGE_EN,
+    LANGUAGE_FR,
+    LANGUAGE_IT,
+    LANGUAGE_GE,
+    LANGUAGE_SP,
+    LANGUAGE_JP,
+    LANGUAGE_KO,
+    LANGUAGE_SC,
+    LANGUAGE_TC,
 }
 
 [System.CRepr] public struct ModFunctionTable
@@ -69,7 +69,7 @@ public enum GameLanguages
         function void() serialize, char8* inherited) RegisterObject;
 #endif
 
-    public void* RegisterObject_STD;
+    private void* RegisterObject_STD;
     public function void(void** staticVars, char8* staticName) RegisterObjectHook;
     public function void*(char8* name) FindObject;
     public function void*() GetGlobals;
@@ -84,7 +84,7 @@ public enum GameLanguages
 
     // Mod Callbacks & Public Functions
     public function void(int32 callbackID, function void(void*) callback) AddModCallback;
-    public void* AddModCallback_STD;
+    private void* AddModCallback_STD;
     public function void(char8* functionName, void* functionPtr) AddPublicFunction;
     public function void*(char8* id, char8* functionName) GetPublicFunction;
 
@@ -427,7 +427,7 @@ public enum GameLanguages
     public function void(Vector2* vertices, int32 vertCount, int32 r, int32 g, int32 b, int32 alpha, int32 inkEffect) DrawFace;
     public function void(Vector2* vertices, color* vertColors, int32 vertCount, int32 alpha, int32 inkEffect) DrawBlendedFace;
     public function void(Animator* animator, Vector2* position, bool32 screenRelative) DrawSprite;
-    public function void(uint16 sheetID, int32 inkEffect, bool32 screenRelative) DrawDeformedSprite;
+    public function void(uint16 sheetID, int32 inkEffect, int32 alpha) DrawDeformedSprite;
     public function void(Animator* animator, Vector2* position, String* string, int32 endFrame, int32 textLength, int32 align, int32 spacing,
         void* unused, Vector2* charOffsets, bool32 screenRelative) DrawText;
     public function void(uint16* tiles, int32 countX, int32 countY, Vector2* position, Vector2* offset, bool32 screenRelative) DrawTile;

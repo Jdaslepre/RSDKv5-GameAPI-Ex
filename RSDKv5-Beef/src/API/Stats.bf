@@ -9,7 +9,7 @@ namespace RSDK;
 }
 
 namespace RSDK.API;
-    
+
 public static class Stats
 {
     public static void TryTrackStat(StatInfo* stat)      => APITable.TryTrackStat(stat);

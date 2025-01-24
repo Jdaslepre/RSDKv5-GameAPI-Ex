@@ -39,10 +39,10 @@ public enum CollisionSides : uint8 { C_NONE, C_TOP, C_LEFT, C_RIGHT, C_BOTTOM }
     public static void SetPathGripSensors(Self *sensors) => RSDKTable.SetPathGripSensors(sensors);
 
     public void FindFloorPosition() mut => RSDKTable.FindFloorPosition(&this);
-    public void FindLWallPosition() mut => RSDKTable.FindLWallPosition(&this); 
+    public void FindLWallPosition() mut => RSDKTable.FindLWallPosition(&this);
     public void FindRoofPosition() mut => RSDKTable.FindRoofPosition(&this);
     public void FindRWallPosition() mut => RSDKTable.FindRWallPosition(&this);
-    public void FloorCollision() mut => RSDKTable.FloorCollision(&this); 
+    public void FloorCollision() mut => RSDKTable.FloorCollision(&this);
     public void LWallCollision() mut => RSDKTable.LWallCollision(&this);
     public void RoofCollision() mut => RSDKTable.RoofCollision(&this);
     public void RWallCollision() mut => RSDKTable.RWallCollision(&this);
@@ -51,10 +51,10 @@ public enum CollisionSides : uint8 { C_NONE, C_TOP, C_LEFT, C_RIGHT, C_BOTTOM }
     public static void SetPathGripSensors(Self *sensors) => modTable.SetPathGripSensors(sensors);
 
     public void FindFloorPosition() mut => modTable.FindFloorPosition(&this);
-    public void FindLWallPosition() mut => modTable.FindLWallPosition(&this); 
+    public void FindLWallPosition() mut => modTable.FindLWallPosition(&this);
     public void FindRoofPosition() mut => modTable.FindRoofPosition(&this);
     public void FindRWallPosition() mut => modTable.FindRWallPosition(&this);
-    public void FloorCollision() mut => modTable.FloorCollision(&this); 
+    public void FloorCollision() mut => modTable.FloorCollision(&this);
     public void LWallCollision() mut => modTable.LWallCollision(&this);
     public void RoofCollision() mut => modTable.RoofCollision(&this);
     public void RWallCollision() mut => modTable.RWallCollision(&this);

@@ -2,12 +2,8 @@ using System;
 
 namespace RSDK;
 
-public static class Math
+static
 {
-    // --------------
-    // Helpers/Macros
-    // --------------
-
     public static T MIN<T>(T a, T b) where T : var, IInteger => (a < b) ? a : b;
     public static T MAX<T>(T a, T b) where T : var, IInteger => (a) > (b) ? a : b;
 
@@ -44,11 +40,10 @@ public static class Math
 
     public static T TO_FIXED<T>(T x) where T : var, IInteger   => (x) << 16;
     public static T FROM_FIXED<T>(T x) where T : var, IInteger => (x) >> 16;
+}
 
-    // --------------
-    // RSDK Functions
-    // --------------
-
+public static class Math
+{
     public static int32 Sin1024(int32 angle)  => RSDKTable.Sin1024(angle);
     public static int32 Cos1024(int32 angle)  => RSDKTable.Cos1024(angle);
     public static int32 Tan1024(int32 angle)  => RSDKTable.Tan1024(angle);

@@ -29,14 +29,14 @@ public enum Alignments : int32
 
 public enum InkEffects : uint8
 {
-    NONE,
-    BLEND,
-    ALPHA,
-    ADD,
-    SUB,
-    TINT,
-    MASKED,
-    UNMASKED,
+    INK_NONE,
+    INK_BLEND,
+    INK_ALPHA,
+    INK_ADD,
+    INK_SUB,
+    INK_TINT,
+    INK_MASKED,
+    INK_UNMASKED,
 }
 
 public enum VideoSettingsValues : int32
@@ -162,9 +162,9 @@ public static class Graphics
         RSDKTable.DrawBlendedFace(vertices, vertColors, vertCount, alpha, (.)inkEffect);
     }
 
-    public static void DrawDeformedSprite(SpriteSheet sheet, int32 inkEffect, bool32 screenRelative)
+    public static void DrawDeformedSprite(SpriteSheet sheet, int32 inkEffect, int32 alpha)
     {
-        RSDKTable.DrawDeformedSprite(sheet.id, inkEffect, screenRelative);
+        RSDKTable.DrawDeformedSprite(sheet.id, inkEffect, alpha);
     }
 
     public static void DrawTile(Tile* tiles, int32 countX, int32 countY, Vector2* position, Vector2* offset, bool32 screenRelative)

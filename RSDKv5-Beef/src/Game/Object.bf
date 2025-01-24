@@ -4,17 +4,17 @@ namespace RSDK;
 
 public enum ActiveFlags : uint8
 {
-    NEVER, // never update
-    ALWAYS, // always update (even if paused/frozen)
-    NORMAL, // always update (unless paused/frozen)
-    PAUSED, // update only when paused/frozen
-    BOUNDS, // update if in x & y bounds
-    XBOUNDS, // update only if in x bounds (y bounds dont matter)
-    YBOUNDS, // update only if in y bounds (x bounds dont matter)
-    RBOUNDS, // update based on radius boundaries (updateRange.x == radius)
+    ACTIVE_NEVER, // never update
+    ACTIVE_ALWAYS, // always update (even if paused/frozen)
+    ACTIVE_NORMAL, // always update (unless paused/frozen)
+    ACTIVE_PAUSED, // update only when paused/frozen
+    ACTIVE_BOUNDS, // update if in x & y bounds
+    ACTIVE_XBOUNDS, // update only if in x bounds (y bounds dont matter)
+    ACTIVE_YBOUNDS, // update only if in y bounds (x bounds dont matter)
+    ACTIVE_RBOUNDS, // update based on radius boundaries (updateRange.x == radius)
 
     // Not really even a real active value, but some objects set their active states to this so here it is I suppose
-    DISABLED = 0xFF,
+    ACTIVE_DISABLED = 0xFF,
 }
 
 public enum VariableTypes : uint8
@@ -107,36 +107,12 @@ public enum TileCollisionModes : uint8
 #endif
     }
 
-    [System.CRepr] public struct Entity : IEntity
+    [System.CRepr] public struct Entity
     {
-        // ----------------------
-        // Standard Entity Events
-        // ----------------------
-
-        public void Update() { }
-        public void LateUpdate() { }
-        public static void StaticUpdate() { }
-        public void Draw() { }
-        public void Create(void* data) { }
-        public static void StageLoad() { }
 #if RETRO_REV0U
-        public static void StaticLoad(void* sVars) => System.Internal.MemSet(sVars, 0, sizeof(Static));
-#endif
-        public static void Serialize() { }
-#if GAME_INCLUDE_EDITOR
-        public static void EditorLoad() { }
-        public void EditorDraw() { }
-#endif
-
-        // ----------------
-        // Entity Variables
-        // ----------------
-
-#if RETRO_REV0U
-        // used for languages such as beeflang that always have vfTables in classes
-        // note from jd, if our object type was class instead of struct, we could've had this commented out - but unfortunately, inheriting a class
-        // will add another vTable i think..? so there'd be this vfTable field, and then *another* vfTable that'd completely ruin entity alignment :pensive:
-        // having entities as structs is good anyways - because *if* the class idea worked, the objects would absolutely have to be v5U exclusive :D
+        // other languages have this vfTable field specifically for beef classes
+        // we aren't actually able to make use of classes though, because all objects
+        // would have to be REV0U-exclusive...
         private void* vfTable;
 #endif
 
@@ -170,23 +146,19 @@ public enum TileCollisionModes : uint8
         public Boolean<uint8> visible;
         public Boolean<uint8> onScreen;
 
-        // ----------------------
-        // Extra Entity Functions
-        // ----------------------
-
         public void Init() mut
         {
-            active        = .BOUNDS;
+            active        = .ACTIVE_BOUNDS;
             visible       = false;
-            updateRange.x = Math.TO_FIXED(128);
-            updateRange.y = Math.TO_FIXED(128);
+            updateRange.x = TO_FIXED(128);
+            updateRange.y = TO_FIXED(128);
         }
 
         public uint16 Slot() mut  => (.)RSDKTable.GetEntitySlot(&this);
         public void Destroy() mut => RSDKTable.ResetEntity(&this, (.)DefaultObjects.TYPE_DEFAULTOBJECT, null);
 
         public void Reset(uint32 type, void* data) mut => RSDKTable.ResetEntity(&this, (.)type, data);
-        public void Reset(uint32 type, int32 data) mut => RSDKTable.ResetEntity(&this, (.)type, Math.INT_TO_VOID(data));
+        public void Reset(uint32 type, int32 data) mut => RSDKTable.ResetEntity(&this, (.)type, INT_TO_VOID(data));
 
         public void Copy(GameObject.Entity* dst, bool32 clearThis) mut => RSDKTable.CopyEntity(dst, &this, clearThis);
 
@@ -232,9 +204,16 @@ public enum TileCollisionModes : uint8
     }
 
     public static T* This<T>() => (.)sceneInfo.entity;
+    public static void InitStatic<T>(T* sVars) => System.Internal.MemSet(sVars, 0, sizeof(T));;
 
     public static GameObject.Entity* Create(void* data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, data, x, y);
-    public static GameObject.Entity* Create(int32 data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, Math.INT_TO_VOID(data), x, y);
+    public static GameObject.Entity* Create(int32 data, int32 x, int32 y) => (.)RSDKTable.CreateEntity((.)DefaultObjects.TYPE_DEFAULTOBJECT, INT_TO_VOID(data), x, y);
+
+    public static GameObject.Entity* Create(void* data, Vector2 position) => Create(data, position.x, position.y);
+    public static GameObject.Entity* Create(int32 data, Vector2 position) => Create(data, position.x, position.y);
+
+    public static GameObject.Entity* Create(void* data, Vector2* position) => Create(data, *position.x, *position.y);
+    public static GameObject.Entity* Create(int32 data, Vector2* position) => Create(data, *position.x, *position.y);
 
     public static T* Create<T>(void* data, int32 x, int32 y) where T : struct
     {
@@ -245,8 +224,14 @@ public enum TileCollisionModes : uint8
     public static T* Create<T>(int32 data, int32 x, int32 y) where T : GameObject.Entity
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
-        return (.)RSDKTable.CreateEntity(fStatic.classID, Math.INT_TO_VOID(data), x, y);
+        return (.)RSDKTable.CreateEntity(fStatic.classID, INT_TO_VOID(data), x, y);
     }
+
+    public static T* Create<T>(void* data, Vector2 position) where T : struct => Create<T>(data, position.x, position.y);
+    public static T* Create<T>(int32 data, Vector2 position) where T : GameObject.Entity => Create<T>(data, position.x, position.y);
+
+    public static T* Create<T>(void* data, Vector2* position) where T : struct => Create<T>(data, *position.x, *position.y);
+    public static T* Create<T>(int32 data, Vector2* position) where T : GameObject.Entity => Create<T>(data, *position.x, *position.y);
 
     public static GameObject.Entity* Get(int32 slot)      => (.)RSDKTable.GetEntity((.)slot);
     public static GameObject.Entity* Get(uint16 slot)     => (.)RSDKTable.GetEntity(slot);
@@ -263,7 +248,7 @@ public enum TileCollisionModes : uint8
     public static void Copy(void* dst, void* src, bool32 clearSrc)                           => RSDKTable.CopyEntity(dst, src, clearSrc);
 
     public static void Reset(uint16 slot, uint16 type, void* data) => RSDKTable.ResetEntitySlot(slot, type, data);
-    public static void Reset(uint16 slot, uint16 type, int32 data) => RSDKTable.ResetEntitySlot(slot, type, Math.INT_TO_VOID(data));
+    public static void Reset(uint16 slot, uint16 type, int32 data) => RSDKTable.ResetEntitySlot(slot, type, INT_TO_VOID(data));
 
     public static void Reset<T>(uint16 slot, void* data)
     {
@@ -273,7 +258,7 @@ public enum TileCollisionModes : uint8
     public static void Reset<T>(uint16 slot, int32 data)
     {
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
-        RSDKTable.ResetEntitySlot(slot, fStatic.classID, Math.INT_TO_VOID(data));
+        RSDKTable.ResetEntitySlot(slot, fStatic.classID, INT_TO_VOID(data));
     }
 
     // Example usage:
@@ -288,18 +273,18 @@ public enum TileCollisionModes : uint8
         T* entity = null; defer delete entity;
         switch (type)
         {
-            case .ALL_ENTITIES:
-                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
-                break;
-            case .ACTIVE_ENTITIES:
-                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
-                break;
+        case .ALL_ENTITIES:
+            while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
+            break;
+        case .ACTIVE_ENTITIES:
+            while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
+            break;
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
             case .GROUP_ENTITIES:
                 while (modTable.GetGroupEntities(group, (void**)&entity)) list.AddLast(entity);
                 break;
 #endif
-            default: break;
+        default: break;
         }
 
         return list;
@@ -313,18 +298,18 @@ public enum TileCollisionModes : uint8
         T* entity = null; defer delete entity;
         switch (type)
         {
-            case .ALL_ENTITIES:
-                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
-                break;
-            case .ACTIVE_ENTITIES:
-                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
-                break;
+        case .ALL_ENTITIES:
+            while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
+            break;
+        case .ACTIVE_ENTITIES:
+            while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
+            break;
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
             case .GROUP_ENTITIES:
                 while (modTable.GetGroupEntities(group, (void**)&entity)) list.AddLast(entity);
                 break;
 #endif
-            default: break;
+        default: break;
         }
 
         return list;
@@ -339,18 +324,18 @@ public enum TileCollisionModes : uint8
 
         switch (type)
         {
-            case .ALL_ENTITIES:
-                while (RSDKTable.GetAllEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
-                break;
-            case .ACTIVE_ENTITIES:
-                while (RSDKTable.GetActiveEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
-                break;
+        case .ALL_ENTITIES:
+            while (RSDKTable.GetAllEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
+            break;
+        case .ACTIVE_ENTITIES:
+            while (RSDKTable.GetActiveEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
+            break;
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
             case .GROUP_ENTITIES:
                 while (modTable.GetGroupEntities(.(ForeachGroups.GROUP_ALL), (void**)&entity)) list.AddLast(entity);
                 break;
 #endif
-            default: break;
+        default: break;
         }
 
         return list;
@@ -365,18 +350,18 @@ public enum TileCollisionModes : uint8
 
         switch (type)
         {
-            case .ALL_ENTITIES:
-                while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
-                break;
-            case .ACTIVE_ENTITIES:
-                while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
-                break;
+        case .ALL_ENTITIES:
+            while (RSDKTable.GetAllEntities(group, (void**)&entity)) list.AddLast(entity);
+            break;
+        case .ACTIVE_ENTITIES:
+            while (RSDKTable.GetActiveEntities(group, (void**)&entity)) list.AddLast(entity);
+            break;
 #if RETRO_USE_MOD_LOADER && RETRO_MOD_LOADER_VER_2
             case .GROUP_ENTITIES:
                 while (modTable.GetGroupEntities(group, (void**)&entity)) list.AddLast(entity);
                 break;
 #endif
-            default: break;
+        default: break;
         }
 
         return list;
