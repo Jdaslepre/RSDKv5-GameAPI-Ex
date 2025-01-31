@@ -212,8 +212,8 @@ public enum TileCollisionModes : uint8
     public static GameObject.Entity* Create(void* data, Vector2 position) => Create(data, position.x, position.y);
     public static GameObject.Entity* Create(int32 data, Vector2 position) => Create(data, position.x, position.y);
 
-    public static GameObject.Entity* Create(void* data, Vector2* position) => Create(data, *position.x, *position.y);
-    public static GameObject.Entity* Create(int32 data, Vector2* position) => Create(data, *position.x, *position.y);
+    public static GameObject.Entity* Create(void* data, Vector2* position) => Create(data, position.x, position.y);
+    public static GameObject.Entity* Create(int32 data, Vector2* position) => Create(data, position.x, position.y);
 
     public static T* Create<T>(void* data, int32 x, int32 y) where T : struct
     {
@@ -230,8 +230,8 @@ public enum TileCollisionModes : uint8
     public static T* Create<T>(void* data, Vector2 position) where T : struct => Create<T>(data, position.x, position.y);
     public static T* Create<T>(int32 data, Vector2 position) where T : GameObject.Entity => Create<T>(data, position.x, position.y);
 
-    public static T* Create<T>(void* data, Vector2* position) where T : struct => Create<T>(data, *position.x, *position.y);
-    public static T* Create<T>(int32 data, Vector2* position) where T : GameObject.Entity => Create<T>(data, *position.x, *position.y);
+    public static T* Create<T>(void* data, Vector2* position) where T : struct => Create<T>(data, position.x, position.y);
+    public static T* Create<T>(int32 data, Vector2* position) where T : GameObject.Entity => Create<T>(data, position.x, position.y);
 
     public static GameObject.Entity* Get(int32 slot)      => (.)RSDKTable.GetEntity((.)slot);
     public static GameObject.Entity* Get(uint16 slot)     => (.)RSDKTable.GetEntity(slot);
@@ -260,6 +260,8 @@ public enum TileCollisionModes : uint8
         typeof(T).GetField("sVars").Value.GetValue<Static*>(null, var fStatic);
         RSDKTable.ResetEntitySlot(slot, fStatic.classID, INT_TO_VOID(data));
     }
+
+    public static void Destroy(uint16 slot) => Reset(slot, (.)DefaultObjects.TYPE_DEFAULT_COUNT, null);
 
     // Example usage:
     // for (var entity in GameObject.GetEntities<Type>(.ALL_ENTITIES, scope .()))
